@@ -21,7 +21,10 @@ export const roomRouter = router({
     .input(createRoomSchema)
     .mutation(async ({ ctx, input }) => {
       const game = await createRoom({ redis: ctx.redis, room: input });
-      return game;
+      return {
+        redirect: `/game/${game.id}`,
+        game
+      };
     }),
   join: protectedProcedure
     .input(joinRoomSchema)
