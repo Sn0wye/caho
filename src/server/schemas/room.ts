@@ -27,3 +27,10 @@ export const joinRoomSchema = z.object({
 });
 
 export type JoinRoomSchema = z.infer<typeof joinRoomSchema>;
+
+export const startRoomSchema = z.object({
+  roomId: z.string().min(1),
+  playerId: z.string().min(1)
+});
+
+export type StartRoomSchema = z.infer<typeof startRoomSchema>;

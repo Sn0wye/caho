@@ -1,7 +1,13 @@
 import { createId } from '@paralleldrive/cuid2';
+import { TRPCError } from '@trpc/server';
 import { type Redis } from '@upstash/redis/nodejs';
 import { type Player } from '../schemas/player';
-import { roomSchema, type CreateRoomSchema, type Room } from '../schemas/room';
+import {
+  roomSchema,
+  type CreateRoomSchema,
+  type Room,
+  type StartRoomSchema
+} from '../schemas/room';
 
 export const getRoom = async ({
   redis,
@@ -83,6 +89,36 @@ export const addPlayerToRoom = async ({
   });
 };
 
-// export const startGame = (redis: Redis) => {};
+export const startRoom = async ({
+  redis,
+  input
+}: {
+  redis: Redis;
+  input: StartRoomSchema;
+}) => {
+  const { roomId, playerId } = input;
+
+  const roomExists = await redis.exists(`room:${playerId}`);
+
+  if (!roomExists) {
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: 'A sala não existe.' // TODO
+    });
+  }
+
+  const hostId = await redis.hget(`room:${roomId}`, 'hostId');
+
+  if (hostId !== playerId) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Você não é o host da sala.' // TODO
+    });
+  }
+
+  await redis.hset(`room:${roomId}`, {
+    status: 'IN_PROGRESS'
+  });
+};
 
 // export const leaveRoom = (redis: Redis) => {};
