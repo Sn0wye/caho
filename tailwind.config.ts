@@ -1,4 +1,5 @@
 import { type Config } from 'tailwindcss';
+import { fontFamily } from 'tailwindcss/defaultTheme';
 
 export default {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
@@ -23,6 +24,10 @@ export default {
           red: '#FFA0A0',
           gray: '#EAEAEA'
         }
+      },
+      fontFamily: {
+        sans: ['var(--font-sans)', ...fontFamily.sans],
+        mono: ['var(--font-mono)', ...fontFamily.mono]
       },
       keyframes: {
         'accordion-down': {
