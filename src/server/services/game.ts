@@ -36,6 +36,14 @@ export const createRoom = async ({
   const roomListKey = room.isPublic ? 'public_rooms' : 'private_rooms';
   await redis.lpush(roomListKey, roomId);
 
+  // Adicionar o jogador à lista de jogadores da sala
+  const player = room.players[0] as Player;
+  await addPlayerToRoom({
+    redis,
+    player,
+    roomId
+  });
+
   return createdRoom;
 };
 
