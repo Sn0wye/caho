@@ -1,7 +1,7 @@
 import { createId } from '@paralleldrive/cuid2';
 import { type Redis } from '@upstash/redis/nodejs';
 import { type Player } from '../schemas/player';
-import { type CreateRoomSchema, type Room } from '../schemas/room';
+import { roomSchema, type CreateRoomSchema, type Room } from '../schemas/room';
 
 export const getRoom = async ({
   redis,
@@ -12,7 +12,7 @@ export const getRoom = async ({
 }) => {
   const room = await redis.hgetall(`room:${roomId}`);
 
-  return room;
+  return roomSchema.parse(room);
 };
 
 export const createRoom = async ({
@@ -43,9 +43,17 @@ export const listRooms = async ({ redis }: { redis: Redis }) => {
   const publicRooms = await redis.lrange('public_rooms', 0, -1);
   const privateRooms = await redis.lrange('private_rooms', 0, -1);
 
-  const rooms = [...publicRooms, ...privateRooms];
+  const parsedRooms = [];
 
-  return rooms;
+  for (const room of publicRooms) {
+    parsedRooms.push(roomSchema.parse(JSON.parse(room)));
+  }
+
+  for (const room of privateRooms) {
+    parsedRooms.push(roomSchema.parse(JSON.parse(room)));
+  }
+
+  return parsedRooms;
 };
 
 export const addPlayerToRoom = async ({
