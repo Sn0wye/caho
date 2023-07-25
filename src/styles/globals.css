@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  * {
+    @apply focus-visible:outline-geist-yellow focus-visible:outline-dashed focus-visible:outline-offset-4 focus-visible:outline-2;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  } 
+
+  body {
+    @apply bg-zinc-50 dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 selection:bg-geist-yellow selection:text-zinc-950;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-[6px] h-0;
+    scrollbar-width: 6px;
+  }
+
+  ::-webkit-scrollbar, ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zinc-500;
+  }
+}
