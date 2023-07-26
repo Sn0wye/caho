@@ -40,7 +40,7 @@
     "**/*.cjs",
     "**/*.mjs",
     ".next/types/**/*.ts"
-  ],
+, "src/app/game/[roomId]"  ],
   "exclude": [
     "node_modules",
     "cards"

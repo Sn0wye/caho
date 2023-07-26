@@ -1,22 +1,22 @@
-export interface Pack {
-  id: string
-  name: string
-  official: boolean
-  cards: Cards
-}
+export type CardPack = {
+  id: string;
+  name: string;
+  official: boolean;
+  cards: Cards;
+};
 
-export interface Cards {
-  white: WhiteCard[]
-  black: BlackCard[]
-}
+export type Cards = {
+  white: WhiteCard[];
+  black: BlackCard[];
+};
 
-export interface WhiteCard {
-  text: string
-  packId: string
-}
+export type WhiteCard = {
+  text: string;
+  packId: string;
+};
 
-export interface BlackCard {
-  text: string
-  pick: number
-  packId: string
-}
+export type BlackCard = {
+  text: string;
+  pick: number;
+  packId: string;
+};

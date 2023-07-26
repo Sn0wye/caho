@@ -1,13 +1,13 @@
-import { AlertTopbar } from '@/components/alert-topbar';
+import { AlertTopBar } from '@/components/alert-top-bar';
 import { Navbar } from '@/components/navbar';
 import { NewGameCard } from '@/components/new-game-card';
 import { Separator } from '@/components/ui/separator';
 
-export default async function NewGame() {
+export default async function CreateNewGamePage() {
   return (
     <div className="flex h-full min-h-screen w-screen flex-col items-center">
       <Navbar />
-      <AlertTopbar label="Essa joça tá em BETA. Não fode." />
+      <AlertTopBar label="Essa joça tá em BETA. Não fode." />
       <main className="flex h-full w-full max-w-7xl grow flex-col gap-8 p-8">
         <header className="flex w-full flex-col gap-3 md:max-w-xl">
           <h1 className="text-5xl font-extrabold">Nova sala</h1>
