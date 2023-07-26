@@ -4,27 +4,58 @@
 
 @layer base {
   * {
-    @apply focus-visible:outline-geist-yellow focus-visible:outline-dashed focus-visible:outline-offset-4 focus-visible:outline-2;
+    @apply focus-visible:outline-dashed focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-geist-yellow;
   }
 
   html {
     scroll-behavior: smooth;
-  } 
+  }
 
   body {
-    @apply bg-zinc-50 dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 selection:bg-geist-yellow selection:text-zinc-950;
+    @apply bg-zinc-50 text-zinc-950 selection:bg-geist-yellow selection:text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50;
   }
 
   ::-webkit-scrollbar {
-    @apply w-[6px] h-0;
+    @apply h-0 w-[6px];
     scrollbar-width: 6px;
   }
 
-  ::-webkit-scrollbar, ::-webkit-scrollbar-track {
+  ::-webkit-scrollbar,
+  ::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     @apply bg-zinc-500;
+  }
+
+  /* TODO Remove keyframes and move to @apply */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes slide-from-right {
+    from {
+      transform: translate(30px);
+    }
+  }
+  @keyframes slide-to-left {
+    to {
+      transform: translate(-30px);
+    }
+  }
+  ::view-transition-old(root) {
+    animation: 90ms cubic-bezier (0.4, 0, 1, 1) both fade-out,
+      300ms cubic-bezier (0.4, 0, 0.2, 1) both slide-to-left;
+  }
+  ::view-transition-new(root) {
+    animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+      300ms cubic-bezier (0.4, 0, 0.2, 1) both slide-from-right;
   }
 }
