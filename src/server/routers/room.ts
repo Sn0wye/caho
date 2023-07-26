@@ -60,11 +60,14 @@ export const roomRouter = router({
       return getRoom({ redis: ctx.redis, roomId });
     }),
   start: protectedProcedure
-    .input(z.object({ roomId: z.string().min(1), playerId: z.string().min(1) }))
+    .input(z.object({ roomId: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       await startRoom({
         redis: ctx.redis,
-        input
+        input: {
+          roomId: input.roomId,
+          playerId: ctx.auth.userId
+        }
       });
     }),
   end: protectedProcedure
