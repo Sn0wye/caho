@@ -1,7 +1,6 @@
-import Image from 'next/image';
-import { currentUser } from '@clerk/nextjs/app-beta';
 import { Button } from '@/components/ui/button';
-import finishedEmojiImage from '../../../../public/finished-emoji.png';
+import { currentUser } from '@clerk/nextjs/app-beta';
+import Image from 'next/image';
 
 export default async function FinishedGamePage() {
   const user = await currentUser();
@@ -27,7 +26,7 @@ export default async function FinishedGamePage() {
         </aside>
 
         <Image
-          src={finishedEmojiImage}
+          src="/finished-emoji.png"
           alt="Seu troféu!"
           width={320}
           height={320}

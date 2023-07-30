@@ -1,6 +1,6 @@
 import { AlertTopBar } from '@/components/alert-top-bar';
 import { Navbar } from '@/components/navbar';
-import { NewGameCard } from '@/components/new-game-card';
+import { NewGameCardForm } from '@/components/new-game-card-form';
 import { Separator } from '@/components/ui/separator';
 
 export default async function CreateNewGamePage() {
@@ -19,7 +19,7 @@ export default async function CreateNewGamePage() {
 
         <Separator className="w-full" />
 
-        <NewGameCard />
+        <NewGameCardForm />
       </main>
     </div>
   );

@@ -7,7 +7,7 @@ interface NavbarProps {}
 
 export function Navbar({}: NavbarProps) {
   return (
-    <nav className="sticky left-0 top-0 flex h-20 w-full items-center justify-between border-b bg-white px-8 py-4 dark:bg-black">
+    <nav className="sticky left-0 top-0 flex h-20 w-full items-center justify-between border-b bg-white border-zinc-200 dark:border-zinc-900 px-8 py-4 dark:bg-black">
       <LogoText />
 
       <div className="flex h-full w-fit items-center gap-4">

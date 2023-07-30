@@ -1,49 +1,41 @@
 'use client';
 
-import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/utils/cn';
 import { mockPlayers } from '@/mock/players';
-import { GameRankingCollapseButton } from './game-ranking-collapse-button';
+import { cn } from '@/utils/cn';
+import { Fragment } from 'react';
+import { create } from 'zustand';
+import { GameRankingHeader } from './game-ranking-header';
 import { GameRankingPlayer } from './game-ranking-player';
 
-interface GameRankingSidebarProps {}
+type GameRankingSidebarContext = {
+  isCollapsed: boolean;
+  setIsCollapsed: (isCollapsed: boolean) => void;
+};
 
-export function GameRankingSidebar({}: GameRankingSidebarProps) {
-  const [isOpen, setIsOpen] = useState(true);
+export const useGameRankingSidebarContext = create<GameRankingSidebarContext>(
+  set => ({
+    isCollapsed: false,
+    setIsCollapsed: isCollapsed => set({ isCollapsed })
+  })
+);
+
+export function GameRankingSidebar() {
+  const { isCollapsed } = useGameRankingSidebarContext();
 
   return (
     <ScrollArea
       className={cn(
         'h-[calc(100vh-4rem)] flex-col items-center justify-between border-r border-zinc-200 p-4 dark:border-zinc-900',
-        isOpen ? 'relative max-w-sm flex-1' : 'w-24'
+        isCollapsed ? 'w-24' : 'relative max-w-sm flex-1'
       )}
     >
-      {isOpen ? (
-        <header className="absolute left-0 top-0 z-10 flex w-full items-center justify-between bg-gradient-to-b from-zinc-50 via-zinc-50 to-transparent p-8 pb-16 dark:from-zinc-950 dark:via-zinc-950">
-          <h2 className="text-3xl font-bold">Ranking</h2>
-          <GameRankingCollapseButton setIsOpen={setIsOpen} isOpen={isOpen} />
-        </header>
-      ) : (
-        <header className="flex w-full flex-col items-center gap-4">
-          <GameRankingCollapseButton setIsOpen={setIsOpen} isOpen={isOpen} />
-          <Separator />
-        </header>
-      )}
+      <GameRankingHeader />
 
-      {isOpen ? (
-        <div className="mt-24 flex w-full flex-1 flex-col items-center gap-2">
-          {mockPlayers.map((player, idx) => (
-            <>
-              <GameRankingPlayer key={idx} data={player} />
-              <Separator className="last:hidden" />
-            </>
-          ))}
-        </div>
-      ) : (
+      {isCollapsed ? (
         <div className="flex w-full flex-col items-center">
           {mockPlayers.map((player, idx) => (
             <div
@@ -97,6 +89,15 @@ export function GameRankingSidebar({}: GameRankingSidebarProps) {
                 )}
               </div>
             </div>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-24 flex w-full flex-1 flex-col items-center gap-2">
+          {mockPlayers.map((player, idx) => (
+            <Fragment key={idx}>
+              <GameRankingPlayer  data={player} />
+              <Separator className="last:hidden" />
+            </Fragment>
           ))}
         </div>
       )}
