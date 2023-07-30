@@ -3,6 +3,7 @@ import { type PropsWithChildren } from 'react';
 import { type Metadata } from 'next';
 // eslint-disable-next-line camelcase
 import { JetBrains_Mono, Roboto } from 'next/font/google';
+import { ClerkProvider } from '@clerk/nextjs';
 import { cn } from '@/utils/cn';
 import { Providers } from './providers';
 
@@ -30,7 +31,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body className={cn('font-sans', fontSans.variable, fontMono.variable)}>
-        <Providers>{children}</Providers>
+        <ClerkProvider>
+          <Providers>{children}</Providers>
+        </ClerkProvider>
       </body>
     </html>
   );
