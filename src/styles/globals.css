@@ -4,26 +4,27 @@
 
 @layer base {
   * {
-    @apply focus-visible:outline-geist-yellow focus-visible:outline-dashed focus-visible:outline-offset-4 focus-visible:outline-2;
+    @apply focus-visible:outline-dashed focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-geist-yellow;
   }
 
   html {
     scroll-behavior: smooth;
-  } 
+  }
 
   body {
-    @apply bg-zinc-50 dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 selection:bg-geist-yellow selection:text-zinc-950;
+    @apply bg-zinc-50 text-zinc-950 selection:bg-geist-yellow selection:text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50;
   }
 
   ::-webkit-scrollbar {
-    @apply w-[6px] h-0;
+    @apply h-0 w-[6px];
     scrollbar-width: 6px;
   }
 
-  ::-webkit-scrollbar, ::-webkit-scrollbar-track {
+  ::-webkit-scrollbar,
+  ::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     @apply bg-zinc-500;
   }

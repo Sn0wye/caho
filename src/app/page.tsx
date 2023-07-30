@@ -1,12 +1,12 @@
 import { siteConfig } from 'config/site';
-import { AlertTopbar } from '@/components/alert-topbar';
+import { AlertTopBar } from '@/components/alert-top-bar';
 import { Navbar } from '@/components/navbar';
 
-export default async function Home() {
+export default async function HomePage() {
   return (
     <div className="flex h-screen w-full flex-col justify-center">
       <Navbar />
-      <AlertTopbar label="Cheguei na web! Agora é para valer ein... Vai arregar?" />
+      <AlertTopBar label="Cheguei na web! Agora é para valer ein... Vai arregar?" />
 
       <main className="flex h-full grow items-center px-8 py-4">
         <section className="flex flex-col gap-4 lg:max-w-2xl">

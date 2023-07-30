@@ -25,6 +25,13 @@ export default {
           gray: '#EAEAEA'
         }
       },
+      fontSize: {
+        '2xs': '0.625rem', // 10px
+        '3xs': '0.5rem' // 8px
+      },
+      aspectRatio: {
+        'card': '2 / 3'
+      },
       fontFamily: {
         sans: ['var(--font-sans)', ...fontFamily.sans],
         mono: ['var(--font-mono)', ...fontFamily.mono]

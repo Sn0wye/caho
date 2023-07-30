@@ -1,9 +1,8 @@
-import Image from 'next/image';
-import { currentUser } from '@clerk/nextjs/app-beta';
 import { Button } from '@/components/ui/button';
-import finishedEmojiImage from '../../../../public/finished-emoji.png';
+import { currentUser } from '@clerk/nextjs/app-beta';
+import Image from 'next/image';
 
-export default async function FinishedGame() {
+export default async function FinishedGamePage() {
   const user = await currentUser();
 
   return (
@@ -21,14 +20,14 @@ export default async function FinishedGame() {
           <div className="flex w-full items-center gap-4">
             <Button size="lg">Jogar novamente</Button>
             <Button size="lg" variant="ghost">
-              Arregar... (AKA. Voltar para o Loby)
+              Arregar... (AKA. Voltar para o Lobby)
             </Button>
           </div>
         </aside>
 
         <Image
-          src={finishedEmojiImage}
-          alt="Seu trofeu!"
+          src="/finished-emoji.png"
+          alt="Seu troféu!"
           width={320}
           height={320}
         />
