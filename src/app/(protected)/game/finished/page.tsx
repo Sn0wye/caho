@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { currentUser } from '@clerk/nextjs/app-beta';
 import Image from 'next/image';
+import { currentUser } from '@clerk/nextjs/app-beta';
+import { Button } from '@/components/ui/button';
 
 export default async function FinishedGamePage() {
   const user = await currentUser();

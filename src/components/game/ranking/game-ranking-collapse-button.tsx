@@ -1,7 +1,7 @@
 'use client';
 
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { type ComponentProps } from 'react';
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { useGameRankingSidebarContext } from './game-ranking-sidebar';
 
 type GameRankingCollapseButtonProps = ComponentProps<'button'>;

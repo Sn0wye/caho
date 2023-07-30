@@ -9,10 +9,7 @@ type BlackCardProps = {
 export function BlackCard({ data }: BlackCardProps) {
   const { packId, text } = data;
 
-  // Handle pick (Fill in the blanks)
-
-  // w-56 224px
-  // h-80 320px
+  // TODO: Handle pick (Fill in the blanks)
 
   return (
     <div className="flex aspect-card h-[30rem] flex-col justify-between gap-5 rounded-2xl border border-zinc-950 bg-zinc-950 p-9 dark:border-zinc-50">
@@ -24,7 +21,7 @@ export function BlackCard({ data }: BlackCardProps) {
         </span>
       </div>
 
-      <CardFooter variant="blackCard" />
+      <CardFooter variant="blackCard" size="lg" />
     </div>
   );
 }
