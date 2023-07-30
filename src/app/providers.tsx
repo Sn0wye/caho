@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes';
+import { Toaster } from '@/components/ui/toaster';
 import { api } from '@/utils/api';
 
 interface ProvidersProps {
@@ -20,6 +21,7 @@ export const ProvidersComponent = ({ children }: ProvidersProps) => {
   return (
     <ThemeProvider attribute="class" disableTransitionOnChange>
       {children}
+      <Toaster />
     </ThemeProvider>
   );
 };
