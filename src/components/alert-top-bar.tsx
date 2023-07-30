@@ -5,12 +5,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
-interface AlertTopbarProps {
+interface AlertTopBarProps {
   icon?: ReactNode;
   label: string;
 }
 
-export function AlertTopbar({ icon, label }: AlertTopbarProps) {
+export function AlertTopBar({ icon, label }: AlertTopBarProps) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
