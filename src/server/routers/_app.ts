@@ -1,7 +1,8 @@
-import { publicProcedure, router } from '../trpc';
+import { router } from '../trpc';
+import { roomRouter } from './room';
 
 export const appRouter = router({
-  example: publicProcedure.query(() => 'Hello world!')
+  room: roomRouter
 });
 
 // export type definition of API
