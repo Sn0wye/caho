@@ -2,7 +2,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { siteConfig } from 'config/site';
 import { LogoIcon } from '@/components/brand/logo-icon';
 
-const cardFooterVariants = cva('flex items-center gap-4 font-bold ', {
+const cardFooterVariants = cva('flex items-center font-bold ', {
   variants: {
     variant: {
       default: 'text-zinc-800 dark:text-zinc-100',
@@ -10,8 +10,8 @@ const cardFooterVariants = cva('flex items-center gap-4 font-bold ', {
       blackCard: 'text-zinc-100'
     },
     size: {
-      sm: 'text-xs',
-      default: 'text-base max-w-[75%]'
+      default: 'text-xs gap-2',
+      lg: 'text-base max-w-[75%] gap-4'
     }
   },
   defaultVariants: {

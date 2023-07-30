@@ -1,4 +1,6 @@
-export const mockPlayers = [
+import { type MockPlayers } from 'types';
+
+export const mockPlayers: MockPlayers = [
   {
     isHost: false,
     isJudge: false,

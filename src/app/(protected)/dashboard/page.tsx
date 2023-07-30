@@ -1,3 +1,1 @@
-export default function DashboardPage() {
-  
-};
+export default function DashboardPage() {}
