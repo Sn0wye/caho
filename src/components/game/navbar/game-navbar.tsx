@@ -2,14 +2,22 @@ import { LogoText } from '@/components/brand/logo-text';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { GameRoomCodeButton } from './game-room-code-button';
 
-interface GameNavbarProps {}
+type GameNavbarProps = {
+  status: 'LOBBY' | 'IN_PROGRESS' | 'FINISHED';
+};
 
-export function GameNavbar({}: GameNavbarProps) {
+export function GameNavbar({ status }: GameNavbarProps) {
   return (
-    <nav className="flex h-16 w-full items-center justify-between border-b border-zinc-200 bg-inherit px-8 py-4 dark:border-zinc-900">
+    <nav className="relative flex h-16 w-full items-center justify-between border-b border-zinc-200 bg-inherit px-8 py-4 dark:border-zinc-900">
       <div className="flex items-center gap-3">
         <LogoText />
         <GameRoomCodeButton />
+      </div>
+
+      <div className="absolute left-1/2 flex -translate-x-1/2 flex-col items-center gap-1">
+        <span className="w-fit bg-amber-500 px-2 py-1 font-mono font-bold uppercase !leading-none text-zinc-100">
+          {status}
+        </span>
       </div>
 
       <div className="flex items-center gap-3">

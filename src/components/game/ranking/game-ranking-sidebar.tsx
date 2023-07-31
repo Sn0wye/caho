@@ -1,11 +1,11 @@
 'use client';
 
-import { Fragment } from 'react';
-import { create } from 'zustand';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/utils/cn';
 import { mockPlayers } from '@/mock/players';
+import { cn } from '@/utils/cn';
+import { Fragment } from 'react';
+import { create } from 'zustand';
 import { GameRankingHeader } from './game-ranking-header';
 import { GameRankingPlayer } from './game-ranking-player';
 
