@@ -1,6 +1,7 @@
 import { createId } from '@paralleldrive/cuid2';
 import { TRPCError } from '@trpc/server';
 import { type Redis } from '@upstash/redis/nodejs';
+import { ROOM_ERRORS } from '../constants/errors';
 import { playerSchema, type Player } from '../schemas/player';
 import {
   roomSchema,
@@ -23,7 +24,7 @@ export const getRoom = async ({
   if (!room) {
     throw new TRPCError({
       code: 'NOT_FOUND',
-      message: 'A sala não existe.' // TODO
+      message: ROOM_ERRORS.ROOM_NOT_FOUND
     });
   }
 
@@ -44,14 +45,11 @@ export const createRoom = async ({
     ...room
   };
 
-  // Armazenar os dados da sala no Redis
   await redis.hmset(`room:${roomId}`, createdRoom);
 
-  // Adicionar a sala recém-criada à lista de salas públicas ou privadas, dependendo do valor de 'isPublic'
   const roomListKey = room.isPublic ? 'public_rooms' : 'private_rooms';
   await redis.lpush(roomListKey, roomId);
 
-  // Adicionar o jogador à lista de jogadores da sala
   const player = {
     ...room.players[0],
     isHost: true
@@ -92,10 +90,8 @@ export const addPlayerToRoom = async ({
   roomId: string;
   player: Player;
 }) => {
-  // Adicionar o jogador à lista de jogadores da sala
   await redis.rpush(`room:${roomId}:players`, JSON.stringify(player));
 
-  // Adicionar o jogador ao ranking da sala
   await redis.zadd(`room:${roomId}:ranking`, {
     score: player.points,
     member: JSON.stringify(player)
@@ -116,7 +112,7 @@ export const startRoom = async ({
   if (!roomExists) {
     throw new TRPCError({
       code: 'NOT_FOUND',
-      message: 'A sala não existe.' // TODO
+      message: ROOM_ERRORS.ROOM_NOT_FOUND
     });
   }
 
@@ -125,7 +121,7 @@ export const startRoom = async ({
   if (hostId !== playerId) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
-      message: 'Você não é o host da sala.' // TODO
+      message: ROOM_ERRORS.IS_NOT_ROOM_HOST
     });
   }
 
@@ -146,7 +142,7 @@ export const endRoom = async ({
   if (!roomExists) {
     throw new TRPCError({
       code: 'NOT_FOUND',
-      message: 'A sala não existe.' // TODO
+      message: ROOM_ERRORS.ROOM_NOT_FOUND
     });
   }
 
@@ -182,45 +178,39 @@ export const joinRoom = async ({
 }) => {
   const { roomId, player, password } = input;
 
-  // Verificar se a sala existe
   const roomExists = await redis.exists(`room:${roomId}`);
   if (!roomExists) {
     throw new TRPCError({
       code: 'NOT_FOUND',
-      message: 'A sala não existe' // TODO
+      message: ROOM_ERRORS.ROOM_NOT_FOUND
     });
   }
 
-  // Obter os detalhes da sala
   const room = roomSchema.parse(await getRoom({ redis, roomId }));
 
-  // Verificar se a sala está cheia
   if (room.players.length >= room.maxPlayers) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
-      message: 'A sala está cheia'
+      message: ROOM_ERRORS.ROOM_IS_FULL
     });
   }
 
-  // Verificar se a senha está correta
   if (room.password !== password) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
-      message: 'Senha incorreta!'
+      message: ROOM_ERRORS.WRONG_PASSWORD
     });
   }
 
-  // Verificar se o jogador já está na sala
   const playerAlreadyInRoom = room.players.some(p => p.id === player.id);
 
   if (playerAlreadyInRoom) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
-      message: 'Você já está na sala!'
+      message: ROOM_ERRORS.PLAYER_ALREADY_IN_ROOM
     });
   }
 
-  // Adicionar o jogador à sala e atualizar o ranking
   await addPlayerToRoom({ redis, roomId, player });
 };
 
@@ -238,7 +228,7 @@ export const leaveRoom = async ({
   if (!roomExists) {
     throw new TRPCError({
       code: 'NOT_FOUND',
-      message: 'A sala não existe.' // TODO
+      message: ROOM_ERRORS.ROOM_NOT_FOUND
     });
   }
 

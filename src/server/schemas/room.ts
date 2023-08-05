@@ -23,6 +23,8 @@ export const roomSchema = z.object({
 
 export type Room = z.infer<typeof roomSchema>;
 
+export type RoomStatus = Room['status'];
+
 export const createRoomSchema = roomSchema.omit({
   id: true,
   status: true

@@ -2,12 +2,25 @@
   "cSpell.words": [
     "arregar",
     "CAHO",
+    "hget",
+    "hgetall",
+    "hmset",
     "hookform",
+    "hset",
+    "lpush",
+    "lrange",
+    "lrem",
+    "paralleldrive",
+    "rpush",
     "runtimes",
     "snowye",
+    "trpc",
     "TRPC",
+    "upstash",
     "UPSTASH",
     "xmas",
+    "zadd",
+    "zrange",
     "zustand"
   ]
 }
