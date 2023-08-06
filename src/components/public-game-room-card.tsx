@@ -1,18 +1,12 @@
 import Link from 'next/link';
 import { Hash } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { type Room } from '@/server/schemas/room';
 import { Skeleton } from './ui/skeleton';
 
 type PublicGameRoomCardProps = Room;
 
-export function PublicGameRoomCard({
+function PublicGameRoomCard({
   code,
   maxPlayers,
   maxPoints,
@@ -21,7 +15,7 @@ export function PublicGameRoomCard({
   const playerAmount = players.length;
 
   return (
-    <Link href="/game/12345">
+    <Link href={`/room/${code}`}>
       <Card className="transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
         <CardHeader>
           <CardTitle className="flex flex-row items-center justify-between gap-2">
@@ -47,10 +41,10 @@ export function PublicGameRoomCard({
           <PublicGameRoomCardData label="host" value={players[0]?.username} />
         </CardContent>
 
-        <CardFooter className="flex items-center justify-between text-sm dark:text-zinc-500">
+        {/* <CardFooter className="flex items-center justify-between text-sm dark:text-zinc-500">
           <span className="font-medium">Atualizado por último:</span>
-          {/* <span className="text-xs">{lastUpdate}</span> */}
-        </CardFooter>
+          <span className="text-xs">{lastUpdate}</span>
+        </CardFooter> */}
       </Card>
     </Link>
   );
@@ -73,7 +67,7 @@ function PublicGameRoomCardData({
   );
 }
 
-export function PublicGameRoomCardSkeleton() {
+function PublicGameRoomCardSkeleton() {
   return (
     <figure className="flex cursor-not-allowed flex-col justify-between gap-6 border border-zinc-200/50 bg-white/20 p-6 dark:border-zinc-900/50 dark:bg-zinc-900/20">
       <Skeleton className="h-8 w-9/12" />
@@ -93,4 +87,9 @@ export function PublicGameRoomCardSkeleton() {
 }
 
 PublicGameRoomCard.Skeleton = PublicGameRoomCardSkeleton;
-export {};
+
+export {
+  PublicGameRoomCard,
+  PublicGameRoomCardSkeleton,
+  PublicGameRoomCardData
+};
