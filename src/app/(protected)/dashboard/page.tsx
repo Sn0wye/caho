@@ -25,19 +25,19 @@ export default async function DashboardPage() {
           <DashboardOptionCard
             title="Encontrar uma partida pública"
             description="Acredite se quiser, algumas pessoas tem coragem de deixar uma sala pública... Tente a sorte lá!"
-            href="/games"
+            href="/rooms"
           />
 
           <DashboardOptionCard
-            title="Entrar em uma partida com credenciais"
-            description="Acredite se quiser, algumas pessoas tem coragem de deixar uma sala pública... Tente a sorte lá!"
-            href="/games"
+            title="Tenho um código"
+            description="Meus amiguinhos já estão me esperando na sala. Vou entrar com o código!"
+            href="/rooms"
           />
 
           <DashboardOptionCard
             title="Criar uma nova partida"
-            description="Acredite se quiser, algumas pessoas tem coragem de deixar uma sala pública... Tente a sorte lá!"
-            href="/game/new"
+            description="Minha sala, minhas regras!"
+            href="/room/new"
             fillContainer
           />
         </section>
