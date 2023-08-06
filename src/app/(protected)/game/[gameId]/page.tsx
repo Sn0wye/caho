@@ -37,11 +37,6 @@ export default async function GamePage() {
        * - [ ] Toggle fullscreen button
        *
        */}
-
-      {/**
-       * TODO: Judge Pick Modal
-       *
-       */}
     </div>
   );
 }
