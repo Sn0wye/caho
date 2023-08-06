@@ -42,6 +42,7 @@ export const createRoom = async ({
   const createdRoom: Room = {
     id: roomId,
     status: 'LOBBY',
+    code: createId(),
     ...room
   };
 
@@ -64,18 +65,15 @@ export const createRoom = async ({
   return createdRoom;
 };
 
-export const listRooms = async ({ redis }: { redis: Redis }) => {
-  const publicRooms = await redis.lrange('public_rooms', 0, -1);
-  const privateRooms = await redis.lrange('private_rooms', 0, -1);
+export const listPublicRooms = async ({ redis }: { redis: Redis }) => {
+  const publicRoomIds = await redis.lrange('public_rooms', 0, -1);
 
   const parsedRooms = [];
 
-  for (const room of publicRooms) {
-    parsedRooms.push(roomSchema.parse(JSON.parse(room)));
-  }
+  for (const roomId of publicRoomIds) {
+    const room = await redis.hgetall(`room:${roomId}`);
 
-  for (const room of privateRooms) {
-    parsedRooms.push(roomSchema.parse(JSON.parse(room)));
+    parsedRooms.push(roomSchema.parse(room));
   }
 
   return parsedRooms;

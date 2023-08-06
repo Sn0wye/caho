@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Hash } from 'lucide-react';
+import { type Room } from '@/server/schemas/room';
 import {
   Card,
   CardContent,
@@ -8,23 +9,16 @@ import {
   CardTitle
 } from './ui/card';
 
-type PublicGameRoomCardProps = {
-  roomCode: string;
-  playerAmount: number;
-  maxPlayerAmount: number;
-  maxPoints: number;
-  host: string;
-  lastUpdate: string;
-};
+type PublicGameRoomCardProps = Room;
 
 export function PublicGameRoomCard({
-  roomCode,
-  playerAmount,
-  maxPlayerAmount,
+  code,
+  maxPlayers,
   maxPoints,
-  host,
-  lastUpdate
+  players
 }: PublicGameRoomCardProps) {
+  const playerAmount = players.length;
+
   return (
     <Link href="/game/12345">
       <Card className="transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
@@ -34,7 +28,7 @@ export function PublicGameRoomCard({
             <div className="flex items-center gap-1">
               <Hash size={16} className="text-geist-orange" />
               <span className="font-mono text-lg font-bold leading-none">
-                {roomCode}
+                {code}
               </span>
             </div>
           </CardTitle>
@@ -43,18 +37,18 @@ export function PublicGameRoomCard({
         <CardContent className="flex flex-col gap-2">
           <PublicGameRoomCardData
             label="jogadores"
-            value={`${playerAmount} / ${maxPlayerAmount}`}
+            value={`${playerAmount} / ${maxPlayers}`}
           />
           <PublicGameRoomCardData
             label="pontos para acabar"
             value={maxPoints}
           />
-          <PublicGameRoomCardData label="host" value={host} />
+          <PublicGameRoomCardData label="host" value={players[0]?.username} />
         </CardContent>
 
         <CardFooter className="flex items-center justify-between text-sm dark:text-zinc-500">
           <span className="font-medium">Atualizado por último:</span>
-          <span className="text-xs">{lastUpdate}</span>
+          {/* <span className="text-xs">{lastUpdate}</span> */}
         </CardFooter>
       </Card>
     </Link>
@@ -66,7 +60,7 @@ function PublicGameRoomCardData({
   value
 }: {
   label: string;
-  value: string | number;
+  value?: string | number;
 }) {
   return (
     <div className="flex items-center justify-between">

@@ -21,11 +21,7 @@ export const router = t.router;
 export const publicProcedure = t.procedure;
 
 const isAuthed = t.middleware(({ next, ctx }) => {
-  if (
-    !ctx.auth.userId ||
-    ctx.auth.user === null ||
-    ctx.auth.user === undefined
-  ) {
+  if (!ctx.auth.userId) {
     throw new TRPCError({ code: 'UNAUTHORIZED' });
   }
 

@@ -7,7 +7,7 @@ import {
   getRoom,
   joinRoom,
   leaveRoom,
-  listRooms,
+  listPublicRooms,
   startRoom
 } from '../services/room';
 import { protectedProcedure, router } from '../trpc';
@@ -19,7 +19,9 @@ export const roomRouter = router({
       const { roomId } = input;
       return getRoom({ redis: ctx.redis, roomId });
     }),
-  list: protectedProcedure.query(({ ctx }) => listRooms({ redis: ctx.redis })),
+  list: protectedProcedure.query(({ ctx }) =>
+    listPublicRooms({ redis: ctx.redis })
+  ),
   new: protectedProcedure
     .input(createRoomSchema)
     .mutation(async ({ ctx, input }) => {
@@ -42,8 +44,8 @@ export const roomRouter = router({
 
       const player: Player = {
         id: ctx.auth.userId,
-        avatarUrl: ctx.auth.user.imageUrl,
-        username: ctx.auth.user.username || 'Anônimo',
+        avatarUrl: ctx.auth.user?.imageUrl,
+        username: ctx.auth.user?.username || 'Anônimo',
         isHost: false,
         points: 0
       };
