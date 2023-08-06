@@ -8,7 +8,7 @@ export function GameRankingHeader() {
   return (
     <header
       className={cn(
-        'absolute left-0 top-0 z-20 flex w-full items-center bg-gradient-to-b from-zinc-50 via-zinc-50 to-transparent p-8 pb-16 dark:from-zinc-950 dark:via-zinc-950',
+        'absolute left-0 top-0 z-20 flex w-full items-center pointer-events-none bg-gradient-to-b from-zinc-50 via-zinc-50 to-transparent p-8 pb-16 dark:from-zinc-950 dark:via-zinc-950',
         isCollapsed ? 'justify-center' : 'justify-between'
       )}
     >

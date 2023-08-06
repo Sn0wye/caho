@@ -2,12 +2,27 @@
   "cSpell.words": [
     "arregar",
     "CAHO",
+    "Gentili",
+    "hget",
+    "hgetall",
+    "hmset",
     "hookform",
+    "hset",
+    "lpush",
+    "lrange",
+    "lrem",
+    "paralleldrive",
+    "rpush",
     "runtimes",
     "snowye",
+    "trpc",
     "TRPC",
+    "Tweetar",
+    "upstash",
     "UPSTASH",
     "xmas",
+    "zadd",
+    "zrange",
     "zustand"
   ]
 }

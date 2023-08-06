@@ -15,12 +15,15 @@ export const roomSchema = z.object({
     })
     .positive(),
   isPublic: z.boolean(),
+  // TODO: add Judging player state
   status: z.enum(['LOBBY', 'IN_PROGRESS', 'FINISHED']),
   players: z.array(playerSchema),
   hostId: z.string().min(1)
 });
 
 export type Room = z.infer<typeof roomSchema>;
+
+export type RoomStatus = Room['status'];
 
 export const createRoomSchema = roomSchema.omit({
   id: true,

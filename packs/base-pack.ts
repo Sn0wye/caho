@@ -11,7 +11,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: '(Estou fazendo exercícios de Kegel agora.)',
+        text: '(Estou fazendo exercícios de pompoarismo agora.)',
         packId: 'base-pack'
       },
       {
@@ -167,7 +167,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Um didgeridildo.',
+        text: 'Um pênis de borracha.',
         packId: 'base-pack'
       },
       {
@@ -207,11 +207,11 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Uma Fleshlight.',
+        text: 'Uma boneca inflável.',
         packId: 'base-pack'
       },
       {
-        text: 'Uma Fleshlight®.',
+        text: 'Uma boneca inflável.',
         packId: 'base-pack'
       },
       {
@@ -263,7 +263,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Um pequeno saco de merda sem pelos chamado Callou.',
+        text: 'Um pequeno saco de merda sem pelos chamado Pigmeu.',
         packId: 'base-pack'
       },
       {
@@ -347,11 +347,11 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Um micropênis.',
+        text: 'Um micro-pênis.',
         packId: 'base-pack'
       },
       {
-        text: 'Um microporco usando uma capa de chuva e botinhas.',
+        text: 'Um micro-porco usando uma capa de chuva e botinhas.',
         packId: 'base-pack'
       },
       {
@@ -391,7 +391,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Um polvo pangênero que perambula pelo cosmos em busca de amor.',
+        text: 'Um polvo transgênero que perambula pelo cosmos em busca de amor.',
         packId: 'base-pack'
       },
       {
@@ -531,7 +531,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Uma franquia do Tim Hortons.',
+        text: 'Uma franquia do KFC.',
         packId: 'base-pack'
       },
       {
@@ -555,7 +555,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Uma vagina vajazzled.',
+        text: 'Uma vagina com candidíase.',
         packId: 'base-pack'
       },
       {
@@ -563,7 +563,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Um cocô após comer um vindaloo.',
+        text: 'Cocô de um baiano após comer um acarajé.',
         packId: 'base-pack'
       },
       {
@@ -607,7 +607,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Vencedora do Oscar, Meryl Streep.',
+        text: 'Vencedora do Oscar, Jair Bolsonaro.',
         packId: 'base-pack'
       },
       {
@@ -631,11 +631,11 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Adderall™.',
+        text: 'Adolescentes grávidas.',
         packId: 'base-pack'
       },
       {
-        text: 'Adult Friendfinder.',
+        text: 'Tinder.',
         packId: 'base-pack'
       },
       {
@@ -663,7 +663,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Alexandria Ocasio-Cortez.',
+        text: 'Silvio Santos',
         packId: 'base-pack'
       },
       {
@@ -751,7 +751,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Uma Noite com Michael Buble.',
+        text: 'Uma Noite com o Danilo Gentili.',
         packId: 'base-pack'
       },
       {
@@ -771,7 +771,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Uma reviravolta na trama de M. Night Shyamalan.',
+        text: 'Uma reviravolta na trama de La Casa de Papel.',
         packId: 'base-pack'
       },
       {
@@ -839,7 +839,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Arnold Vosloo.',
+        text: 'Arnold Schwarzenegger.',
         packId: 'base-pack'
       },
       {
@@ -867,7 +867,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Autocanibalismo.',
+        text: 'Auto-canibalismo.',
         packId: 'base-pack'
       },
       {
@@ -879,7 +879,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Comentário lance a lance de Richie Benaud.',
+        text: 'Comentário lance a lance do Galvão Bueno.',
         packId: 'base-pack'
       },
       {
@@ -999,7 +999,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Benedict Cumberbatch.',
+        text: 'Paulo Muzzy.',
         packId: 'base-pack'
       },
       {
@@ -1015,7 +1015,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Tartarugas de assalto bio-engenheiradas com hálito de ácido.',
+        text: 'Tartarugas ninja com hálito de ácido.',
         packId: 'base-pack'
       },
       {
@@ -1079,15 +1079,15 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Trançar três pênis em um Curly Wurly.',
+        text: 'Trançar os pentelhos do pênis.',
         packId: 'base-pack'
       },
       {
-        text: 'Trançar três pênis em uma torção de alcaçuz.',
+        text: 'Trançar os pentelhos do saco com a Susana Vieira.',
         packId: 'base-pack'
       },
       {
-        text: 'Trançar três pênis em um Twizzler.',
+        text: 'Trançar os pentelhos do saco com o Renato Cariani.',
         packId: 'base-pack'
       },
       {
@@ -1111,7 +1111,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Buckfast Tonic Wine.',
+        text: 'Vodka Natasha.',
         packId: 'base-pack'
       },
       {
@@ -1151,7 +1151,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Bogans cheios de dinheiro.',
+        text: 'Kid Bengala cheio de dinheiro.',
         packId: 'base-pack'
       },
       {
