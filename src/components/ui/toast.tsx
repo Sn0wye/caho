@@ -1,8 +1,8 @@
-import { cn } from '@/utils/cn';
+import * as React from 'react';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
-import * as React from 'react';
+import { cn } from '@/utils/cn';
 
 const ToastProvider = ToastPrimitives.Provider;
 
@@ -91,7 +91,10 @@ const ToastTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Title
     ref={ref}
-    className={cn('text-sm font-bold !leading-none px-2 py-1 font-mono bg-zinc-950 text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950 dark:group-[.destructive]:bg-red-500 dark:group-[.destructive]:text-zinc-50 w-fit', className)}
+    className={cn(
+      'w-fit bg-zinc-950 px-2 py-1 font-mono text-sm font-bold !leading-none text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950 dark:group-[.destructive]:bg-red-500 dark:group-[.destructive]:text-zinc-50',
+      className
+    )}
     {...props}
   />
 ));
@@ -103,7 +106,7 @@ const ToastDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Description
     ref={ref}
-    className={cn('text-sm opacity-90 mt-1', className)}
+    className={cn('mt-1 text-sm opacity-90', className)}
     {...props}
   />
 ));

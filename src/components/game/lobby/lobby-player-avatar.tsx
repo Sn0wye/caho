@@ -1,7 +1,7 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { cn } from '@/utils/cn';
 import { Check } from 'lucide-react';
 import { type MockPlayer } from 'types';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { cn } from '@/utils/cn';
 
 interface LobbyPlayerAvatarProps {
   player: MockPlayer;
