@@ -12,7 +12,6 @@ export function GameRankingCollapseButton(
   const { isCollapsed, setIsCollapsed } = useGameRankingSidebarContext();
 
   function handleClick() {
-    console.log('click');
     setIsCollapsed(!isCollapsed);
   }
 
