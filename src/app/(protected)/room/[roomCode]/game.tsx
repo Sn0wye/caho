@@ -1,19 +1,26 @@
+'use client';
+
+import { useStorage } from 'liveblocks.config';
 import { BlackCard } from '@/components/game/cards/black-card';
 import { GamePlayerDeck } from '@/components/game/game-player-deck';
 import { Lobby } from '@/components/game/lobby/lobby';
 import { GameNavbar } from '@/components/game/navbar/game-navbar';
 import { GameRankingSidebar } from '@/components/game/ranking/game-ranking-sidebar';
-import { type RoomStatus } from '@/server/schemas/room';
+import { type Room } from '@/server/schemas/room';
 
-const gameStatus: RoomStatus = 'IN_PROGRESS' as const;
+type GameProps = Room;
 
-export default async function GamePage() {
+export const Game = ({ status }: GameProps) => {
+  const room = useStorage(s => s.room);
+
+  console.log('room storage data', room);
+
   return (
     <div className="flex h-screen w-full flex-col items-center justify-between">
-      <GameNavbar gameStatus={gameStatus} />
+      <GameNavbar gameStatus={status} />
 
       <main className="flex h-[calc(100vh-4rem)] w-full flex-1">
-        {gameStatus === 'LOBBY' && <Lobby />}
+        {status === 'LOBBY' && <Lobby />}
 
         <GameRankingSidebar />
         <div className="flex flex-1 flex-col items-center justify-between p-8">
@@ -29,7 +36,7 @@ export default async function GamePage() {
       </main>
 
       {/**
-       * TODO: Game bottom bar
+       * //TODO: Game bottom bar
        *
        * - [ ] Leave room button
        * - [ ] Toggle sound button
@@ -39,4 +46,4 @@ export default async function GamePage() {
        */}
     </div>
   );
-}
+};
