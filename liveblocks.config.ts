@@ -6,7 +6,7 @@ import { env } from '@/env.mjs';
 import { type Room } from '@/server/schemas/room';
 
 const client = createClient({
-  publicApiKey: env.LIVEBLOCKS_PUBLIC_API_KEY
+  publicApiKey: env.NEXT_PUBLIC_LIVEBLOCKS_API_KEY
 });
 
 type Presence = {};
