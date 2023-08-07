@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SelectTrigger } from '@radix-ui/react-select';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useZact } from 'zact/client';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -26,7 +25,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
-import { createRoomAction } from '@/actions/create-room';
+import { api } from '@/utils/api';
 import { type Player } from '@/server/schemas/player';
 import {
   createRoomFormSchema,
@@ -37,7 +36,7 @@ import { Separator } from './ui/separator';
 import { toast } from './ui/use-toast';
 
 export const NewGameCardForm = () => {
-  const { mutate, data, isLoading, error } = useZact(createRoomAction);
+  const { mutate, isLoading } = api.room.new.useMutation();
 
   const form = useForm<CreateRoomFormSchema>({
     resolver: zodResolver(createRoomFormSchema),
@@ -50,18 +49,7 @@ export const NewGameCardForm = () => {
   const { user } = useUser();
   const router = useRouter();
 
-  if (data) {
-    router.push(data.redirect);
-  }
-
-  if (error) {
-    toast({
-      description: error.message,
-      variant: 'destructive'
-    });
-  }
-
-  async function onSubmit(values: CreateRoomFormSchema) {
+  const onSubmit = async (values: CreateRoomFormSchema) => {
     if (!user) return;
 
     const player: Player = {
@@ -78,8 +66,18 @@ export const NewGameCardForm = () => {
       hostId: user.id
     };
 
-    await mutate(payload);
-  }
+    mutate(payload, {
+      onSuccess: data => {
+        router.push(data.redirect);
+      },
+      onError: e => {
+        toast({
+          description: e.message,
+          variant: 'destructive'
+        });
+      }
+    });
+  };
 
   const isPublic = form.watch('isPublic');
 
