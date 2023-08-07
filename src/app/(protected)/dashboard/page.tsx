@@ -1,17 +1,20 @@
+import { currentUser } from '@clerk/nextjs';
 import { AlertTopBar } from '@/components/alert-top-bar';
 import { DashboardOptionCard } from '@/components/dashboard/dashboard-option-card';
 import { DashboardPageHeader } from '@/components/dashboard/dashboard-page-header';
 import { Navbar } from '@/components/navbar';
 import { Separator } from '@/components/ui/separator';
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const user = await currentUser();
+
   return (
     <div className="flex h-full min-h-screen w-screen flex-col items-center">
       <Navbar />
       <AlertTopBar label="Essa joça tá em BETA. Não fode." />
       <main className="flex h-full w-full max-w-7xl grow flex-col gap-8 p-8">
         <DashboardPageHeader
-          title="Olá, Fulano de Tal"
+          title={`Olá, ${user?.firstName}`}
           subtitle="Algum subtítulo que o nosso qualificado time de desenvolvedores não
             pensou... Quer saber, use sua imaginação!"
         />
@@ -22,19 +25,19 @@ export default function DashboardPage() {
           <DashboardOptionCard
             title="Encontrar uma partida pública"
             description="Acredite se quiser, algumas pessoas tem coragem de deixar uma sala pública... Tente a sorte lá!"
-            href="/games"
+            href="/rooms"
           />
 
           <DashboardOptionCard
-            title="Entrar em uma partida com credenciais"
-            description="Acredite se quiser, algumas pessoas tem coragem de deixar uma sala pública... Tente a sorte lá!"
-            href="/games"
+            title="Tenho um código"
+            description="Meus amiguinhos já estão me esperando na sala. Vou entrar com o código!"
+            href="/rooms"
           />
 
           <DashboardOptionCard
             title="Criar uma nova partida"
-            description="Acredite se quiser, algumas pessoas tem coragem de deixar uma sala pública... Tente a sorte lá!"
-            href="/game/new"
+            description="Minha sala, minhas regras!"
+            href="/room/new"
             fillContainer
           />
         </section>

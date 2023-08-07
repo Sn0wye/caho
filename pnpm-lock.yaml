@@ -11,6 +11,12 @@ dependencies:
   '@hookform/resolvers':
     specifier: ^3.1.1
     version: 3.1.1(react-hook-form@7.45.2)
+  '@liveblocks/client':
+    specifier: ^1.2.1
+    version: 1.2.1
+  '@liveblocks/react':
+    specifier: ^1.2.1
+    version: 1.2.1(react@18.2.0)
   '@paralleldrive/cuid2':
     specifier: ^2.2.1
     version: 2.2.1
@@ -592,6 +598,27 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
+
+  /@liveblocks/client@1.2.1:
+    resolution: {integrity: sha512-Oh3h05fK0bpBhJ8zxBIDI2d/w1UXvaBuEBt1Gr6ZebqdAnBvW6L85hAEWbKKkRpokZyM79ZfRtOEqj9shJ9aww==}
+    dependencies:
+      '@liveblocks/core': 1.2.1
+    dev: false
+
+  /@liveblocks/core@1.2.1:
+    resolution: {integrity: sha512-W1hNNw3Rc0fy9pj7s5FQuEmZwFqOomW8FcgZLSFg3QlhDfAsPfAJW5IMQXaBKc4C41aSlc/Pude5o1e7tQtu8g==}
+    dev: false
+
+  /@liveblocks/react@1.2.1(react@18.2.0):
+    resolution: {integrity: sha512-JSOWVzi7p3YircwtTrXNJ28nc86uaFprW1XhH37Q0AGRwJ+Oy2WVllOmsRYRLtHONvHJS0YMprh6OHXI4XfgUg==}
+    peerDependencies:
+      react: ^16.14.0 || ^17 || ^18
+    dependencies:
+      '@liveblocks/client': 1.2.1
+      '@liveblocks/core': 1.2.1
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
 
   /@next/env@13.4.2:
     resolution: {integrity: sha512-Wqvo7lDeS0KGwtwg9TT9wKQ8raelmUxt+TQKWvG/xKfcmDXNOtCuaszcfCF8JzlBG1q0VhpI6CKaRMbVPMDWgw==}

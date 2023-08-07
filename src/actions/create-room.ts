@@ -6,10 +6,10 @@ import { createRoomSchema } from '@/server/schemas/room';
 import { createRoom } from '@/server/services/room';
 
 export const createRoomAction = zact(createRoomSchema)(async input => {
-  const game = await createRoom({ redis: redis, room: input });
+  const room = await createRoom({ redis: redis, room: input });
 
   return {
-    redirect: `/game/${game.id}`,
-    game
+    redirect: `/room/${room.code}`,
+    room
   };
 });

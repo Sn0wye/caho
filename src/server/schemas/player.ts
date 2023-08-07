@@ -4,7 +4,7 @@ export const playerSchema = z.object({
   id: z.string().min(1),
   points: z.number().min(0),
   username: z.string().min(1),
-  avatarUrl: z.string().url(),
+  avatarUrl: z.string().url().nullish(),
   isHost: z.boolean()
 });
 

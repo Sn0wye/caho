@@ -3,7 +3,8 @@ import { playerSchema } from './player';
 
 export const roomSchema = z.object({
   id: z.string().min(1),
-  password: z.string(),
+  password: z.coerce.string(),
+  code: z.string().min(6).max(6),
   maxPlayers: z.number().min(2).max(10).positive(),
   maxPoints: z
     .number()
@@ -27,20 +28,22 @@ export type RoomStatus = Room['status'];
 
 export const createRoomSchema = roomSchema.omit({
   id: true,
-  status: true
+  status: true,
+  code: true
 });
 
 export type CreateRoomSchema = z.infer<typeof createRoomSchema>;
 
 export const createRoomFormSchema = createRoomSchema.omit({
   players: true,
-  hostId: true
+  hostId: true,
+  code: true
 });
 
 export type CreateRoomFormSchema = z.infer<typeof createRoomFormSchema>;
 
 export const joinRoomSchema = z.object({
-  roomId: z.string().min(1),
+  roomCode: z.string().min(1),
   password: z.string().optional(),
   player: playerSchema
 });
@@ -48,14 +51,14 @@ export const joinRoomSchema = z.object({
 export type JoinRoomSchema = z.infer<typeof joinRoomSchema>;
 
 export const leaveRoomSchema = z.object({
-  roomId: z.string().min(1),
+  roomCode: z.string().min(1),
   playerId: z.string().min(1)
 });
 
 export type LeaveRoomSchema = z.infer<typeof leaveRoomSchema>;
 
 export const startRoomSchema = z.object({
-  roomId: z.string().min(1),
+  roomCode: z.string().min(1),
   playerId: z.string().min(1)
 });
 

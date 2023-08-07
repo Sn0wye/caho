@@ -2,11 +2,13 @@ import { AlertTopBar } from '@/components/alert-top-bar';
 import { DashboardPageHeader } from '@/components/dashboard/dashboard-page-header';
 import { Navbar } from '@/components/navbar';
 import { PublicGameRoomCard } from '@/components/public-game-room-card';
-import { PublicGameRoomCardSkeleton } from '@/components/skeletons/public-game-room-card-skeleton';
 import { Separator } from '@/components/ui/separator';
-import { mockPublicRooms } from '@/mock/rooms';
+import { createCaller } from '@/utils/caller';
 
-export default function ListGamesPage() {
+export default async function ListGamesPage() {
+  const caller = createCaller();
+  const publicRooms = await caller.room.list();
+
   return (
     <div className="flex h-full min-h-screen w-screen flex-col items-center">
       <Navbar />
@@ -21,10 +23,9 @@ export default function ListGamesPage() {
         <Separator className="w-full" />
 
         <section className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {mockPublicRooms.map(room => (
-            <PublicGameRoomCard key={room.roomCode} {...room} />
+          {publicRooms.map(room => (
+            <PublicGameRoomCard key={room.id} {...room} />
           ))}
-          <PublicGameRoomCardSkeleton />
         </section>
       </main>
     </div>

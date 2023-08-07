@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { LogoText } from '@/components/brand/logo-text';
 import { ThemeSwitcher } from '@/components/theme-switcher';
@@ -18,8 +18,9 @@ export function GameNavbar({ gameStatus }: GameNavbarProps) {
   function handleLeaveRoom() {
     toast({
       variant: 'destructive',
-      title: "ERROR LOG | ROOM.JOIN",
-      description: "Essa sala já está cheia! Tente outra sala ou crie sua própria sessão.",
+      title: 'ERROR LOG | ROOM.JOIN',
+      description:
+        'Essa sala já está cheia! Tente outra sala ou crie sua própria sessão.'
     });
   }
 
@@ -31,7 +32,7 @@ export function GameNavbar({ gameStatus }: GameNavbarProps) {
       </div>
 
       <div className="absolute left-1/2 flex -translate-x-1/2 flex-col items-center gap-1">
-        { gameStatus === 'LOBBY' && <GameNavbarStatus gameStatus={gameStatus} />}
+        {gameStatus === 'LOBBY' && <GameNavbarStatus gameStatus={gameStatus} />}
       </div>
 
       <div className="flex items-center gap-3">

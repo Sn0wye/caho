@@ -1,9 +1,9 @@
-import { type RoomStatus } from '@/server/schemas/room';
 import { cn } from '@/utils/cn';
+import { type RoomStatus } from '@/server/schemas/room';
 
 type GameStatusVariantsObject = {
   [key in RoomStatus]: string;
-}
+};
 
 const gameStatusColorVariants: GameStatusVariantsObject = {
   'LOBBY': 'bg-amber-500',

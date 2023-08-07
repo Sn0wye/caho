@@ -7,43 +7,45 @@ import {
   getRoom,
   joinRoom,
   leaveRoom,
-  listRooms,
+  listPublicRooms,
   startRoom
 } from '../services/room';
 import { protectedProcedure, router } from '../trpc';
 
 export const roomRouter = router({
   get: protectedProcedure
-    .input(z.object({ roomId: z.string().min(1) }))
+    .input(z.object({ roomCode: z.string().min(1) }))
     .query(({ ctx, input }) => {
-      const { roomId } = input;
-      return getRoom({ redis: ctx.redis, roomId });
+      const { roomCode } = input;
+      return getRoom({ redis: ctx.redis, roomCode });
     }),
-  list: protectedProcedure.query(({ ctx }) => listRooms({ redis: ctx.redis })),
+  list: protectedProcedure.query(({ ctx }) =>
+    listPublicRooms({ redis: ctx.redis })
+  ),
   new: protectedProcedure
     .input(createRoomSchema)
     .mutation(async ({ ctx, input }) => {
-      const game = await createRoom({ redis: ctx.redis, room: input });
+      const room = await createRoom({ redis: ctx.redis, room: input });
 
       return {
-        redirect: `/game/${game.id}`,
-        game
+        redirect: `/room/${room.code}`,
+        room
       };
     }),
   join: protectedProcedure
     .input(
       z.object({
-        roomId: z.string().min(1),
+        roomCode: z.string().min(1),
         password: z.string().optional()
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { roomId } = input;
+      const { roomCode } = input;
 
       const player: Player = {
         id: ctx.auth.userId,
-        avatarUrl: ctx.auth.user.imageUrl,
-        username: ctx.auth.user.username || 'Anônimo',
+        avatarUrl: ctx.auth.user?.imageUrl,
+        username: ctx.auth.user?.username || 'Anônimo',
         isHost: false,
         points: 0
       };
@@ -51,21 +53,21 @@ export const roomRouter = router({
       await joinRoom({
         redis: ctx.redis,
         input: {
-          roomId,
+          roomCode,
           player
         }
       });
 
       // Retornar os detalhes da sala atualizados
-      return getRoom({ redis: ctx.redis, roomId });
+      return getRoom({ redis: ctx.redis, roomCode });
     }),
   start: protectedProcedure
-    .input(z.object({ roomId: z.string().min(1) }))
+    .input(z.object({ roomCode: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       await startRoom({
         redis: ctx.redis,
         input: {
-          roomId: input.roomId,
+          roomCode: input.roomCode,
           playerId: ctx.auth.userId
         }
       });
@@ -73,15 +75,15 @@ export const roomRouter = router({
   end: protectedProcedure
     .input(
       z.object({
-        roomId: z.string().min(1)
+        roomCode: z.string().min(1)
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { roomId } = input;
+      const { roomCode } = input;
 
       await endRoom({
         redis: ctx.redis,
-        roomId
+        roomCode
       });
     }),
   leave: protectedProcedure
