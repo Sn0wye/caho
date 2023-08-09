@@ -47,7 +47,7 @@ export const roomRouter = router({
         avatarUrl: ctx.auth.user?.imageUrl,
         username: ctx.auth.user?.username || 'Anônimo',
         isHost: false,
-        points: 0
+        score: 0
       };
 
       await joinRoom({

@@ -56,7 +56,7 @@ export const NewGameCardForm = () => {
       avatarUrl: user.imageUrl,
       id: user.id,
       isHost: true,
-      points: 0,
+      score: 0,
       username: user.fullName || user.username || 'Anônimo'
     };
 

@@ -92,7 +92,7 @@ export const addPlayerToRoom = async ({
   await redis.rpush(`room:${roomCode}:players`, JSON.stringify(player));
 
   await redis.zadd(`room:${roomCode}:ranking`, {
-    score: player.points,
+    score: player.score,
     member: JSON.stringify(player)
   });
 };
