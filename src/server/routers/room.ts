@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { type Player } from '../schemas/player';
+import { type PlayerSchema } from '../schemas/player';
 import { createRoomSchema, leaveRoomSchema } from '../schemas/room';
 import {
   createRoom,
@@ -13,25 +13,25 @@ import {
 import { protectedProcedure, router } from '../trpc';
 
 export const roomRouter = router({
-  get: protectedProcedure
+  getByCode: protectedProcedure
     .input(z.object({ roomCode: z.string().min(1) }))
     .query(({ ctx, input }) => {
       const { roomCode } = input;
       return getRoom({ redis: ctx.redis, roomCode });
     }),
-  list: protectedProcedure.query(({ ctx }) =>
-    listPublicRooms({ redis: ctx.redis })
-  ),
-  new: protectedProcedure
+  create: protectedProcedure
     .input(createRoomSchema)
     .mutation(async ({ ctx, input }) => {
-      const room = await createRoom({ redis: ctx.redis, room: input });
+      const room = await createRoom({ redis: ctx.redis, input });
 
       return {
         redirect: `/room/${room.code}`,
         room
       };
     }),
+  listPublic: protectedProcedure.query(({ ctx }) =>
+    listPublicRooms({ redis: ctx.redis })
+  ),
   join: protectedProcedure
     .input(
       z.object({
@@ -42,7 +42,7 @@ export const roomRouter = router({
     .mutation(async ({ ctx, input }) => {
       const { roomCode } = input;
 
-      const player: Player = {
+      const player: PlayerSchema = {
         id: ctx.auth.userId,
         avatarUrl: ctx.auth.user?.imageUrl,
         username: ctx.auth.user?.username || 'Anônimo',

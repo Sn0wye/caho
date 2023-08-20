@@ -1,11 +1,22 @@
+import { createId } from '@paralleldrive/cuid2';
 import { z } from 'zod';
+import { generateCode } from '../utils/generateCode';
 import { playerSchema } from './player';
 
 export const roomSchema = z.object({
-  id: z.string().min(1),
-  password: z.coerce.string(),
-  code: z.string().min(6).max(6),
-  maxPlayers: z.number().min(2).max(10).positive(),
+  id: z
+    .string()
+    .optional()
+    .default(() => createId()),
+  code: z
+    .string()
+    .min(6)
+    .max(6)
+    .optional()
+    .default(() => generateCode()),
+  status: z.enum(['LOBBY', 'IN_PROGRESS', 'FINISHED']).default('LOBBY'),
+  password: z.string().optional(),
+  maxPlayers: z.number().min(2).max(10).positive().int(),
   maxPoints: z
     .number()
     .min(1, {
@@ -14,33 +25,22 @@ export const roomSchema = z.object({
     .max(30, {
       message: 'Deve ser menor que 30 pontos'
     })
-    .positive(),
+    .positive()
+    .int(),
   isPublic: z.boolean(),
-  // TODO: add Judging player state
-  status: z.enum(['LOBBY', 'IN_PROGRESS', 'FINISHED']),
-  players: z.array(playerSchema),
-  hostId: z.string().min(1)
+  hostId: z.string().nonempty()
 });
 
 export type Room = z.infer<typeof roomSchema>;
 
 export type RoomStatus = Room['status'];
 
-export const createRoomSchema = roomSchema.omit({
-  id: true,
-  status: true,
-  code: true
+export const createRoomSchema = z.object({
+  room: roomSchema,
+  host: playerSchema
 });
 
 export type CreateRoomSchema = z.infer<typeof createRoomSchema>;
-
-export const createRoomFormSchema = createRoomSchema.omit({
-  players: true,
-  hostId: true,
-  code: true
-});
-
-export type CreateRoomFormSchema = z.infer<typeof createRoomFormSchema>;
 
 export const joinRoomSchema = z.object({
   roomCode: z.string().min(1),

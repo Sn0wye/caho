@@ -1,8 +1,7 @@
-import { createId } from '@paralleldrive/cuid2';
 import { TRPCError } from '@trpc/server';
-import { type Redis } from '@upstash/redis/nodejs';
+import { type Redis } from '@upstash/redis';
+import { type GameStatuses } from 'types';
 import { ROOM_ERRORS } from '../constants/errors';
-import { playerSchema, type Player } from '../schemas/player';
 import {
   roomSchema,
   type CreateRoomSchema,
@@ -11,7 +10,17 @@ import {
   type Room,
   type StartRoomSchema
 } from '../schemas/room';
-import { generateCode } from '../utils/generateCode';
+import {
+  addPlayerToRoom,
+  getPlayersFromRoom,
+  isPlayerInRoom,
+  removePlayerFromRoom
+} from './player';
+import {
+  addPlayerToRanking,
+  getPlayerRanking,
+  removePlayerFromRanking
+} from './ranking';
 
 export const getRoom = async ({
   redis,
@@ -19,7 +28,7 @@ export const getRoom = async ({
 }: {
   redis: Redis;
   roomCode: string;
-}) => {
+}): Promise<Room> => {
   const room = await redis.hgetall(`room:${roomCode}`);
 
   if (!room) {
@@ -29,41 +38,38 @@ export const getRoom = async ({
     });
   }
 
-  return roomSchema.parse(room);
+  const parsedRoom = roomSchema.safeParse(room);
+
+  if (!parsedRoom.success) {
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: parsedRoom.error.message
+    });
+  }
+
+  return parsedRoom.data;
 };
 
 export const createRoom = async ({
   redis,
-  room
+  input
 }: {
   redis: Redis;
-  room: CreateRoomSchema;
-}) => {
-  const roomCode = generateCode();
-  const createdRoom: Room = {
-    id: createId(),
-    status: 'LOBBY',
-    code: roomCode,
-    ...room
-  };
+  input: CreateRoomSchema;
+}): Promise<Room> => {
+  const { room, host } = input;
 
-  await redis.hmset(`room:${roomCode}`, createdRoom);
+  await redis.hmset(`room:${room.code}`, room);
 
   const roomListKey = room.isPublic ? 'public_rooms' : 'private_rooms';
-  await redis.lpush(roomListKey, roomCode);
+  await redis.lpush(roomListKey, room.code);
 
-  const player = {
-    ...room.players[0],
-    isHost: true
-  } as Player;
+  await Promise.all([
+    addPlayerToRoom({ redis, roomCode: room.code, player: host }),
+    addPlayerToRanking({ redis, roomCode: room.code, player: host })
+  ]);
 
-  await addPlayerToRoom({
-    redis,
-    player,
-    roomCode
-  });
-
-  return createdRoom;
+  return room;
 };
 
 export const listPublicRooms = async ({ redis }: { redis: Redis }) => {
@@ -80,23 +86,6 @@ export const listPublicRooms = async ({ redis }: { redis: Redis }) => {
   return parsedRooms;
 };
 
-export const addPlayerToRoom = async ({
-  redis,
-  roomCode,
-  player
-}: {
-  redis: Redis;
-  roomCode: string;
-  player: Player;
-}) => {
-  await redis.rpush(`room:${roomCode}:players`, JSON.stringify(player));
-
-  await redis.zadd(`room:${roomCode}:ranking`, {
-    score: player.score,
-    member: JSON.stringify(player)
-  });
-};
-
 export const startRoom = async ({
   redis,
   input
@@ -106,27 +95,25 @@ export const startRoom = async ({
 }) => {
   const { roomCode, playerId } = input;
 
-  const roomExists = await redis.exists(`room:${playerId}`);
+  const room = await getRoom({
+    redis,
+    roomCode
+  });
 
-  if (!roomExists) {
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: ROOM_ERRORS.ROOM_NOT_FOUND
-    });
-  }
-
-  const hostId = await redis.hget(`room:${roomCode}`, 'hostId');
-
-  if (hostId !== playerId) {
+  if (room.hostId !== playerId) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
       message: ROOM_ERRORS.IS_NOT_ROOM_HOST
     });
   }
 
-  await redis.hset(`room:${roomCode}`, {
+  await updateRoomStatus({
+    redis,
+    roomCode,
     status: 'IN_PROGRESS'
   });
+
+  await redis.expire(`room:${roomCode}`, 60 * 60 * 24);
 };
 
 export const endRoom = async ({
@@ -136,36 +123,24 @@ export const endRoom = async ({
   redis: Redis;
   roomCode: string;
 }) => {
-  const roomExists = await redis.exists(`room:${roomCode}`);
+  // TODO: Maybe check if room exists?
+  // const room = await getRoom({
+  //   redis,
+  //   roomCode
+  // });
 
-  if (!roomExists) {
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: ROOM_ERRORS.ROOM_NOT_FOUND
-    });
-  }
-
-  await redis.hset(`room:${roomCode}`, {
+  await updateRoomStatus({
+    redis,
+    roomCode,
     status: 'FINISHED'
   });
 
-  const ranking = await redis.zrange(`room:${roomCode}:ranking`, 0, -1);
+  const ranking = await getPlayerRanking({
+    redis,
+    roomCode
+  });
 
-  type Entry = {
-    score: number;
-    member: string;
-  };
-
-  const parsed = (ranking as Entry[])
-    .map(entry => {
-      return {
-        score: entry.score,
-        player: playerSchema.parse(JSON.parse(entry.member))
-      };
-    })
-    .sort((a, b) => b.score - a.score);
-
-  return parsed;
+  return ranking;
 };
 
 export const joinRoom = async ({
@@ -177,17 +152,12 @@ export const joinRoom = async ({
 }) => {
   const { roomCode, player, password } = input;
 
-  const roomExists = await redis.exists(`room:${roomCode}`);
-  if (!roomExists) {
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: ROOM_ERRORS.ROOM_NOT_FOUND
-    });
-  }
+  const [room, players] = await Promise.all([
+    getRoom({ redis, roomCode }),
+    getPlayersFromRoom({ redis, roomCode })
+  ]);
 
-  const room = roomSchema.parse(await getRoom({ redis, roomCode }));
-
-  if (room.players.length >= room.maxPlayers) {
+  if (players.length >= room.maxPlayers) {
     throw new TRPCError({
       code: 'BAD_REQUEST',
       message: ROOM_ERRORS.ROOM_IS_FULL
@@ -201,7 +171,11 @@ export const joinRoom = async ({
     });
   }
 
-  const playerAlreadyInRoom = room.players.some(p => p.id === player.id);
+  const playerAlreadyInRoom = await isPlayerInRoom({
+    redis,
+    roomCode,
+    playerId: player.id
+  });
 
   if (playerAlreadyInRoom) {
     throw new TRPCError({
@@ -231,5 +205,22 @@ export const leaveRoom = async ({
     });
   }
 
-  await redis.lrem(`room:${roomCode}:players`, 0, playerId);
+  await Promise.all([
+    removePlayerFromRoom({ redis, roomCode, playerId }),
+    removePlayerFromRanking({ redis, roomCode, playerId })
+  ]);
+};
+
+const updateRoomStatus = async ({
+  redis,
+  roomCode,
+  status
+}: {
+  redis: Redis;
+  roomCode: string;
+  status: GameStatuses;
+}) => {
+  return await redis.hset(`room:${roomCode}`, {
+    status
+  });
 };
