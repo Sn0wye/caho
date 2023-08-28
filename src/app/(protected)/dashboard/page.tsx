@@ -1,47 +1,48 @@
-import { currentUser } from '@clerk/nextjs';
-import { AlertTopBar } from '@/components/alert-top-bar';
+import { DashboardBanner } from '@/components/dashboard/dashboard-banner';
 import { DashboardOptionCard } from '@/components/dashboard/dashboard-option-card';
 import { DashboardPageHeader } from '@/components/dashboard/dashboard-page-header';
-import { Navbar } from '@/components/navbar';
 import { Separator } from '@/components/ui/separator';
+import { currentUser } from '@clerk/nextjs';
+import { Home, Lock, Plus, Search } from 'lucide-react';
 
 export default async function DashboardPage() {
   const user = await currentUser();
 
   return (
-    <div className="flex h-full min-h-screen w-screen flex-col items-center">
-      <Navbar />
-      <AlertTopBar label="Essa joça tá em BETA. Não fode." />
-      <main className="flex h-full w-full max-w-7xl grow flex-col gap-8 p-8">
-        <DashboardPageHeader
-          title={`Olá, ${user?.firstName}`}
-          subtitle="Algum subtítulo que o nosso qualificado time de desenvolvedores não
-            pensou... Quer saber, use sua imaginação!"
+    <section className="flex flex-col gap-8">
+      <DashboardPageHeader
+        title="Dashboard"
+        subtitle="Aqui você pode criar uma nova sala, entrar em uma sala com um código ou encontrar uma sala pública."
+        icon={<Home size={24} />}
+      />
+      <Separator className="w-full" />
+      <DashboardBanner firstName={user?.firstName || 'DESCONHECIDO'} />
+
+      <section className="mt-4 grid grid-cols-1 gap-8 md:grid-cols-3">
+        <DashboardOptionCard
+          title="Criar uma nova partida"
+          description="Minha sala, minhas regras!"
+          href="/dashboard/create-room"
+          bgColor="teal"
+          icon={<Plus />}
         />
 
-        <Separator className="w-full" />
+        <DashboardOptionCard
+          title="Tenho um código"
+          description="Meus amiguinhos já estão me esperando na sala. Vou entrar com o código!"
+          href="/rooms"
+          bgColor="purple"
+          icon={<Lock />}
+        />
 
-        <section className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          <DashboardOptionCard
-            title="Encontrar uma partida pública"
-            description="Acredite se quiser, algumas pessoas tem coragem de deixar uma sala pública... Tente a sorte lá!"
-            href="/rooms"
-          />
-
-          <DashboardOptionCard
-            title="Tenho um código"
-            description="Meus amiguinhos já estão me esperando na sala. Vou entrar com o código!"
-            href="/rooms"
-          />
-
-          <DashboardOptionCard
-            title="Criar uma nova partida"
-            description="Minha sala, minhas regras!"
-            href="/room/new"
-            fillContainer
-          />
-        </section>
-      </main>
-    </div>
+        <DashboardOptionCard
+          title="Encontrar uma partida pública"
+          description="Algumas pessoas tem coragem de deixar uma sala pública... Tente a sorte lá!"
+          href="/dashboard/list-public-rooms"
+          bgColor="yellow"
+          icon={<Search />}
+        />
+      </section>
+    </section>
   );
 }

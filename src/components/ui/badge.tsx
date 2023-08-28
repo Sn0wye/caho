@@ -1,16 +1,16 @@
-import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
+import { cva, type VariantProps } from 'class-variance-authority';
+import * as React from 'react';
 
 const badgeVariants = cva(
-  'inline-flex font-bold rounded items-center justify-center border border-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 dark:border-zinc-800 dark:focus:ring-zinc-800',
+  'inline-flex rounded font-bold items-center justify-center border border-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 dark:border-zinc-800 dark:focus:ring-zinc-800',
   {
     variants: {
       variant: {
         default:
-          'border-transparent bg-zinc-900 text-zinc-50 hover:bg-zinc-900/80 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/80',
+          'border-transparent bg-zinc-900 text-zinc-50 dark:bg-zinc-50 dark:text-zinc-900',
         secondary:
-          'border-transparent bg-zinc-100 text-zinc-900 hover:bg-zinc-100/80 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-800/80',
+          'border-transparent dark:border-transparent bg-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-400',
         destructive:
           'border-transparent bg-red-500 text-zinc-50 hover:bg-red-500/80 dark:bg-red-900 dark:text-red-50 dark:hover:bg-red-900/80',
         outline: 'text-zinc-950 dark:text-zinc-50',
@@ -20,8 +20,9 @@ const badgeVariants = cva(
           'border-none bg-zinc-200 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-700'
       },
       size: {
-        default: ' px-2 py-1 text-xs',
-        avatar: 'p-1 text-2xs !leading-none w-full'
+        default: 'px-2 py-1 text-xs',
+        avatar: 'p-1 text-2xs !leading-none w-full',
+        fit: 'px-2 py-1 text-xs w-fit'
       }
     },
     defaultVariants: {

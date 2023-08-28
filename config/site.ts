@@ -5,7 +5,7 @@ export const siteConfig: SiteConfig = {
   nameLong: 'Cartas contra a humanidade online',
   descriptionShort: 'O jogo para pessoas horríveis.',
   descriptionLong:
-    "Trata-se de um jogo de cartas horrível sem o politicamente correto, mas divertido. Trazendo o clássico jogo de cartas 'Cards Against Humanity' para o universo online! Além de tudo, código aberto! :).",
+    'Trazendo o clássico jogo de cartas politicamente incorreto para o universo online! Além de tudo, código aberto!',
   url: '',
   ogImage: '',
   links: {

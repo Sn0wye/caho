@@ -1,26 +1,25 @@
-import { GoToPreviousPageButton } from '../go-to-previous-page-button';
+import { type ReactNode } from 'react';
+import { DashboardPageHeaderIcon } from './dashboard-page-header-icon';
 
 interface DashboardPageHeaderProps {
   title: string;
-  subtitle: string;
-  previousPageButton?: boolean;
+  subtitle?: string;
+  icon: ReactNode;
 }
 
 export function DashboardPageHeader({
   title,
   subtitle,
-  previousPageButton
+  icon,
 }: DashboardPageHeaderProps) {
   return (
-    <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-8 ">
-      <div className="flex w-full flex-col gap-3">
-        <h1 className="text-5xl font-extrabold">{title}</h1>
-        <span className="text-lg !leading-relaxed dark:text-zinc-500 md:text-xl">
-          {subtitle}
-        </span>
-      </div>
+    <header className="flex flex-col gap-4 sm:flex-row sm:items-center">
+      <DashboardPageHeaderIcon icon={icon} />
 
-      {previousPageButton && <GoToPreviousPageButton />}
+      <div className="flex w-full flex-col gap-1">
+        <h1 className="text-2xl sm:text-3xl font-bold">{title}</h1>
+        {subtitle && <span className="text-zinc-500">{subtitle}</span>}
+      </div>
     </header>
   );
 }

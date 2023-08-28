@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { SignedIn, SignedOut } from '@clerk/nextjs';
+import Link from 'next/link';
 import { LogoText } from './brand/logo-text';
 import { ThemeSwitcher } from './theme-switcher';
 import { Button } from './ui/button';
@@ -8,7 +8,7 @@ interface NavbarProps {}
 
 export function Navbar({}: NavbarProps) {
   return (
-    <nav className="sticky left-0 top-0 flex h-20 w-full items-center justify-between border-b border-zinc-200 bg-white px-8 py-4 dark:border-zinc-900 dark:bg-black">
+    <nav className="sticky left-0 top-0 flex w-full items-center justify-between border-b py-4 dark:border-b-zinc-900">
       <LogoText />
 
       <div className="flex h-full w-fit items-center gap-4">

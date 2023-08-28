@@ -1,24 +1,34 @@
-import { siteConfig } from 'config/site';
 import { AlertTopBar } from '@/components/alert-top-bar';
 import { Navbar } from '@/components/navbar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { siteConfig } from 'config/site';
 
 export default async function HomePage() {
   return (
-    <div className="flex h-screen w-full flex-col justify-center">
-      <Navbar />
+    <div className="flex h-screen w-full flex-col items-center">
       <AlertTopBar label="Cheguei na web! Agora é para valer ein... Vai arregar?" />
 
-      <main className="flex h-full grow items-center px-8 py-4">
-        <section className="flex flex-col gap-4 lg:max-w-2xl">
-          <span className="w-fit bg-geist-pink px-1.5 py-0.5 text-xs font-bold text-zinc-950 sm:text-sm md:text-base">
+      <main className="flex flex-col gap-16 w-full max-w-5xl flex-1">
+        <Navbar />
+
+        <section className="flex max-w-[70%] flex-col gap-6">
+          <Badge variant="secondary" size="fit">
             {siteConfig.descriptionShort}
-          </span>
-          <h1 className="text-5xl font-extrabold sm:text-6xl md:text-8xl lg:max-w-md">
-            {siteConfig.nameLong}
-          </h1>
-          <span className="mt-4 !leading-relaxed dark:text-zinc-500 md:text-lg">
-            {siteConfig.descriptionLong}
-          </span>
+          </Badge>
+
+          <div className="flex flex-col gap-3">
+            <h1 className="text-3xl font-bold leading-relaxed sm:text-4xl md:text-6xl">
+              {siteConfig.nameLong}
+            </h1>
+            <span className="text-base max-w-[70%] leading-10 text-zinc-500 md:text-lg">
+              {siteConfig.descriptionLong}
+            </span>
+          </div>
+
+          <Button size="lg" className="mt-4 w-fit">
+            Começar
+          </Button>
         </section>
       </main>
     </div>

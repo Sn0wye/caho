@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { siteConfig } from 'config/site';
+import Link from 'next/link';
 import { LogoIcon } from './logo-icon';
 
 interface LogoTextProps {}

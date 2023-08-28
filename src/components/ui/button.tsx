@@ -1,10 +1,10 @@
-import * as React from 'react';
+import { cn } from '@/utils/cn';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/utils/cn';
+import * as React from 'react';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-zinc-950 dark:focus-visible:ring-zinc-800',
+  'inline-flex rounded items-center justify-center text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-zinc-950 dark:focus-visible:ring-zinc-800',
   {
     variants: {
       variant: {
@@ -18,7 +18,8 @@ const buttonVariants = cva(
           'bg-zinc-100 text-zinc-900 hover:bg-zinc-100/80 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-800/80',
         ghost:
           'hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50',
-        link: 'text-zinc-900 underline-offset-4 hover:underline dark:text-zinc-50'
+        link: 'text-zinc-900 underline-offset-4 hover:underline dark:text-zinc-50',
+        transparent: 'text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-zinc-100 dark:hover:bg-zinc-900', 
       },
       size: {
         default: 'h-10 px-4 py-2',
