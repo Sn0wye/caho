@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@clerk/localizations": "^1.25.0",
     "@clerk/nextjs": "^4.23.1",
     "@hookform/resolvers": "^3.1.1",
     "@liveblocks/client": "^1.2.1",

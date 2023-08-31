@@ -1,10 +1,14 @@
 import { type Config } from 'tailwindcss';
-import { fontFamily } from 'tailwindcss/defaultTheme';
+import { fontFamily, screens } from 'tailwindcss/defaultTheme';
 
 export default {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   darkMode: ['class'],
   theme: {
+    screens: {
+      'clerk': '30em',
+      ...screens,
+    },
     container: {
       center: true,
       padding: '2rem',

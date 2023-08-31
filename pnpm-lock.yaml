@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@clerk/localizations':
+    specifier: ^1.25.0
+    version: 1.25.0(react@18.2.0)
   '@clerk/nextjs':
     specifier: ^4.23.1
     version: 4.23.1(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)
@@ -412,6 +415,16 @@ packages:
       tslib: 2.4.1
     dev: false
 
+  /@clerk/localizations@1.25.0(react@18.2.0):
+    resolution: {integrity: sha512-D0rfAP/tl46i6jz6VgizvKlF8xSUJJ+ZWyec88rPTd8yylOSZXxIQUHgaXp8gTgXJtTz84rTyZyFpBJN+vqWcQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16'
+    dependencies:
+      '@clerk/types': 3.50.0
+      react: 18.2.0
+    dev: false
+
   /@clerk/nextjs@4.23.1(next@13.4.2)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-r7lSisqvUvyvlakn69AN+3EDBgIuEQQBR7Hn/MR71UT7zfKvdsRCyTENsj+rxDgfb8a4guiytDJGk1lOewLLvQ==}
     engines: {node: '>=14'}
@@ -444,6 +457,13 @@ packages:
 
   /@clerk/types@3.48.1:
     resolution: {integrity: sha512-bpSSfqdrw4iYCLlJ8UVN8HWMkA12wOH0lICdjnefPKKm1qO3yb8P5p6jmaCckcwF77unMECAslO2q2ocZcO1QA==}
+    engines: {node: '>=14'}
+    dependencies:
+      csstype: 3.1.1
+    dev: false
+
+  /@clerk/types@3.50.0:
+    resolution: {integrity: sha512-3TWalDWPTFToXC/W07QUIBN96TA+4dR3YLBvwr9U2Z4RVG9in9HW4CTC6aHTnJ2kVtTcgDkXjDKeVKS1GjPCcA==}
     engines: {node: '>=14'}
     dependencies:
       csstype: 3.1.1

@@ -1,11 +1,13 @@
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { clerkStyles } from '@/helpers/clerkStyles';
 import '@/styles/globals.css';
+import { cn } from '@/utils/cn';
+import { ptBR } from '@clerk/localizations';
 import { ClerkProvider } from '@clerk/nextjs';
 import { type Metadata } from 'next';
+// eslint-disable-next-line camelcase
 import { JetBrains_Mono, Roboto } from 'next/font/google';
 import { type PropsWithChildren } from 'react';
-// eslint-disable-next-line camelcase
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { cn } from '@/utils/cn';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {
@@ -31,8 +33,17 @@ const fontMono = JetBrains_Mono({
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={cn('font-sans', fontSans.variable, fontMono.variable)}>
-        <ClerkProvider>
+      <body
+        className={cn(
+          'font-sans antialiased',
+          fontSans.variable,
+          fontMono.variable
+        )}
+      >
+        <ClerkProvider
+          localization={ptBR}
+          appearance={{ elements: clerkStyles }}
+        >
           <TooltipProvider>
             <Providers>{children}</Providers>
           </TooltipProvider>

@@ -1,9 +1,9 @@
-import { SignedIn } from '@clerk/nextjs';
-import { Home, LogOut, Plus } from 'lucide-react';
+import { Home, Plus } from 'lucide-react';
 import { LogoIcon } from '../brand/logo-icon';
 import { ThemeSwitcher } from '../theme-switcher';
 import { Separator } from '../ui/separator';
 import { DashboardSidebarItem } from './dashboard-sidebar-item';
+import { DashboardSidebarSignOutButton } from './dashboard-sidebar-sign-out-button';
 
 interface DashboardSidebarProps {}
 
@@ -32,16 +32,8 @@ export function DashboardSidebar({}: DashboardSidebarProps) {
 
       <div className="flex w-full flex-col items-center gap-3">
         <Separator className="mb-3 w-2/3" />
-
         <ThemeSwitcher />
-
-        <SignedIn>
-          <DashboardSidebarItem
-            icon={<LogOut size={20} />}
-            label="Sair do sistema"
-            href="/dashboard"
-          />
-        </SignedIn>
+        <DashboardSidebarSignOutButton />
       </div>
     </aside>
   );
