@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
-import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/components/ui/toaster';
 import { api } from '@/utils/api';
+import { ThemeProvider } from 'next-themes';
+import { useEffect, useState, type ReactNode } from 'react';
 
 interface ProvidersProps {
   children: ReactNode;

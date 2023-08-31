@@ -18,12 +18,13 @@ export default {
           yellow: '#FFFD6D',
           pink: '#FFA0F0',
           green: '#B4FF91',
-          orange: '#FF9559',
+          orange: '#ED974F', 
           blue: '#A0E9FF',
           purple: '#D0A0FF',
-          red: '#FFA0A0',
+          'dark-purple': '#8465CB',
+          red: '#E77975',
           gray: '#EAEAEA'
-        }
+        },
       },
       fontSize: {
         '2xs': '0.625rem', // 10px

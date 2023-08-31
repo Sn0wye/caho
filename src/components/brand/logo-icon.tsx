@@ -5,6 +5,7 @@ const logoIconVariants = cva('fill-current h-fit', {
     size: {
       default: 'w-7',
       sm: 'w-6',
+      md: 'w-8',
       lg: 'w-14'
     }
   },

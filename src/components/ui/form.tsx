@@ -1,6 +1,8 @@
-import * as React from 'react';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/utils/cn';
 import type * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
+import * as React from 'react';
 import {
   Controller,
   FormProvider,
@@ -9,8 +11,6 @@ import {
   type FieldPath,
   type FieldValues
 } from 'react-hook-form';
-import { Label } from '@/components/ui/label';
-import { cn } from '@/utils/cn';
 
 const Form = FormProvider;
 
@@ -77,7 +77,7 @@ const FormItem = React.forwardRef<
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn('space-y-2', className)} {...props} />
+      <div ref={ref} className={cn('space-y-4', className)} {...props} />
     </FormItemContext.Provider>
   );
 });
@@ -92,7 +92,7 @@ const FormLabel = React.forwardRef<
   return (
     <Label
       ref={ref}
-      className={cn(error && 'text-red-500 dark:text-red-900', className)}
+      className={cn(error && 'text-geist-red', className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -133,7 +133,7 @@ const FormDescription = React.forwardRef<
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn('text-sm text-zinc-500 dark:text-zinc-400', className)}
+      className={cn('text-sm text-zinc-500', className)}
       {...props}
     />
   );
@@ -155,10 +155,7 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn(
-        'text-sm font-medium text-red-500 dark:text-red-900',
-        className
-      )}
+      className={cn('text-sm text-geist-red', className)}
       {...props}
     >
       {body}

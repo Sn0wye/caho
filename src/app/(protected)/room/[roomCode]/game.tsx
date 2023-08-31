@@ -1,10 +1,10 @@
 'use client';
 
-import { useStorage } from 'liveblocks.config';
 import { Lobby } from '@/components/game/lobby/lobby';
 import { GameNavbar } from '@/components/game/navbar/game-navbar';
 import { Ongoing } from '@/components/game/ongoing/ongoing';
 import { type Room } from '@/server/schemas/room';
+import { useStorage } from 'liveblocks.config';
 
 type GameProps = Room;
 

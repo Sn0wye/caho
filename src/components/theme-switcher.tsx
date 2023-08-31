@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Laptop, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import {
   DropdownMenu,
@@ -19,6 +19,12 @@ const themeIconVariants = {
   system: <Laptop size={20} />
 } as const;
 
+const themeLabelVariants = {
+  light: 'Claro',
+  dark: 'Escuro',
+  system: 'Sistema'
+} as const;
+
 export function ThemeSwitcher({}: ThemeSwitcherProps) {
   const [isMounted, setIsMounted] = useState(false);
   const { theme, setTheme, themes } = useTheme();
@@ -32,19 +38,19 @@ export function ThemeSwitcher({}: ThemeSwitcherProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button variant="transparent" size="icon">
           {themeIconVariants[theme as keyof typeof themeIconVariants]}
           <span className="sr-only">Trocar tema</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="start" >
         {themes.map(theme => (
           <DropdownMenuItem
             key={theme}
             onClick={() => setTheme(theme)}
             className="capitalize"
           >
-            {theme}
+            {themeLabelVariants[theme as keyof typeof themeLabelVariants]}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

@@ -1,8 +1,8 @@
-import * as React from 'react';
+import { cn } from '@/utils/cn';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import * as React from 'react';
 
 const ToastProvider = ToastPrimitives.Provider;
 
@@ -27,8 +27,8 @@ const toastVariants = cva(
     variants: {
       variant: {
         default: 'border bg-white dark:bg-zinc-950',
-        destructive:
-          'destructive group border-red-500 bg-red-500 text-zinc-50 dark:border-red-900 dark:bg-zinc-950'
+        destructive: 'destructive group border-red-500 bg-red-500 text-zinc-50 dark:border-red-900 dark:bg-zinc-950',
+        warning: 'warning group border-orange-500 bg-orange-500 text-zinc-50 dark:border-orange-900 dark:bg-zinc-950',
       }
     },
     defaultVariants: {
@@ -74,7 +74,7 @@ const ToastClose = React.forwardRef<
   <ToastPrimitives.Close
     ref={ref}
     className={cn(
-      'absolute right-2 top-2 p-1 text-zinc-950/50 hover:text-zinc-950 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600 dark:text-zinc-50/50 dark:hover:text-zinc-50',
+      'absolute right-2 top-2 p-1 text-zinc-950/50 hover:text-zinc-950 focus:outline-none focus:ring-2 group-hover:opacity-100 dark:text-zinc-50/50 dark:hover:text-zinc-50',
       className
     )}
     toast-close=""
@@ -92,7 +92,7 @@ const ToastTitle = React.forwardRef<
   <ToastPrimitives.Title
     ref={ref}
     className={cn(
-      'w-fit bg-zinc-950 px-2 py-1 font-mono text-sm font-bold !leading-none text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950 dark:group-[.destructive]:bg-red-500 dark:group-[.destructive]:text-zinc-50',
+      'w-fit bg-zinc-950 px-2 py-1 font-mono text-sm font-bold !leading-none text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950 dark:group-[.warning]:bg-orange-500 dark:group-[.warning]:text-zinc-50 dark:group-[.destructive]:bg-red-500 dark:group-[.destructive]:text-zinc-50',
       className
     )}
     {...props}

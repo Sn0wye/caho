@@ -20,7 +20,7 @@ export function Lobby({}: LobbyProps) {
             Aguardando jogadores
           </h1>
           <span className="!leading-relaxed dark:text-zinc-500 md:text-xl">
-            Tem que esperar os homi entrar pra começar a loucura.
+            Tem que esperar os piá entrar pra começar a loucura.
           </span>
         </header>
 
