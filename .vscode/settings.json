@@ -1,7 +1,9 @@
 {
   "cSpell.words": [
     "arregar",
+    "caho",
     "CAHO",
+    "camelcase",
     "Gentili",
     "hget",
     "hgetall",
@@ -19,6 +21,7 @@
     "trpc",
     "TRPC",
     "Tweetar",
+    "typecheck",
     "upstash",
     "UPSTASH",
     "xmas",

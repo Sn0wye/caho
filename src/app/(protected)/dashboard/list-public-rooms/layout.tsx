@@ -1,7 +1,18 @@
-import { DashboardBreadcrumbs } from '@/components/dashboard/dashboard-breadcrumbs';
+import { DashboardBreadcrumbs, type BreadcrumbType } from '@/components/dashboard/dashboard-breadcrumbs';
 import { DashboardPageHeader } from '@/components/dashboard/dashboard-page-header';
 import { Search } from 'lucide-react';
 import { type ReactNode } from 'react';
+
+const breadcrumbs: BreadcrumbType[] = [
+  {
+    label: 'Dashboard',
+    href: '/dashboard',
+  },
+  {
+    label: 'Partidas públicas',
+    href: '/dashboard/list-public-rooms',
+  }
+];
 
 interface ListPublicRoomsLayoutProps {
   children: ReactNode;
@@ -13,7 +24,7 @@ export default function ListPublicRoomsLayout({
   return (
     <section className="flex flex-col gap-16 w-full max-w-5xl">
       <div className="flex flex-col gap-6">
-        <DashboardBreadcrumbs />
+        <DashboardBreadcrumbs breadcrumbs={breadcrumbs} />
 
         <DashboardPageHeader
           title="Encontrar uma partida pública"

@@ -1,34 +1,54 @@
 import { cn } from '@/utils/cn';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { Fragment } from 'react';
 
-interface DashboardBreadcrumbsProps {}
+export type BreadcrumbType = {
+  label: string;
+  href: string;
+};
 
-export function DashboardBreadcrumbs({}: DashboardBreadcrumbsProps) {
+type DashboardBreadcrumbsProps = {
+  breadcrumbs: BreadcrumbType[];
+};
+
+export function DashboardBreadcrumbs({ breadcrumbs }: DashboardBreadcrumbsProps) {
   return (
     <nav className="flex items-center">
-      <DashboardBreadcrumb label="Dashboard" href="/dashboard" />
-      <DashboardBreadcrumbSeparator />
-      <DashboardBreadcrumb label="Nova sala" href="/dashboard/create-room" isCurrentPage/>
+      {breadcrumbs.map((breadcrumb, index) => (
+        <Fragment key={breadcrumb.href}>
+          <DashboardBreadcrumb
+            label={breadcrumb.label}
+            href={breadcrumb.href}
+            isCurrentPage={index === breadcrumbs.length - 1}
+          />
+          {index !== breadcrumbs.length - 1 && (
+            <DashboardBreadcrumbSeparator />
+          )}
+        </Fragment>
+      ))}
     </nav>
   );
 }
+
+type DashboardBreadcrumbProps = {
+  label: string;
+  href: string;
+  isCurrentPage?: boolean;
+};
 
 function DashboardBreadcrumb({
   label,
   href,
   isCurrentPage
-}: {
-  label: string;
-  href: string;
-  isCurrentPage?: boolean;
-}) {
+}: DashboardBreadcrumbProps) {
   return (
     <Link
       href={href}
       className={cn(
-        'leading-none rounded px-1.5 py-0.5 text-sm text-zinc-600 dark:text-zinc-400 transition-all hover:text-geist-dark-purple hover:bg-geist-dark-purple/10 dark:hover:text-geist-dark-purple',
-        isCurrentPage && 'text-zinc-800 dark:text-zinc-200 hover:bg-transparent dark:hover:bg-transparent hover:text-zinc-800 hover:dark:text-zinc-200 hover:cursor-default'
+        'rounded px-1.5 py-0.5 text-sm leading-none text-zinc-600 transition-all hover:bg-geist-dark-purple/10 hover:text-geist-dark-purple dark:text-zinc-400 dark:hover:text-geist-dark-purple',
+        isCurrentPage &&
+          'text-zinc-800 hover:cursor-default hover:bg-transparent hover:text-zinc-800 dark:text-zinc-200 dark:hover:bg-transparent hover:dark:text-zinc-200'
       )}
     >
       {label}
@@ -37,7 +57,5 @@ function DashboardBreadcrumb({
 }
 
 function DashboardBreadcrumbSeparator() {
-  return (
-    <ChevronRight className="w-4 h-4 text-zinc-500" />
-  );
+  return <ChevronRight className="h-4 w-4 text-zinc-500" />;
 }

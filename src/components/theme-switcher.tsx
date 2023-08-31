@@ -10,8 +10,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from './ui/dropdown-menu';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
-interface ThemeSwitcherProps {}
+type ThemeSwitcherProps = {
+  tooltipSide?: 'left' | 'right' | 'bottom' | 'top' | undefined;
+};
 
 const themeIconVariants = {
   light: <Sun size={20} />,
@@ -25,7 +28,9 @@ const themeLabelVariants = {
   system: 'Sistema'
 } as const;
 
-export function ThemeSwitcher({}: ThemeSwitcherProps) {
+const label = 'Trocar tema';
+
+export function ThemeSwitcher({ tooltipSide = 'right' }: ThemeSwitcherProps) {
   const [isMounted, setIsMounted] = useState(false);
   const { theme, setTheme, themes } = useTheme();
 
@@ -36,24 +41,31 @@ export function ThemeSwitcher({}: ThemeSwitcherProps) {
   if (!isMounted) return null;
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="transparent" size="icon">
-          {themeIconVariants[theme as keyof typeof themeIconVariants]}
-          <span className="sr-only">Trocar tema</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" >
-        {themes.map(theme => (
-          <DropdownMenuItem
-            key={theme}
-            onClick={() => setTheme(theme)}
-            className="capitalize"
-          >
-            {themeLabelVariants[theme as keyof typeof themeLabelVariants]}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Tooltip>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <TooltipTrigger asChild>
+            <Button variant="transparent" size="icon">
+              {themeIconVariants[theme as keyof typeof themeIconVariants]}
+              <span className="sr-only">{label}</span>
+            </Button>
+          </TooltipTrigger>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start">
+          {themes.map(theme => (
+            <DropdownMenuItem
+              key={theme}
+              onClick={() => setTheme(theme)}
+              className="capitalize"
+            >
+              {themeLabelVariants[theme as keyof typeof themeLabelVariants]}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <TooltipContent side={tooltipSide} sideOffset={4}>
+        <span>{label}</span>
+      </TooltipContent>
+    </Tooltip>
   );
 }

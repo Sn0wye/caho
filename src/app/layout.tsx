@@ -1,9 +1,10 @@
 import '@/styles/globals.css';
-import { type PropsWithChildren } from 'react';
-import { type Metadata } from 'next';
-// eslint-disable-next-line camelcase
-import { JetBrains_Mono, Roboto } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
+import { type Metadata } from 'next';
+import { JetBrains_Mono, Roboto } from 'next/font/google';
+import { type PropsWithChildren } from 'react';
+// eslint-disable-next-line camelcase
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { cn } from '@/utils/cn';
 import { Providers } from './providers';
 
@@ -32,7 +33,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="pt-BR" suppressHydrationWarning>
       <body className={cn('font-sans', fontSans.variable, fontMono.variable)}>
         <ClerkProvider>
-          <Providers>{children}</Providers>
+          <TooltipProvider>
+            <Providers>{children}</Providers>
+          </TooltipProvider>
         </ClerkProvider>
       </body>
     </html>
