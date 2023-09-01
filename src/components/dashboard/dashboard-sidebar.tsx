@@ -1,9 +1,10 @@
-import { Home, Plus } from 'lucide-react';
+import { Home, Plus, Settings } from 'lucide-react';
+import { Suspense } from 'react';
 import { LogoIcon } from '../brand/logo-icon';
-import { ThemeSwitcher } from '../theme-switcher';
 import { Separator } from '../ui/separator';
+import { Skeleton } from '../ui/skeleton';
 import { DashboardSidebarItem } from './dashboard-sidebar-item';
-import { DashboardSidebarSignOutButton } from './dashboard-sidebar-sign-out-button';
+import { DashboardUserNav } from './dashboard-user-nav';
 
 interface DashboardSidebarProps {}
 
@@ -17,23 +18,30 @@ export function DashboardSidebar({}: DashboardSidebarProps) {
 
       <nav className="flex flex-1 flex-col gap-3 py-6">
         <DashboardSidebarItem
-          icon={<Home size={24} />}
+          icon={<Home size={20}/>}
           label="Dashboard"
           href="/dashboard"
-          isActive
         />
 
         <DashboardSidebarItem
-          icon={<Plus size={24} />}
+          icon={<Plus size={20}/>}
           label="Nova sala"
-          href="/dashboard"
+          href="/dashboard/create-room"
+        />
+
+        <DashboardSidebarItem
+          icon={<Settings size={20}/>}
+          label="Configurações"
+          href="/dashboard/settings"
         />
       </nav>
 
-      <div className="flex w-full flex-col items-center gap-3">
-        <Separator className="mb-3 w-2/3" />
-        <ThemeSwitcher />
-        <DashboardSidebarSignOutButton />
+      <div className="flex w-full flex-col items-center gap-6">
+        <Separator className="w-2/3" />
+
+        <Suspense fallback={<Skeleton className="h-8 w-8 rounded-full" />}>
+          <DashboardUserNav />
+        </Suspense>
       </div>
     </aside>
   );
