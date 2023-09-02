@@ -1,9 +1,9 @@
 'use client';
 
-import * as React from 'react';
+import { cn } from '@/utils/cn';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/utils/cn';
+import * as React from 'react';
 
 const avatarVariants = cva(
   'relative flex shrink-0 overflow-hidden rounded-full',
@@ -20,8 +20,8 @@ const avatarVariants = cva(
       },
       ring: {
         default: 'ring-none',
-        purple:
-          'ring-2 ring-violet-500 ring-offset-4 ring-offset-zinc-50 dark:ring-offset-zinc-950',
+        teal:
+          'ring-2 ring-teal-500 ring-offset-4 ring-offset-zinc-50 dark:ring-offset-zinc-950',
         orange:
           'ring-2 ring-orange-400 ring-offset-4 ring-offset-zinc-50 dark:ring-offset-zinc-950',
         ghost:

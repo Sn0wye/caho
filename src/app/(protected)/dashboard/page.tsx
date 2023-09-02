@@ -1,9 +1,10 @@
 import { DashboardBanner } from '@/components/dashboard/dashboard-banner';
 import { DashboardOptionCard } from '@/components/dashboard/dashboard-option-card';
 import { DashboardPageHeader } from '@/components/dashboard/dashboard-page-header';
+import { DashboardPrivateRoomModal } from '@/components/dashboard/dashboard-private-room-modal';
 import { Separator } from '@/components/ui/separator';
 import { currentUser } from '@clerk/nextjs';
-import { Home, Lock, Plus, Search } from 'lucide-react';
+import { Home, Plus, Search } from 'lucide-react';
 
 export default async function DashboardPage() {
   const user = await currentUser();
@@ -27,13 +28,7 @@ export default async function DashboardPage() {
           icon={<Plus />}
         />
 
-        <DashboardOptionCard
-          title="Tenho um código"
-          description="Meus amiguinhos já estão me esperando na sala. Vou entrar com o código!"
-          href="/rooms"
-          bgColor="purple"
-          icon={<Lock />}
-        />
+        <DashboardPrivateRoomModal />
 
         <DashboardOptionCard
           title="Encontrar uma partida pública"

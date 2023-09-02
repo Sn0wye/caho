@@ -2,27 +2,31 @@
 
 import { Toaster } from '@/components/ui/toaster';
 import { api } from '@/utils/api';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 
 interface ProvidersProps {
   children: ReactNode;
 }
 
 export const ProvidersComponent = ({ children }: ProvidersProps) => {
-  const [isMounted, setIsMounted] = useState(false);
+  // const [isMounted, setIsMounted] = useState(false);
+  const [queryClient] = useState(() => new QueryClient());
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  // useEffect(() => {
+  //   setIsMounted(true);
+  // }, []);
 
-  if (!isMounted) return <>{children}</>;
+  // if (!isMounted) return <>{children}</>;
 
   return (
-    <ThemeProvider attribute="class" disableTransitionOnChange>
-      {children}
-      <Toaster />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider attribute="class" disableTransitionOnChange>
+        {children}
+        <Toaster />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 };
 

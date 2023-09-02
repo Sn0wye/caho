@@ -19,15 +19,14 @@ export default {
     extend: {
       colors: {
         geist: {
-          yellow: '#FFFD6D',
+          yellow: '#E5C443',
           pink: '#FFA0F0',
-          green: '#B4FF91',
-          orange: '#ED974F', 
-          blue: '#A0E9FF',
-          purple: '#D0A0FF',
+          green: '#66CCBE',
+          orange: '#F1924C',
+          blue: '#5C8BD6',
+          purple: '#C086EA',
           'dark-purple': '#8465CB',
-          red: '#E77975',
-          gray: '#EAEAEA'
+          red: '#D1757E',
         },
       },
       fontSize: {

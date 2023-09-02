@@ -8,7 +8,7 @@ export function Grid({ className }: GridProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={cn('h-full w-full stroke-red-500', className)}
+      className={cn('h-full w-full', className)}
       fill="none"
       viewBox="0 0 1358 767"
     >

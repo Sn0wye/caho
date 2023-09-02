@@ -1,6 +1,5 @@
 'use client';
 
-import { Lobby } from '@/components/game/lobby/lobby';
 import { GameNavbar } from '@/components/game/navbar/game-navbar';
 import { Ongoing } from '@/components/game/ongoing/ongoing';
 import { type Room } from '@/server/schemas/room';
@@ -17,8 +16,8 @@ export const Game = ({ status }: GameProps) => {
     <div className="flex h-screen w-full flex-col items-center justify-between">
       <GameNavbar gameStatus={status} />
 
-      {status === 'LOBBY' && <Lobby />}
-      {status === 'IN_PROGRESS' && <Ongoing />}
+      {/* {status === 'LOBBY' && <Lobby />} */}
+      {status === 'LOBBY' && <Ongoing />}
 
       {/**
        * //TODO: Game bottom bar

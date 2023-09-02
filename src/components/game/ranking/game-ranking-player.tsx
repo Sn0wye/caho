@@ -1,6 +1,6 @@
-import { type MockPlayer } from 'types';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/utils/cn';
+import { type MockPlayer } from 'types';
 import { GameRankingPlayerAvatar } from './game-ranking-player-avatar';
 import { useGameRankingSidebarContext } from './game-ranking-sidebar';
 
@@ -37,7 +37,7 @@ export function GameRankingPlayer({ player }: GameRankingPlayerProps) {
 
           <div className="flex w-fit flex-col items-end justify-center gap-1">
             {player.isHost && (
-              <Badge variant="purple" className="uppercase">
+              <Badge variant="teal" className="uppercase">
                 Host
               </Badge>
             )}
