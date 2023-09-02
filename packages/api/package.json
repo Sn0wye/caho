@@ -1,0 +1,40 @@
+{
+  "name": "@caho/api",
+  "version": "1.0.50",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "db:seed": "bun run src/db/seed.ts",
+    "db:migrate": "bun run migrate.ts",
+    "db:generate": "drizzle-kit generate:sqlite",
+    "lint": "eslint src --ext ts,tsx",
+    "lint:fix": "eslint src --ext ts,tsx --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "clean": "git clean -xdf node_modules"
+  },
+  "dependencies": {
+    "@elysiajs/cookie": "^0.6.1",
+    "@elysiajs/jwt": "^0.6.3",
+    "@elysiajs/trpc": "^0.6.1",
+    "@elysiajs/websocket": "^0.2.8",
+    "@faker-js/faker": "^8.0.2",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "@t3-oss/env-core": "^0.6.1",
+    "@trpc/server": "^10.38.0",
+    "@upstash/redis": "^1.22.0",
+    "add": "^2.0.6",
+    "drizzle-orm": "^0.28.5",
+    "elysia": "latest",
+    "zod": "^3.22.2"
+  },
+  "devDependencies": {
+    "@sn0wye/eslint-config": "^3.0.0",
+    "bun-types": "latest",
+    "drizzle-kit": "^0.19.13",
+    "eslint": "^8.48.0",
+    "typescript": "^5.2.2"
+  },
+  "module": "src/index.js"
+}
