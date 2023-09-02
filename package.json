@@ -7,7 +7,8 @@
     "lint": "SKIP_ENV_VALIDATION=1 turbo run lint",
     "format": "prettier --cache --write --plugin-search-dir=. **/*.{cjs,mjs,ts,tsx}",
     "clean": "git clean -xdf node_modules",
-    "clean:workspaces": "turbo clean"
+    "clean:workspaces": "turbo clean",
+    "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
     "@sn0wye/eslint-config": "latest",
