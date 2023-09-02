@@ -1,17 +1,18 @@
 import { cn } from '@/utils/cn';
-import Link from 'next/link';
+import Link, { type LinkProps } from 'next/link';
 import { type ReactNode } from 'react';
 import { Noise } from '../illustrations/noise';
 
 type BackgroundColors = 'yellow' | 'purple' | 'teal';
 
-type DashboardOptionCardProps = {
+interface DashboardOptionCardProps {
   title: string;
   description: string;
-  href: string;
   bgColor: BackgroundColors;
   icon: ReactNode;
-};
+  href?: LinkProps['href'];
+  as?: 'button' | 'a';
+}
 
 const backgroundColorVariants: { [key in BackgroundColors]: string } = {
   yellow: 'hover:bg-yellow-600',
@@ -28,20 +29,26 @@ const darkShadowVariants: { [key in BackgroundColors]: string } = {
 export function DashboardOptionCard({
   title,
   description,
-  href,
   bgColor,
-  icon
+  icon,
+  as = 'a',
+  href,
+  ...rest
 }: DashboardOptionCardProps) {
+  const Wrapper = as === 'a' ? Link : 'button';
+
   return (
-    <Link
-      href={href}
+    // @ts-expect-error - href is present when as is 'a'. Unfortunately, TypeScript doesn't know that.
+    <Wrapper
+      {...(as === 'a' ? { href } : {})}
       className={cn(
-        'group relative flex w-full flex-col justify-between gap-6 rounded-md p-6 transition-all hover:-translate-y-2 hover:translate-x-2 hover:shadow-[-8px_8px] hover:shadow-zinc-950',
+        'group relative flex w-full flex-col justify-between gap-6 rounded-md p-6 text-left transition-all hover:-translate-y-2 hover:translate-x-2 hover:shadow-[-8px_8px] hover:shadow-zinc-950',
         'bg-zinc-100',
         'dark:bg-zinc-900/20 dark:hover:bg-gradient-to-br dark:hover:from-zinc-900 dark:hover:via-zinc-900 dark:hover:to-zinc-700 ',
         backgroundColorVariants[bgColor],
         darkShadowVariants[bgColor]
       )}
+      {...rest}
     >
       <Noise className="hidden rounded-md group-hover:block" />
 
@@ -57,6 +64,6 @@ export function DashboardOptionCard({
           {description}
         </span>
       </header>
-    </Link>
+    </Wrapper>
   );
 }

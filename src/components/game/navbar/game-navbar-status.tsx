@@ -1,20 +1,18 @@
-import { cn } from '@/utils/cn';
+import { Badge, type BadgeVariants } from '@/components/ui/badge';
 import { type RoomStatus } from '@/server/schemas/room';
 
-type GameStatusVariantsObject = {
-  [key in RoomStatus]: string;
+const gameStatusColorVariants: {
+  [key in RoomStatus]: BadgeVariants['variant'];
+} = {
+  'LOBBY': 'orange',
+  'IN_PROGRESS': 'outline',
+  'FINISHED': 'destructive'
 };
 
-const gameStatusColorVariants: GameStatusVariantsObject = {
-  'LOBBY': 'bg-amber-500',
-  'IN_PROGRESS': 'bg-green-500',
-  'FINISHED': 'bg-red-500'
-};
-
-const gameStatusLabelVariants: GameStatusVariantsObject = {
-  'LOBBY': 'LOBBY',
-  'IN_PROGRESS': 'EM PROGRESSO',
-  'FINISHED': 'FINALIZADO'
+const gameStatusLabelVariants: { [key in RoomStatus]: string } = {
+  'LOBBY': 'Lobby',
+  'IN_PROGRESS': 'Em andamento',
+  'FINISHED': 'Finalizado'
 };
 
 type GameNavbarStatusProps = {
@@ -23,13 +21,8 @@ type GameNavbarStatusProps = {
 
 export function GameNavbarStatus({ gameStatus }: GameNavbarStatusProps) {
   return (
-    <span
-      className={cn(
-        'w-fit px-2 py-1 font-mono font-bold uppercase !leading-none text-zinc-100',
-        gameStatusColorVariants[gameStatus]
-      )}
-    >
+    <Badge variant={gameStatusColorVariants[gameStatus]} className="uppercase">
       {gameStatusLabelVariants[gameStatus]}
-    </span>
+    </Badge>
   );
 }

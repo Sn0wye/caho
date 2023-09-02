@@ -12,7 +12,7 @@ export function Navbar({}: NavbarProps) {
       <LogoText />
 
       <div className="flex h-full w-fit items-center gap-4">
-        <ThemeSwitcher />
+        <ThemeSwitcher tooltipSide="bottom" />
 
         <SignedIn>
           <Button asChild>

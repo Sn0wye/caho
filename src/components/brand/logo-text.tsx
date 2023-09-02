@@ -6,7 +6,7 @@ interface LogoTextProps {}
 
 export function LogoText({}: LogoTextProps) {
   return (
-    <Link href={'/'} className="flex items-center gap-2">
+    <Link href={'/'} className="flex items-center gap-2 w-fit">
       <LogoIcon />
       <span className="text-xl font-bold md:text-2xl">
         {siteConfig.nameShort}

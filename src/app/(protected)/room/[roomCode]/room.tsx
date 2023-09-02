@@ -1,10 +1,11 @@
 'use client';
 
-import { type ReactNode } from 'react';
+import { GameLoading } from '@/components/game/game-loading';
+import { type Room } from '@/server/schemas/room';
 import { LiveObject } from '@liveblocks/client';
 import { ClientSideSuspense } from '@liveblocks/react';
 import { RoomProvider } from 'liveblocks.config';
-import { type Room } from '@/server/schemas/room';
+import { type ReactNode } from 'react';
 
 type RoomProps = {
   children: ReactNode;
@@ -20,7 +21,7 @@ export function Room({ children, room }: RoomProps) {
         room: new LiveObject(room)
       }}
     >
-      <ClientSideSuspense fallback={<div>Loading…</div>}>
+      <ClientSideSuspense fallback={<GameLoading />}>
         {() => children}
       </ClientSideSuspense>
     </RoomProvider>

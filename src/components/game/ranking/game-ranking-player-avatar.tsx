@@ -1,6 +1,6 @@
-import { type MockPlayer } from 'types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { type MockPlayer } from 'types';
 
 // TODO: Refactor to match server data
 interface GameRankingPlayerAvatarProps {
@@ -20,7 +20,7 @@ export function GameRankingPlayerAvatar({
           !player.isConnected
             ? 'ghost'
             : player.isHost
-            ? 'purple'
+            ? 'teal'
             : player.isJudge
             ? 'orange'
             : null
@@ -32,7 +32,7 @@ export function GameRankingPlayerAvatar({
 
       <div className="absolute bottom-0 left-1/2 z-10 w-fit -translate-x-1/2">
         {player.isHost && !hideBadge && (
-          <Badge variant="purple" className="uppercase" size="avatar">
+          <Badge variant="teal" className="uppercase" size="avatar">
             Host
           </Badge>
         )}

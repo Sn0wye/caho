@@ -1,40 +1,51 @@
+'use client';
+
 import { cn } from '@/utils/cn';
 import Link from 'next/link';
-import { type ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
+import { type ComponentProps, type ReactNode } from 'react';
 import { Button } from '../ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
-interface DashboardSidebarItemProps {
+type DashboardSidebarItemProps = ComponentProps<typeof Link> & {
   icon: ReactNode;
   label: string;
-  href: string;
-  isActive?: boolean;
-}
+};
 
-export function DashboardSidebarItem({
-  icon,
-  label,
-  href,
-  isActive = false,
-}: DashboardSidebarItemProps) {
+export function DashboardSidebarItem(props: DashboardSidebarItemProps) {
+  const pathname = usePathname();
+
+  const isActive = pathname === props.href;
+
   return (
     <Tooltip>
       <TooltipTrigger>
-        <div className={cn(
-          "relative flex w-16 items-center justify-center", 
-          isActive && "hover:cursor-not-allowed before:absolute before:content-[''] before:w-1 before:h-full before:rounded-r-sm before:bg-zinc-900 before:dark:bg-zinc-200 before:left-0 before:top-0 before:p-px"
-          )
-        }>
-          <Button variant="transparent" className={cn(isActive && "text-zinc-900 dark:text-zinc-50 hover:bg-transparent hover:dark:bg-transparent hover:cursor-not-allowed")} size="icon" asChild>
-            <Link href={href}>
-              {icon}
-              <span className="sr-only">{label}</span>
+        <div
+          className={cn(
+            'relative flex w-16 items-center justify-center',
+            isActive &&
+              "before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:rounded-r-sm before:bg-zinc-900 before:p-px before:content-[''] hover:cursor-not-allowed before:dark:bg-zinc-200"
+          )}
+        >
+          <Button
+            variant="transparent"
+            className={cn(
+              isActive &&
+                'text-zinc-900 hover:cursor-not-allowed hover:bg-transparent dark:text-zinc-50 hover:dark:bg-transparent',
+              props.className
+            )}
+            size="icon"
+            asChild
+          >
+            <Link {...props}>
+              {props.icon}
+              <span className="sr-only">{props.label}</span>
             </Link>
           </Button>
         </div>
       </TooltipTrigger>
-      <TooltipContent side="right" sideOffset={4}>
-        <span>{label}</span>
+      <TooltipContent side="right" sideOffset={8}>
+        <span>{props.label}</span>
       </TooltipContent>
     </Tooltip>
   );

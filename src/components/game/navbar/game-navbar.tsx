@@ -31,7 +31,7 @@ export function GameNavbar({ gameStatus }: GameNavbarProps) {
       </div>
 
       <div className="absolute left-1/2 flex -translate-x-1/2 flex-col items-center gap-1">
-        {gameStatus === 'LOBBY' && <GameNavbarStatus gameStatus={gameStatus} />}
+        <GameNavbarStatus gameStatus={gameStatus} />
       </div>
 
       <div className="flex items-center gap-3">
