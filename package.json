@@ -11,10 +11,11 @@
     "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
+    "@caho/tsconfig": "workspace:*",
     "@sn0wye/eslint-config": "latest",
     "eslint": "8.47.0",
-    "tsconfig": "workspace:*",
-    "turbo": "latest"
+    "turbo": "latest",
+    "tsup": "^7.2.0"
   },
   "packageManager": "pnpm@8.6.12"
 }
