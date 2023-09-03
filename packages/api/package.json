@@ -1,6 +1,8 @@
 {
   "name": "@caho/api",
   "version": "1.0.50",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
     "dev": "bun run --watch src/index.ts",
     "start": "bun run src/index.ts",
@@ -17,6 +19,7 @@
   "dependencies": {
     "@clerk/backend": "^0.28.0",
     "@elysiajs/cookie": "^0.6.1",
+    "@elysiajs/cors": "^0.6.0",
     "@elysiajs/jwt": "^0.6.3",
     "@elysiajs/trpc": "^0.6.1",
     "@elysiajs/websocket": "^0.2.8",

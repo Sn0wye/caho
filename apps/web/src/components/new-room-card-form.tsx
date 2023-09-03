@@ -1,11 +1,15 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { createRoom, type CreateRoom } from '@caho/contracts';
+import { type Player, type Room } from '@caho/schemas';
 import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SelectTrigger } from '@radix-ui/react-select';
+import { useMutation } from '@tanstack/react-query';
 import { Eye, EyeOff, Loader2, Lock, Trophy, Users } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { type z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -20,20 +24,29 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { api } from '@/utils/api';
 import { NEW_ROOM_FORM } from '@/constants/room';
-import { type Player } from '@/server/schemas/player';
-import {
-  createRoomFormSchema,
-  type CreateRoomFormSchema
-} from '@/server/schemas/room';
 import { Select, SelectContent, SelectItem, SelectValue } from './ui/select';
 import { Separator } from './ui/separator';
 import { toast } from './ui/use-toast';
 
-export const NewRoomCardForm = () => {
-  const { mutate, isLoading } = api.room.new.useMutation();
+const formSchema = createRoom.omit({
+  players: true,
+  hostId: true,
+  isHost: true
+});
 
-  const form = useForm<CreateRoomFormSchema>({
-    resolver: zodResolver(createRoomFormSchema),
+type FormSchema = z.infer<typeof formSchema>;
+
+const createRoomMutation = async (data: CreateRoom) => {
+  const { data: room } = await api.post<Room>('/rooms/create', data);
+
+  return room;
+};
+
+export const NewRoomCardForm = () => {
+  const { mutate, isLoading } = useMutation(createRoomMutation);
+
+  const form = useForm<FormSchema>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       password: '',
       maxPlayers: 2,
@@ -43,7 +56,7 @@ export const NewRoomCardForm = () => {
   const { user } = useUser();
   const router = useRouter();
 
-  const onSubmit = async (values: CreateRoomFormSchema) => {
+  const onSubmit = async (values: FormSchema) => {
     if (!user) return;
 
     const player: Player = {
@@ -60,13 +73,16 @@ export const NewRoomCardForm = () => {
       hostId: user.id
     };
 
+    console.log(payload);
+
     mutate(payload, {
-      onSuccess: data => {
-        router.push(data.redirect);
+      onSuccess: room => {
+        router.push(`/room/${room.code}`);
       },
-      onError: e => {
+      onError: () => {
+        //TODO: type error
         toast({
-          description: e.message,
+          description: 'Erro!',
           variant: 'destructive'
         });
       }
@@ -163,10 +179,10 @@ export const NewRoomCardForm = () => {
                   <Input
                     {...field}
                     value={String(field.value)}
-                    onChange={v => {
-                      if (isNaN(Number(v.target.value))) return;
+                    onChange={e => {
+                      if (isNaN(Number(e.target.value))) return;
 
-                      return field.onChange(Number(v.target.value));
+                      return field.onChange(Number(e.target.value));
                     }}
                     type="number"
                     placeholder="Com quantos pontos a festa acaba?"

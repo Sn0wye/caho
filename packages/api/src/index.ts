@@ -1,4 +1,5 @@
 import { cookie } from '@elysiajs/cookie';
+import { cors } from '@elysiajs/cors';
 import { Elysia } from 'elysia';
 import { redis } from './db/redis';
 import { roomRoutes } from './routers/room';
@@ -8,6 +9,7 @@ const setup = (app: Elysia) => app.state('redis', redis);
 const app = new Elysia()
   .use(setup)
   .use(cookie())
+  .use(cors())
   .use(roomRoutes)
   .get('/ping', () => 'pong');
 
@@ -175,3 +177,5 @@ const app = new Elysia()
 app.listen(3333, server => {
   console.log(`🦊 Elysia is running at ${server.hostname}:${server.port}`);
 });
+
+export type App = typeof app;

@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
+import { type Room as RoomType } from '@caho/schemas';
 import { currentUser } from '@clerk/nextjs';
-import { createCaller } from '@/utils/caller';
+import { api } from '@/utils/api';
 import { Game } from './game';
 import { Room } from './room';
 
@@ -10,11 +11,18 @@ type GamePageProps = {
   };
 };
 
+const getRoom = async (roomCode: string) => {
+  const { data } = await api.get<RoomType>(`/rooms/${roomCode}`);
+
+  return data;
+};
+
 export default async function GamePage({ params }: GamePageProps) {
-  const caller = createCaller();
-  const room = await caller.room.get({
-    roomCode: params.roomCode
-  });
+  const room = await getRoom(params.roomCode);
+
+  if (!room) {
+    redirect('/dashboard');
+  }
 
   const user = await currentUser();
 
