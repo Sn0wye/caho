@@ -1,0 +1,11 @@
+{
+  "extends": "@caho/tsconfig/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [".eslintrc.cjs", "**/*.ts"],
+  "exclude": ["node_modules"]
+}
