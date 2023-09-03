@@ -26,6 +26,9 @@ importers:
       turbo:
         specifier: latest
         version: 1.10.13
+      typescript:
+        specifier: 5.2.2
+        version: 5.2.2
 
   apps/web:
     dependencies:
@@ -250,6 +253,12 @@ importers:
         specifier: ^3.22.2
         version: 3.22.2
     devDependencies:
+      '@caho/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      '@caho/schemas':
+        specifier: workspace:*
+        version: link:../schemas
       '@sn0wye/eslint-config':
         specifier: ^3.0.0
         version: 3.0.0(eslint@8.48.0)(typescript@5.2.2)
@@ -267,6 +276,19 @@ importers:
         version: 5.2.2
 
   packages/contracts:
+    dependencies:
+      '@caho/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+      zod:
+        specifier: 3.22.2
+        version: 3.22.2
+    devDependencies:
+      '@caho/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+
+  packages/schemas:
     dependencies:
       zod:
         specifier: 3.22.2
