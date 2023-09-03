@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 // import { jwt } from '@elysiajs/jwt';
 
 // import { env } from '@/env.js';
@@ -17,24 +18,34 @@
 //   }
 // };
 
+import { type Redis } from '@upstash/redis/nodejs';
 import { Elysia } from 'elysia';
 import { redis } from './db/redis';
+import { roomRouter } from './routers/room';
 
 const setup = (app: Elysia) => app.state('redis', redis);
 
 const app = new Elysia()
   .use(setup)
   .get('/ping', () => 'pong')
-  .group('/room', app => app);
-// GET /rooms/:roomCode
-// GET /rooms/list (list public rooms)
-// POST /rooms/create
-// POST /rooms/:roomCode/join (send password)
-// POST /rooms/start/:roomCode
-// POST /rooms/end/:roomCode
-// POST /rooms/:roomCode/leave  (send roomCode, playerId)
+  .group('/room', app => app.use(roomRouter));
 
-export type App = typeof app;
+export type App = Elysia<
+  '',
+  {
+    request: {};
+    store: {
+      redis: Redis;
+    };
+    schema: {};
+    error: {};
+    meta: {
+      schema: {};
+      defs: {};
+      exposed: {};
+    };
+  }
+>;
 
 // .use(
 //   jwt({
