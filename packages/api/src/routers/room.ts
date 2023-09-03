@@ -5,12 +5,16 @@ import {
   leaveRoom,
   startRoom
 } from '@caho/contracts';
+import { Elysia } from 'elysia';
+import { clerkPlugin } from '@/auth/clerk';
+import { redis } from '@/db/redis';
 import { RedisRoomRepository } from '@/repositories/implementations/RedisRoomRepository';
 import { RoomService } from '@/services/RoomService';
-import { type App } from '..';
 
-export const roomRouter = (app: App) =>
-  app.group('/rooms', app =>
+export const roomRoutes = new Elysia()
+  .state('redis', redis)
+  .use(clerkPlugin())
+  .group('/rooms', app =>
     app
       .get(
         '/:roomCode',
