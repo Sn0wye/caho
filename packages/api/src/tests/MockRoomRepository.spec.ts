@@ -1,8 +1,8 @@
+import { type CreateRoom } from '@caho/contracts';
+import { type Player, type Room } from '@caho/schemas';
 import { beforeEach, describe, expect, it } from 'bun:test';
 import { MockRoomRepository } from '@/repositories/implementations/MockRoomRepository';
 import { type IRoomRepository } from '@/repositories/IRoomRepository';
-import { type Player } from '@/schemas/player';
-import { type CreateRoomSchema, type Room } from '@/schemas/room';
 
 describe('MockRoomRepository', () => {
   let repo: IRoomRepository;
@@ -11,7 +11,7 @@ describe('MockRoomRepository', () => {
   });
 
   it('should create a room', async () => {
-    const room: CreateRoomSchema = {
+    const room: CreateRoom = {
       hostId: '1',
       maxPlayers: 10,
       isPublic: true,
@@ -34,7 +34,7 @@ describe('MockRoomRepository', () => {
   // });
 
   it('should add player to room', async () => {
-    const room: CreateRoomSchema = {
+    const room: CreateRoom = {
       hostId: '1',
       maxPlayers: 10,
       isPublic: true,
@@ -70,7 +70,7 @@ describe('MockRoomRepository', () => {
   // });
 
   it('should list public rooms', async () => {
-    const room1: CreateRoomSchema = {
+    const room1: CreateRoom = {
       hostId: '1',
       maxPlayers: 10,
       isPublic: true,
@@ -78,7 +78,7 @@ describe('MockRoomRepository', () => {
       maxPoints: 5,
       players: []
     };
-    const room2: CreateRoomSchema = {
+    const room2: CreateRoom = {
       hostId: '2',
       maxPlayers: 5,
       isPublic: true,

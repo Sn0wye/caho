@@ -1,4 +1,5 @@
-import { getRoom } from '@/services/room';
+import { RedisRoomRepository } from '@/repositories/implementations/RedisRoomRepository';
+import { RoomService } from '@/services/RoomService';
 import { type App } from '..';
 
 export const roomRouter = (app: App) =>
@@ -6,10 +7,10 @@ export const roomRouter = (app: App) =>
     app.get(
       '/:roomCode',
       async ({ params: { roomCode }, store: { redis } }) => {
-        const room = await getRoom({
-          redis,
-          roomCode
-        });
+        const roomRepository = new RedisRoomRepository(redis);
+        const roomService = new RoomService(roomRepository);
+
+        const room = await roomService.getRoom(roomCode);
 
         return room;
       }

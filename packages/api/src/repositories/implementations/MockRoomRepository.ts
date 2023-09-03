@@ -1,14 +1,13 @@
+import {
+  type CreateRoom,
+  type JoinRoom,
+  type LeaveRoom,
+  type StartRoom
+} from '@caho/contracts';
+import { type Player, type Room } from '@caho/schemas';
 import { generateCode } from '@/utils/generateCode';
 import { HTTPError } from '@/errors/HTTPError';
 import { ROOM_ERRORS } from '@/errors/room';
-import { type Player } from '@/schemas/player';
-import {
-  type CreateRoomSchema,
-  type JoinRoomSchema,
-  type LeaveRoomSchema,
-  type Room,
-  type StartRoomSchema
-} from '@/schemas/room';
 import { type IRoomRepository } from '../IRoomRepository';
 
 export class MockRoomRepository implements IRoomRepository {
@@ -26,7 +25,7 @@ export class MockRoomRepository implements IRoomRepository {
     return room;
   }
 
-  async createRoom(room: CreateRoomSchema): Promise<Room> {
+  async createRoom(room: CreateRoom): Promise<Room> {
     const roomCode = 'mock_' + generateCode();
     const createdRoom: Room = {
       id: 'mock_' + generateCode(),
@@ -64,7 +63,7 @@ export class MockRoomRepository implements IRoomRepository {
     }
   }
 
-  async startRoom(input: StartRoomSchema): Promise<void> {
+  async startRoom(input: StartRoom): Promise<void> {
     const { roomCode, playerId } = input;
     const room = this.rooms.get(roomCode);
     if (!room) {
@@ -110,7 +109,7 @@ export class MockRoomRepository implements IRoomRepository {
     return parsed;
   }
 
-  async joinRoom(input: JoinRoomSchema): Promise<void> {
+  async joinRoom(input: JoinRoom): Promise<void> {
     const { roomCode, player, password } = input;
     const room = this.rooms.get(roomCode);
     if (!room) {
@@ -145,7 +144,7 @@ export class MockRoomRepository implements IRoomRepository {
     room.players.push(player);
   }
 
-  async leaveRoom(input: LeaveRoomSchema): Promise<void> {
+  async leaveRoom(input: LeaveRoom): Promise<void> {
     const { roomCode, playerId } = input;
     const room = this.rooms.get(roomCode);
     if (!room) {
