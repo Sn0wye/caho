@@ -15,7 +15,8 @@
     "@sn0wye/eslint-config": "latest",
     "eslint": "8.47.0",
     "turbo": "latest",
-    "tsup": "^7.2.0"
+    "tsup": "^7.2.0",
+    "@typescript-eslint/parser": "^6.5.0"
   },
   "packageManager": "pnpm@8.6.12"
 }
