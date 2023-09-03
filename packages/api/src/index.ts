@@ -1,51 +1,15 @@
-/* eslint-disable @typescript-eslint/ban-types */
-// import { jwt } from '@elysiajs/jwt';
-
-// import { env } from '@/env.js';
-// import { cookie } from '@elysiajs/cookie';
-// import { db } from './db';
-// import { tokens, users } from './db/schema';
-// import { createId } from '@paralleldrive/cuid2';
-// import { eq } from 'drizzle-orm';
-// import { compare } from './utils/password';
-
-// const isAuthenticated = async ({
-//   cookie
-// }: {
-//   cookie: Record<string, string>;
-// }) => {
-//   if (!cookie.token) {
-//   }
-// };
-
-import { type Redis } from '@upstash/redis/nodejs';
+import { cookie } from '@elysiajs/cookie';
 import { Elysia } from 'elysia';
 import { redis } from './db/redis';
-import { roomRouter } from './routers/room';
+import { roomRoutes } from './routers/room';
 
 const setup = (app: Elysia) => app.state('redis', redis);
 
 const app = new Elysia()
   .use(setup)
-  .get('/ping', () => 'pong')
-  .group('/room', app => app.use(roomRouter));
-
-export type App = Elysia<
-  '',
-  {
-    request: {};
-    store: {
-      redis: Redis;
-    };
-    schema: {};
-    error: {};
-    meta: {
-      schema: {};
-      defs: {};
-      exposed: {};
-    };
-  }
->;
+  .use(cookie())
+  .use(roomRoutes)
+  .get('/ping', () => 'pong');
 
 // .use(
 //   jwt({
@@ -67,7 +31,6 @@ export type App = Elysia<
 //     })
 //   })
 // )
-// .use(cookie())
 // .group('/auth', app =>
 //   app
 //     .get('/', async ({ jwt, set, cookie: { token } }) => {
