@@ -106,5 +106,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", ".eslintrc.cjs"]
+  "include": ["src/**/*", ".eslintrc.cjs", "drizzle.config.ts"]
 }
