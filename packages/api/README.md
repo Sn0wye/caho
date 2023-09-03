@@ -7,3 +7,4 @@
 - [x] POST /rooms/:roomCode/start
 - [x] POST /rooms/end/:roomCode
 - [x] POST /rooms/:roomCode/leave (send roomCode, playerId)
+- [ ] Implement Clerk Auth
