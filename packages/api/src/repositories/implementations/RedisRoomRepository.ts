@@ -1,5 +1,6 @@
 import {
   type CreateRoom,
+  type EndRoom,
   type JoinRoom,
   type LeaveRoom,
   type StartRoom
@@ -118,18 +119,30 @@ export class RedisRoomRepository implements IRoomRepository {
     });
   }
 
-  async endRoom(roomCode: string): Promise<
+  async endRoom(input: EndRoom): Promise<
     {
       score: number;
       player: Player;
     }[]
   > {
+    const { roomCode, playerId } = input;
+
     const roomExists = await this.redis.exists(`room:${roomCode}`);
 
     if (!roomExists) {
       throw new HTTPError({
         code: 'NOT_FOUND',
         message: ROOM_ERRORS.ROOM_NOT_FOUND
+      });
+    }
+
+    const hostId = await this.redis.hget(`room:${roomCode}`, 'hostId');
+    const isAdmin = hostId === playerId;
+
+    if (!isAdmin) {
+      throw new HTTPError({
+        code: 'BAD_REQUEST',
+        message: ROOM_ERRORS.IS_NOT_ROOM_HOST
       });
     }
 

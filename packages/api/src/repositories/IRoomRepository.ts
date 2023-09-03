@@ -1,5 +1,6 @@
 import {
   type CreateRoom,
+  type EndRoom,
   type JoinRoom,
   type LeaveRoom,
   type StartRoom
@@ -13,7 +14,7 @@ export interface IRoomRepository {
   addPlayerToRoom(args: { roomCode: string; player: Player }): Promise<void>;
   startRoom(input: StartRoom): Promise<void>;
   // TODO: ranking schema
-  endRoom(roomCode: string): Promise<
+  endRoom(input: EndRoom): Promise<
     {
       score: number;
       player: Player;

@@ -1,5 +1,6 @@
 import {
   type CreateRoom,
+  type EndRoom,
   type JoinRoom,
   type LeaveRoom,
   type StartRoom
@@ -34,13 +35,13 @@ export class RoomService implements IRoomService {
     return await this.roomRepository.startRoom(input);
   }
 
-  public async endRoom(roomCode: string): Promise<
+  public async endRoom(input: EndRoom): Promise<
     {
       score: number;
       player: Player;
     }[]
   > {
-    return await this.roomRepository.endRoom(roomCode);
+    return await this.roomRepository.endRoom(input);
   }
 
   public async joinRoom(input: JoinRoom): Promise<void> {
