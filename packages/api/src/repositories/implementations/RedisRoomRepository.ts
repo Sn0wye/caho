@@ -1,18 +1,21 @@
+import {
+  type CreateRoom,
+  type JoinRoom,
+  type LeaveRoom,
+  type StartRoom
+} from '@caho/contracts';
+import {
+  playerSchema,
+  roomSchema,
+  type Player,
+  type Room
+} from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
 import { type Redis } from '@upstash/redis/nodejs';
 import { generateCode } from '@/utils/generateCode';
 import { HTTPError } from '@/errors/HTTPError';
 import { ROOM_ERRORS } from '@/errors/room';
 import { type IRoomRepository } from '@/repositories/IRoomRepository';
-import { playerSchema, type Player } from '@/schemas/player';
-import {
-  roomSchema,
-  type CreateRoomSchema,
-  type JoinRoomSchema,
-  type LeaveRoomSchema,
-  type Room,
-  type StartRoomSchema
-} from '@/schemas/room';
 
 export class RedisRoomRepository implements IRoomRepository {
   private redis: Redis;
@@ -34,7 +37,7 @@ export class RedisRoomRepository implements IRoomRepository {
     return roomSchema.parse(room);
   }
 
-  async createRoom(room: CreateRoomSchema): Promise<Room> {
+  async createRoom(room: CreateRoom): Promise<Room> {
     const roomCode = generateCode();
     const createdRoom: Room = {
       id: createId(),
@@ -89,7 +92,7 @@ export class RedisRoomRepository implements IRoomRepository {
     });
   }
 
-  async startRoom(input: StartRoomSchema): Promise<void> {
+  async startRoom(input: StartRoom): Promise<void> {
     const { roomCode, playerId } = input;
 
     const roomExists = await this.redis.exists(`room:${playerId}`);
@@ -153,7 +156,7 @@ export class RedisRoomRepository implements IRoomRepository {
     return parsed;
   }
 
-  async joinRoom(input: JoinRoomSchema): Promise<void> {
+  async joinRoom(input: JoinRoom): Promise<void> {
     const { roomCode, player, password } = input;
 
     const roomExists = await this.redis.exists(`room:${roomCode}`);
@@ -195,7 +198,7 @@ export class RedisRoomRepository implements IRoomRepository {
     });
   }
 
-  async leaveRoom(input: LeaveRoomSchema): Promise<void> {
+  async leaveRoom(input: LeaveRoom): Promise<void> {
     const { roomCode, playerId } = input;
 
     const roomExists = this.redis.exists(`room:${roomCode}`);

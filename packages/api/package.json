@@ -30,6 +30,8 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@caho/schemas": "workspace:*",
+    "@caho/contracts": "workspace:*",
     "@sn0wye/eslint-config": "^3.0.0",
     "bun-types": "latest",
     "drizzle-kit": "^0.19.13",
