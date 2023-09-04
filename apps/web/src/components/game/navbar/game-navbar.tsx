@@ -1,10 +1,10 @@
 'use client';
 
+import { type RoomStatus } from '@caho/schemas';
 import { LogoText } from '@/components/brand/logo-text';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { type RoomStatus } from '@/server/schemas/room';
 import { GameNavbarStatus } from './game-navbar-status';
 import { GameRoomCodeButton } from './game-room-code-button';
 

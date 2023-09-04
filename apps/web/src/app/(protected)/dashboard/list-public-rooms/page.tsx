@@ -1,9 +1,8 @@
-import { createCaller } from '@/utils/caller';
+import { getPublicRooms } from './getPublicRooms';
 import { Rooms } from './rooms';
 
 export default async function ListPublicRoomsPage() {
-  const caller = createCaller();
-  const publicRooms = await caller.room.list();
+  const publicRooms = await getPublicRooms();
 
   return <Rooms initialData={publicRooms} />;
 }

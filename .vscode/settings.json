@@ -30,5 +30,6 @@
     "zadd",
     "zrange",
     "zustand"
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
