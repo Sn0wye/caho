@@ -1,7 +1,7 @@
 import Link from 'next/link';
+import { type Room } from '@caho/schemas';
 import { Hash } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { type Room } from '@/server/schemas/room';
 import { Skeleton } from './ui/skeleton';
 
 type PublicGameRoomCardProps = Room;

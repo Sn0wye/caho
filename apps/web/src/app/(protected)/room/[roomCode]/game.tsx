@@ -1,17 +1,12 @@
 'use client';
 
-import { useStorage } from 'liveblocks.config';
+import { type Room } from '@caho/schemas';
 import { GameNavbar } from '@/components/game/navbar/game-navbar';
 import { Ongoing } from '@/components/game/ongoing/ongoing';
-import { type Room } from '@/server/schemas/room';
 
 type GameProps = Room;
 
 export const Game = ({ status }: GameProps) => {
-  const room = useStorage(s => s.room);
-
-  console.log('room storage data', room);
-
   return (
     <div className="flex h-screen w-full flex-col items-center justify-between">
       <GameNavbar gameStatus={status} />

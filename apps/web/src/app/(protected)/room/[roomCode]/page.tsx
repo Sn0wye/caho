@@ -3,7 +3,6 @@ import { type Room as RoomType } from '@caho/schemas';
 import { currentUser } from '@clerk/nextjs';
 import { api } from '@/utils/api';
 import { Game } from './game';
-import { Room } from './room';
 
 type GamePageProps = {
   params: {
@@ -33,9 +32,5 @@ export default async function GamePage({ params }: GamePageProps) {
     redirect('/dashboard');
   }
 
-  return (
-    <Room room={room}>
-      <Game {...room} />
-    </Room>
-  );
+  return <Game {...room} />;
 }

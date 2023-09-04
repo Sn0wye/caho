@@ -1,14 +1,18 @@
 'use client';
 
+import { type Room } from '@caho/schemas';
+import { useQuery } from '@tanstack/react-query';
 import { PublicGameRoomCard } from '@/components/public-game-room-card';
-import { api, type RouterOutputs } from '@/utils/api';
+import { getPublicRooms } from './getPublicRooms';
 
 type RoomsProps = {
-  initialData: RouterOutputs['room']['list'];
+  initialData: Room[];
 };
 
 export const Rooms = ({ initialData }: RoomsProps) => {
-  const { data } = api.room.list.useQuery(undefined, {
+  const { data } = useQuery({
+    queryKey: ['public-rooms'],
+    queryFn: getPublicRooms,
     initialData
   });
 

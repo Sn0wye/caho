@@ -1,5 +1,5 @@
+import { type RoomStatus } from '@caho/schemas';
 import { Badge, type BadgeVariants } from '@/components/ui/badge';
-import { type RoomStatus } from '@/server/schemas/room';
 
 const gameStatusColorVariants: {
   [key in RoomStatus]: BadgeVariants['variant'];

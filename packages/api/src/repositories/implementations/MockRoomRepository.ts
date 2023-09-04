@@ -1,5 +1,6 @@
 import {
   type CreateRoom,
+  type EndRoom,
   type JoinRoom,
   type LeaveRoom,
   type StartRoom
@@ -82,9 +83,8 @@ export class MockRoomRepository implements IRoomRepository {
     room.status = 'IN_PROGRESS';
   }
 
-  async endRoom(
-    roomCode: string
-  ): Promise<{ score: number; player: Player }[]> {
+  async endRoom(input: EndRoom): Promise<{ score: number; player: Player }[]> {
+    const { roomCode } = input;
     const room = this.rooms.get(roomCode);
     if (!room) {
       throw new HTTPError({
