@@ -6,7 +6,6 @@
     "db:migrate": {},
     "db:generate": {},
     "dev": {
-      "dependsOn": ["^db:generate"],
       "persistent": true,
       "cache": false
     },
