@@ -1,10 +1,20 @@
-import { Database } from 'bun:sqlite';
-import { drizzle, type BunSQLiteDatabase } from 'drizzle-orm/bun-sqlite';
-import { migrate } from 'drizzle-orm/bun-sqlite/migrator';
+import { connect } from '@planetscale/database';
+import { drizzle } from 'drizzle-orm/planetscale-serverless';
+import { env } from '@/env';
+import * as relations from './relations';
+import * as schema from './schema';
 
-export const sqlite = new Database('sqlite.db');
-const db: BunSQLiteDatabase = drizzle(sqlite);
+const connection = connect({
+  host: env.DATABASE_HOST,
+  username: env.DATABASE_USERNAME,
+  password: env.DATABASE_PASSWORD
+});
 
-migrate(db, { migrationsFolder: 'migrations' });
+const db = drizzle(connection, {
+  schema: {
+    ...schema,
+    ...relations
+  }
+});
 
-export { db };
+export { connection, db };

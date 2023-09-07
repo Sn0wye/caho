@@ -5,117 +5,129 @@ import {
   leaveRoom,
   startRoom
 } from '@caho/contracts';
+import { cookie } from '@elysiajs/cookie';
 import { Elysia } from 'elysia';
-import { clerkPlugin } from '@/auth/clerk';
+import { isAuthed } from '@/auth/lucia';
 import { redis } from '@/db/redis';
+import { env } from '@/env';
 import { RedisRoomRepository } from '@/repositories/implementations/RedisRoomRepository';
 import { RoomService } from '@/services/RoomService';
 
 export const roomRoutes = new Elysia()
   .state('redis', redis)
-  .use(clerkPlugin())
-  .group('/rooms', app =>
-    app
-      .get(
-        '/:roomCode',
-        async ({ set, params: { roomCode }, store: { redis } }) => {
+  .use(
+    cookie({
+      secret: env.COOKIE_SECRET
+    })
+  )
+  .group(
+    '/rooms',
+    {
+      beforeHandle: isAuthed
+    },
+    app =>
+      app
+        .get(
+          '/:roomCode',
+
+          async ({ set, params: { roomCode }, store: { redis } }) => {
+            const roomRepository = new RedisRoomRepository(redis);
+            const roomService = new RoomService(roomRepository);
+
+            const room = await roomService.getRoom(roomCode);
+
+            set.status = 200;
+            return room;
+          }
+        )
+        .get('/list', async ({ set, store: { redis } }) => {
           const roomRepository = new RedisRoomRepository(redis);
           const roomService = new RoomService(roomRepository);
 
-          const room = await roomService.getRoom(roomCode);
+          const publicRooms = await roomService.listPublicRooms();
 
           set.status = 200;
-          return room;
-        }
-      )
-      .get('/list', async ({ set, store: { redis } }) => {
-        const roomRepository = new RedisRoomRepository(redis);
-        const roomService = new RoomService(roomRepository);
+          return publicRooms;
+        })
+        .post('/create', async ({ body, set, store: { redis } }) => {
+          try {
+            const validatedBody = createRoom.parse(body);
 
-        const publicRooms = await roomService.listPublicRooms();
+            const roomRepository = new RedisRoomRepository(redis);
+            const roomService = new RoomService(roomRepository);
 
-        set.status = 200;
-        return publicRooms;
-      })
-      .post('/create', async ({ body, set, store: { redis } }) => {
-        try {
-          const validatedBody = createRoom.parse(body);
+            const room = await roomService.createRoom(validatedBody);
 
-          const roomRepository = new RedisRoomRepository(redis);
-          const roomService = new RoomService(roomRepository);
+            set.status = 201;
+            return room;
+          } catch (e) {
+            set.status = 400;
+            console.log('ERRO!', JSON.stringify(e, null, 2));
+            return 'Invalid body';
+          }
+        })
+        .post('/:roomCode/join', async ({ body, set, store: { redis } }) => {
+          try {
+            const validatedBody = joinRoom.parse(body);
 
-          const room = await roomService.createRoom(validatedBody);
+            const roomRepository = new RedisRoomRepository(redis);
+            const roomService = new RoomService(roomRepository);
 
-          set.status = 201;
-          return room;
-        } catch (e) {
-          set.status = 400;
-          console.log('ERRO!', JSON.stringify(e, null, 2));
-          return 'Invalid body';
-        }
-      })
-      .post('/:roomCode/join', async ({ body, set, store: { redis } }) => {
-        try {
-          const validatedBody = joinRoom.parse(body);
+            const room = await roomService.joinRoom(validatedBody);
 
-          const roomRepository = new RedisRoomRepository(redis);
-          const roomService = new RoomService(roomRepository);
+            set.status = 200;
+            return room;
+          } catch {
+            set.status = 400;
+            return 'Invalid body';
+          }
+        })
+        .post('/:roomCode/start', async ({ body, set, store: { redis } }) => {
+          try {
+            const validatedBody = startRoom.parse(body);
 
-          const room = await roomService.joinRoom(validatedBody);
+            const roomRepository = new RedisRoomRepository(redis);
+            const roomService = new RoomService(roomRepository);
 
-          set.status = 200;
-          return room;
-        } catch {
-          set.status = 400;
-          return 'Invalid body';
-        }
-      })
-      .post('/:roomCode/start', async ({ body, set, store: { redis } }) => {
-        try {
-          const validatedBody = startRoom.parse(body);
+            await roomService.startRoom(validatedBody);
 
-          const roomRepository = new RedisRoomRepository(redis);
-          const roomService = new RoomService(roomRepository);
+            set.status = 204;
+            return;
+          } catch {
+            set.status = 400;
+            return 'Invalid body';
+          }
+        })
+        .post('/:roomCode/end', async ({ set, body, store: { redis } }) => {
+          try {
+            const validatedBody = endRoom.parse(body);
 
-          await roomService.startRoom(validatedBody);
+            const roomRepository = new RedisRoomRepository(redis);
+            const roomService = new RoomService(roomRepository);
 
-          set.status = 204;
-          return;
-        } catch {
-          set.status = 400;
-          return 'Invalid body';
-        }
-      })
-      .post('/:roomCode/end', async ({ set, body, store: { redis } }) => {
-        try {
-          const validatedBody = endRoom.parse(body);
+            const room = await roomService.endRoom(validatedBody);
 
-          const roomRepository = new RedisRoomRepository(redis);
-          const roomService = new RoomService(roomRepository);
+            set.status = 200;
+            return room;
+          } catch {
+            set.status = 400;
+            return 'Invalid body';
+          }
+        })
+        .post('/leave', async ({ body, set, store: { redis } }) => {
+          try {
+            const validatedBody = leaveRoom.parse(body);
 
-          const room = await roomService.endRoom(validatedBody);
+            const roomRepository = new RedisRoomRepository(redis);
+            const roomService = new RoomService(roomRepository);
 
-          set.status = 200;
-          return room;
-        } catch {
-          set.status = 400;
-          return 'Invalid body';
-        }
-      })
-      .post('/leave', async ({ body, set, store: { redis } }) => {
-        try {
-          const validatedBody = leaveRoom.parse(body);
+            await roomService.leaveRoom(validatedBody);
 
-          const roomRepository = new RedisRoomRepository(redis);
-          const roomService = new RoomService(roomRepository);
-
-          await roomService.leaveRoom(validatedBody);
-
-          set.status = 204;
-          return;
-        } catch {
-          set.status = 400;
-          return 'Invalid body';
-        }
-      })
+            set.status = 204;
+            return;
+          } catch {
+            set.status = 400;
+            return 'Invalid body';
+          }
+        })
   );

@@ -2,6 +2,6 @@ import { type Room } from '@caho/schemas';
 import { api } from '@/utils/api';
 
 export const getPublicRooms = async () => {
-  const { data } = await api.get<Room[]>('/list');
+  const { data } = await api.get<Room[]>('/rooms/list');
   return data;
 };
