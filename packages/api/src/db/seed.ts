@@ -1,21 +1,31 @@
-import { faker } from '@faker-js/faker';
 import { createId } from '@paralleldrive/cuid2';
+import { auth } from '@/auth/lucia';
 import { db } from '.';
-import { encrypt } from '../utils/password';
-import { tokens, users } from './schema';
+import { keys, sessions, users } from './schema';
 
-db.delete(tokens).run();
-db.delete(users).run();
+await db.delete(users).execute();
+await db.delete(keys).execute();
+await db.delete(sessions).execute();
 
-Array.from({ length: 10 }).forEach((_, i) => {
-  const name = i === 1 ? 'Sn0wye' : faker.person.firstName();
-  const password = i === 1 ? encrypt('12345') : encrypt(createId());
+const user = {
+  id: createId(),
+  username: 'Sn0wye',
+  password: '12345678',
+  email: 'gabriel@snowye.dev',
+  name: 'Gabriel',
+  last_name: 'Trzimajewski'
+};
 
-  db.insert(users)
-    .values({
-      id: createId(),
-      name,
-      password
-    })
-    .run();
+await auth.createUser({
+  key: {
+    providerId: 'username',
+    providerUserId: user.id,
+    password: user.password
+  },
+  attributes: {
+    email: user.email,
+    last_name: user.last_name,
+    name: user.name,
+    username: user.username
+  }
 });
