@@ -27,7 +27,7 @@ export const authRoutes = new Elysia().group(
       .post(
         '/sign-up',
         async ({ body: { username, password } }) => {
-          const user = auth.createUser({
+          const user = await auth.createUser({
             key: {
               providerId: 'username',
               providerUserId: username,
