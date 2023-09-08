@@ -44,9 +44,6 @@ importers:
       '@clerk/nextjs':
         specifier: ^4.23.1
         version: 4.23.1(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)
-      '@elysiajs/eden':
-        specifier: ^0.6.4
-        version: 0.6.4(elysia@0.6.19)
       '@hookform/resolvers':
         specifier: ^3.1.1
         version: 3.1.1(react-hook-form@7.45.2)
@@ -637,19 +634,6 @@ packages:
       elysia: '>= 0.5.12'
     dependencies:
       elysia: 0.6.19(typescript@5.2.2)
-    dev: false
-
-  /@elysiajs/eden@0.6.4(elysia@0.6.19):
-    resolution: {integrity: sha512-/hlURXc57Udpebkx4rZJIe8tcWaUf9GqQi/do/Eb1doTA28xWJSp1xStPfP4fpGBjpKrA85vMWNn2EeogMlukQ==}
-    peerDependencies:
-      '@sinclair/typebox': '*'
-      elysia: '>= 0.6.7'
-    peerDependenciesMeta:
-      '@sinclair/typebox':
-        optional: true
-    dependencies:
-      elysia: 0.6.19(typescript@5.2.2)
-      superjson: 1.13.1
     dev: false
 
   /@elysiajs/jwt@0.6.3(elysia@0.6.19):
