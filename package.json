@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "build:packages": "turbo run build --filter=contracts --filter=schemas",
+    "start": "turbo run start",
     "dev": "turbo run dev",
     "lint": "SKIP_ENV_VALIDATION=1 turbo run lint",
     "format": "prettier --cache --write --plugin-search-dir=. **/*.{cjs,mjs,ts,tsx}",
@@ -11,13 +13,17 @@
     "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
-    "@caho/tsconfig": "workspace:*",
+    "@caho/tsconfig": "*",
     "@sn0wye/eslint-config": "latest",
     "eslint": "8.47.0",
-    "turbo": "latest",
     "tsup": "^7.2.0",
     "@typescript-eslint/parser": "^6.5.0",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "turbo": "latest"
   },
-  "packageManager": "pnpm@8.6.12"
+  "packageManager": "pnpm@8.6.12",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

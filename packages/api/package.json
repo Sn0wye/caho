@@ -22,7 +22,6 @@
     "@elysiajs/cookie": "^0.6.1",
     "@elysiajs/cors": "^0.6.0",
     "@elysiajs/jwt": "^0.6.3",
-    "@elysiajs/trpc": "^0.6.1",
     "@elysiajs/websocket": "^0.2.8",
     "@faker-js/faker": "^8.0.2",
     "@lucia-auth/adapter-mysql": "^2.0.0",

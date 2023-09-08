@@ -12,12 +12,10 @@
     "clean": "git clean -xdf node_modules"
   },
   "dependencies": {
-    "@caho/api": "workspace:*",
     "@caho/contracts": "workspace:*",
     "@caho/schemas": "workspace:*",
     "@clerk/localizations": "^1.25.0",
     "@clerk/nextjs": "^4.23.1",
-    "@elysiajs/eden": "^0.6.4",
     "@hookform/resolvers": "^3.1.1",
     "@liveblocks/client": "^1.2.1",
     "@liveblocks/react": "^1.2.1",

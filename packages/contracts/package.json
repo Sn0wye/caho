@@ -9,7 +9,8 @@
     "dev": "tsup --watch",
     "lint": "eslint src --ext ts,tsx",
     "lint:fix": "eslint src --ext ts,tsx --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "clean": "git clean -xdf node_modules"
   },
   "dependencies": {
     "zod": "3.22.2",

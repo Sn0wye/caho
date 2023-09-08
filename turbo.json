@@ -5,6 +5,9 @@
     "db:seed": {},
     "db:migrate": {},
     "db:generate": {},
+    "start": {
+      "dependsOn": ["^build"]
+    },
     "dev": {
       "persistent": true,
       "cache": false
@@ -18,6 +21,9 @@
     },
     "lint:fix": {},
     "typecheck": {
+      "cache": false
+    },
+    "clean": {
       "cache": false
     }
   },

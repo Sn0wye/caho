@@ -9,7 +9,7 @@ importers:
   .:
     devDependencies:
       '@caho/tsconfig':
-        specifier: workspace:*
+        specifier: '*'
         version: link:packages/tsconfig
       '@sn0wye/eslint-config':
         specifier: latest
@@ -32,9 +32,6 @@ importers:
 
   apps/web:
     dependencies:
-      '@caho/api':
-        specifier: workspace:*
-        version: link:../../packages/api
       '@caho/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
@@ -49,7 +46,7 @@ importers:
         version: 4.23.1(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)
       '@elysiajs/eden':
         specifier: ^0.6.4
-        version: 0.6.4(elysia@0.6.17)
+        version: 0.6.4(elysia@0.6.19)
       '@hookform/resolvers':
         specifier: ^3.1.1
         version: 3.1.1(react-hook-form@7.45.2)
@@ -233,19 +230,16 @@ importers:
         version: 0.28.0
       '@elysiajs/cookie':
         specifier: ^0.6.1
-        version: 0.6.1(elysia@0.6.17)
+        version: 0.6.1(elysia@0.6.19)
       '@elysiajs/cors':
         specifier: ^0.6.0
-        version: 0.6.0(elysia@0.6.17)
+        version: 0.6.0(elysia@0.6.19)
       '@elysiajs/jwt':
         specifier: ^0.6.3
-        version: 0.6.3(elysia@0.6.17)
-      '@elysiajs/trpc':
-        specifier: ^0.6.1
-        version: 0.6.1(elysia@0.6.17)
+        version: 0.6.3(elysia@0.6.19)
       '@elysiajs/websocket':
         specifier: ^0.2.8
-        version: 0.2.8(elysia@0.6.17)
+        version: 0.2.8(elysia@0.6.19)
       '@faker-js/faker':
         specifier: ^8.0.2
         version: 8.0.2
@@ -272,10 +266,10 @@ importers:
         version: 2.0.6
       drizzle-orm:
         specifier: ^0.28.5
-        version: 0.28.5(@planetscale/database@1.11.0)(bun-types@0.8.1)
+        version: 0.28.5(@planetscale/database@1.11.0)(bun-types@1.0.1)
       elysia:
         specifier: latest
-        version: 0.6.17(typescript@5.2.2)
+        version: 0.6.19(typescript@5.2.2)
       lucia:
         specifier: ^2.4.2
         version: 2.4.2
@@ -294,7 +288,7 @@ importers:
         version: 3.0.0(eslint@8.48.0)(typescript@5.2.2)
       bun-types:
         specifier: latest
-        version: 0.8.1
+        version: 1.0.1
       drizzle-kit:
         specifier: ^0.19.13
         version: 0.19.13
@@ -625,7 +619,7 @@ packages:
     resolution: {integrity: sha512-ps5qF0tMxWRVu+V5gvCRrQNqlY92aTnIKdq27gm9LZMSdaKYZt6AVvSK1dlUMzs6Rt0Jm80b+eWct6xShBKhIw==}
     dev: true
 
-  /@elysiajs/cookie@0.6.1(elysia@0.6.17):
+  /@elysiajs/cookie@0.6.1(elysia@0.6.19):
     resolution: {integrity: sha512-E/swYyYcgfUa3LtVjmJfwsL7GUF9nbp+gxouWs0z0z305UaBgx7N0zclQnoaRdL5lPn73J/bEkfTjL0hOBJHIg==}
     peerDependencies:
       elysia: '>= 0.6.0'
@@ -634,18 +628,18 @@ packages:
       '@types/cookie-signature': 1.1.0
       cookie: 0.5.0
       cookie-signature: 1.2.1
-      elysia: 0.6.17(typescript@5.2.2)
+      elysia: 0.6.19(typescript@5.2.2)
     dev: false
 
-  /@elysiajs/cors@0.6.0(elysia@0.6.17):
+  /@elysiajs/cors@0.6.0(elysia@0.6.19):
     resolution: {integrity: sha512-TpkdYRVDLJYn9XHwO3eFu1GG1/p1xZMcujU354N0YG5pbFNy5kSeKFDZRMoh14fPvkRN7tWgRpsZfuCs15IHKA==}
     peerDependencies:
       elysia: '>= 0.5.12'
     dependencies:
-      elysia: 0.6.17(typescript@5.2.2)
+      elysia: 0.6.19(typescript@5.2.2)
     dev: false
 
-  /@elysiajs/eden@0.6.4(elysia@0.6.17):
+  /@elysiajs/eden@0.6.4(elysia@0.6.19):
     resolution: {integrity: sha512-/hlURXc57Udpebkx4rZJIe8tcWaUf9GqQi/do/Eb1doTA28xWJSp1xStPfP4fpGBjpKrA85vMWNn2EeogMlukQ==}
     peerDependencies:
       '@sinclair/typebox': '*'
@@ -654,33 +648,25 @@ packages:
       '@sinclair/typebox':
         optional: true
     dependencies:
-      elysia: 0.6.17(typescript@5.2.2)
+      elysia: 0.6.19(typescript@5.2.2)
       superjson: 1.13.1
     dev: false
 
-  /@elysiajs/jwt@0.6.3(elysia@0.6.17):
+  /@elysiajs/jwt@0.6.3(elysia@0.6.19):
     resolution: {integrity: sha512-6PNFwkVTBEwQhw5XSpQrQNc0osoe29MqBW7qBg3CjE9nqRR8US8b/SSomO/d405dqDbJuDSkpO69A85Lvu19cQ==}
     peerDependencies:
       elysia: '>= 0.6.0'
     dependencies:
-      elysia: 0.6.17(typescript@5.2.2)
+      elysia: 0.6.19(typescript@5.2.2)
       jose: 4.14.5
     dev: false
 
-  /@elysiajs/trpc@0.6.1(elysia@0.6.17):
-    resolution: {integrity: sha512-G63pE7YGYC6DZKq43rJB/2vpfkF5ebSDRDGghODcD6zZIizGQPtzynxRwkOUWcbw0JqjiGq9AH9w9wJ/aOqcrw==}
-    peerDependencies:
-      elysia: '>= 0.6.0'
-    dependencies:
-      elysia: 0.6.17(typescript@5.2.2)
-    dev: false
-
-  /@elysiajs/websocket@0.2.8(elysia@0.6.17):
+  /@elysiajs/websocket@0.2.8(elysia@0.6.19):
     resolution: {integrity: sha512-K9KLmYL1SYuAV353GvmK0V9DG5w7XTOGsa1H1dGB5BUTzvBaMvnwNeqnJQ3cjf9V1c0EjQds0Ty4LfUFvV45jw==}
     peerDependencies:
       elysia: '>= 0.2.2'
     dependencies:
-      elysia: 0.6.17(typescript@5.2.2)
+      elysia: 0.6.19(typescript@5.2.2)
       nanoid: 4.0.2
       raikiri: 0.0.0-beta.8
     dev: false
@@ -3148,8 +3134,8 @@ packages:
       ieee754: 1.2.1
     dev: false
 
-  /bun-types@0.8.1:
-    resolution: {integrity: sha512-VuCBox66P/3a8gVOffLCWIS6vdpXq4y3eJuF3VnsyC5HpykmIjkcr5wYDn22qQdeTUmOfCcBy1SZmtrZCeUr3A==}
+  /bun-types@1.0.1:
+    resolution: {integrity: sha512-7NrXqhMIaNKmWn2dSWEQ50znMZqrN/5Z0NBMXvQTRu/+Y1CvoXRznFy0pnqLe024CeZgVdXoEpARNO1JZLAPGw==}
 
   /bundle-require@4.0.1(esbuild@0.18.20):
     resolution: {integrity: sha512-9NQkRHlNdNpDBGmLpngF3EFDcwodhMUuLz9PaWYciVcQF9SE4LFjM2DB/xV1Li5JiuDMv7ZUWuC3rGbqR0MAXQ==}
@@ -3519,7 +3505,7 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.28.5(@planetscale/database@1.11.0)(bun-types@0.8.1):
+  /drizzle-orm@0.28.5(@planetscale/database@1.11.0)(bun-types@1.0.1):
     resolution: {integrity: sha512-6r6Iw4c38NAmW6TiKH3TUpGUQ1YdlEoLJOQptn8XPx3Z63+vFNKfAiANqrIiYZiMjKR9+NYAL219nFrmo1duXA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -3582,14 +3568,14 @@ packages:
         optional: true
     dependencies:
       '@planetscale/database': 1.11.0
-      bun-types: 0.8.1
+      bun-types: 1.0.1
     dev: false
 
   /electron-to-chromium@1.4.508:
     resolution: {integrity: sha512-FFa8QKjQK/A5QuFr2167myhMesGrhlOBD+3cYNxO9/S4XzHEXesyTD/1/xF644gC8buFPz3ca6G1LOQD0tZrrg==}
 
-  /elysia@0.6.17(typescript@5.2.2):
-    resolution: {integrity: sha512-3PRkikcycM4zGx23hhn82ox/XzWkM14r786LXgXmUvR3aRi6vKoGuz59YIT4AYQnDQ7iMgy3HkC0+23p6uiY+w==}
+  /elysia@0.6.19(typescript@5.2.2):
+    resolution: {integrity: sha512-Kur/p0OG2D+dh6BEQ+KEjIW4cCnIv7ijBDFEVRvyFLYlKJgVMvA+koiGV715lFvE+EGPFbSEDdMzHfBihxza4A==}
     peerDependencies:
       '@elysiajs/fn': '*'
       '@sinclair/typebox': '>= 0.28.10'
