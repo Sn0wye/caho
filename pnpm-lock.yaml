@@ -227,16 +227,16 @@ importers:
         version: 0.28.0
       '@elysiajs/cookie':
         specifier: ^0.6.1
-        version: 0.6.1(elysia@0.6.19)
+        version: 0.6.1(elysia@0.6.20)
       '@elysiajs/cors':
         specifier: ^0.6.0
-        version: 0.6.0(elysia@0.6.19)
+        version: 0.6.0(elysia@0.6.20)
       '@elysiajs/jwt':
         specifier: ^0.6.3
-        version: 0.6.3(elysia@0.6.19)
+        version: 0.6.3(elysia@0.6.20)
       '@elysiajs/websocket':
         specifier: ^0.2.8
-        version: 0.2.8(elysia@0.6.19)
+        version: 0.2.8(elysia@0.6.20)
       '@faker-js/faker':
         specifier: ^8.0.2
         version: 8.0.2
@@ -258,15 +258,12 @@ importers:
       '@upstash/redis':
         specifier: ^1.22.0
         version: 1.22.0
-      add:
-        specifier: ^2.0.6
-        version: 2.0.6
       drizzle-orm:
         specifier: ^0.28.5
         version: 0.28.5(@planetscale/database@1.11.0)(bun-types@1.0.1)
       elysia:
         specifier: latest
-        version: 0.6.19(typescript@5.2.2)
+        version: 0.6.20(typescript@5.2.2)
       lucia:
         specifier: ^2.4.2
         version: 2.4.2
@@ -616,7 +613,7 @@ packages:
     resolution: {integrity: sha512-ps5qF0tMxWRVu+V5gvCRrQNqlY92aTnIKdq27gm9LZMSdaKYZt6AVvSK1dlUMzs6Rt0Jm80b+eWct6xShBKhIw==}
     dev: true
 
-  /@elysiajs/cookie@0.6.1(elysia@0.6.19):
+  /@elysiajs/cookie@0.6.1(elysia@0.6.20):
     resolution: {integrity: sha512-E/swYyYcgfUa3LtVjmJfwsL7GUF9nbp+gxouWs0z0z305UaBgx7N0zclQnoaRdL5lPn73J/bEkfTjL0hOBJHIg==}
     peerDependencies:
       elysia: '>= 0.6.0'
@@ -625,32 +622,32 @@ packages:
       '@types/cookie-signature': 1.1.0
       cookie: 0.5.0
       cookie-signature: 1.2.1
-      elysia: 0.6.19(typescript@5.2.2)
+      elysia: 0.6.20(typescript@5.2.2)
     dev: false
 
-  /@elysiajs/cors@0.6.0(elysia@0.6.19):
+  /@elysiajs/cors@0.6.0(elysia@0.6.20):
     resolution: {integrity: sha512-TpkdYRVDLJYn9XHwO3eFu1GG1/p1xZMcujU354N0YG5pbFNy5kSeKFDZRMoh14fPvkRN7tWgRpsZfuCs15IHKA==}
     peerDependencies:
       elysia: '>= 0.5.12'
     dependencies:
-      elysia: 0.6.19(typescript@5.2.2)
+      elysia: 0.6.20(typescript@5.2.2)
     dev: false
 
-  /@elysiajs/jwt@0.6.3(elysia@0.6.19):
+  /@elysiajs/jwt@0.6.3(elysia@0.6.20):
     resolution: {integrity: sha512-6PNFwkVTBEwQhw5XSpQrQNc0osoe29MqBW7qBg3CjE9nqRR8US8b/SSomO/d405dqDbJuDSkpO69A85Lvu19cQ==}
     peerDependencies:
       elysia: '>= 0.6.0'
     dependencies:
-      elysia: 0.6.19(typescript@5.2.2)
+      elysia: 0.6.20(typescript@5.2.2)
       jose: 4.14.5
     dev: false
 
-  /@elysiajs/websocket@0.2.8(elysia@0.6.19):
+  /@elysiajs/websocket@0.2.8(elysia@0.6.20):
     resolution: {integrity: sha512-K9KLmYL1SYuAV353GvmK0V9DG5w7XTOGsa1H1dGB5BUTzvBaMvnwNeqnJQ3cjf9V1c0EjQds0Ty4LfUFvV45jw==}
     peerDependencies:
       elysia: '>= 0.2.2'
     dependencies:
-      elysia: 0.6.19(typescript@5.2.2)
+      elysia: 0.6.20(typescript@5.2.2)
       nanoid: 4.0.2
       raikiri: 0.0.0-beta.8
     dev: false
@@ -2854,10 +2851,6 @@ packages:
     hasBin: true
     dev: true
 
-  /add@2.0.6:
-    resolution: {integrity: sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==}
-    dev: false
-
   /ajv@6.12.6:
     resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
     dependencies:
@@ -3558,8 +3551,8 @@ packages:
   /electron-to-chromium@1.4.508:
     resolution: {integrity: sha512-FFa8QKjQK/A5QuFr2167myhMesGrhlOBD+3cYNxO9/S4XzHEXesyTD/1/xF644gC8buFPz3ca6G1LOQD0tZrrg==}
 
-  /elysia@0.6.19(typescript@5.2.2):
-    resolution: {integrity: sha512-Kur/p0OG2D+dh6BEQ+KEjIW4cCnIv7ijBDFEVRvyFLYlKJgVMvA+koiGV715lFvE+EGPFbSEDdMzHfBihxza4A==}
+  /elysia@0.6.20(typescript@5.2.2):
+    resolution: {integrity: sha512-15HX3DlTkPo1FKwZLRqxJ4F+KlSyrOj9/8C0R7DHSd8zRJ9e6kx8p8eEftG2mooKo7ItWbIq/PJNF5VuoDSC9A==}
     peerDependencies:
       '@elysiajs/fn': '*'
       '@sinclair/typebox': '>= 0.28.10'
