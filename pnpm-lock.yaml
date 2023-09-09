@@ -30,6 +30,79 @@ importers:
         specifier: 5.2.2
         version: 5.2.2
 
+  apps/backend:
+    dependencies:
+      '@caho/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@caho/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
+      '@clerk/backend':
+        specifier: ^0.28.0
+        version: 0.28.0
+      '@elysiajs/cookie':
+        specifier: ^0.6.1
+        version: 0.6.1(elysia@0.6.20)
+      '@elysiajs/cors':
+        specifier: ^0.6.0
+        version: 0.6.0(elysia@0.6.20)
+      '@elysiajs/jwt':
+        specifier: ^0.6.3
+        version: 0.6.3(elysia@0.6.20)
+      '@elysiajs/websocket':
+        specifier: ^0.2.8
+        version: 0.2.8(elysia@0.6.20)
+      '@faker-js/faker':
+        specifier: ^8.0.2
+        version: 8.0.2
+      '@lucia-auth/adapter-mysql':
+        specifier: ^2.0.0
+        version: 2.0.0(@planetscale/database@1.11.0)(lucia@2.4.2)
+      '@paralleldrive/cuid2':
+        specifier: ^2.2.2
+        version: 2.2.2
+      '@planetscale/database':
+        specifier: ^1.11.0
+        version: 1.11.0
+      '@t3-oss/env-core':
+        specifier: ^0.6.1
+        version: 0.6.1(typescript@5.2.2)(zod@3.22.2)
+      '@trpc/server':
+        specifier: ^10.38.0
+        version: 10.38.0
+      '@upstash/redis':
+        specifier: ^1.22.0
+        version: 1.22.0
+      drizzle-orm:
+        specifier: ^0.28.5
+        version: 0.28.5(@planetscale/database@1.11.0)(bun-types@1.0.1)
+      elysia:
+        specifier: latest
+        version: 0.6.20(typescript@5.2.2)
+      lucia:
+        specifier: ^2.4.2
+        version: 2.4.2
+      zod:
+        specifier: ^3.22.2
+        version: 3.22.2
+    devDependencies:
+      '@sn0wye/eslint-config':
+        specifier: ^3.0.0
+        version: 3.0.0(eslint@8.48.0)(typescript@5.2.2)
+      bun-types:
+        specifier: latest
+        version: 1.0.1
+      drizzle-kit:
+        specifier: ^0.19.13
+        version: 0.19.13
+      eslint:
+        specifier: ^8.48.0
+        version: 8.48.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+
   apps/web:
     dependencies:
       '@caho/contracts':
@@ -216,79 +289,6 @@ importers:
       tailwindcss:
         specifier: ^3.3.0
         version: 3.3.0(postcss@8.4.21)
-      typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
-
-  packages/api:
-    dependencies:
-      '@clerk/backend':
-        specifier: ^0.28.0
-        version: 0.28.0
-      '@elysiajs/cookie':
-        specifier: ^0.6.1
-        version: 0.6.1(elysia@0.6.20)
-      '@elysiajs/cors':
-        specifier: ^0.6.0
-        version: 0.6.0(elysia@0.6.20)
-      '@elysiajs/jwt':
-        specifier: ^0.6.3
-        version: 0.6.3(elysia@0.6.20)
-      '@elysiajs/websocket':
-        specifier: ^0.2.8
-        version: 0.2.8(elysia@0.6.20)
-      '@faker-js/faker':
-        specifier: ^8.0.2
-        version: 8.0.2
-      '@lucia-auth/adapter-mysql':
-        specifier: ^2.0.0
-        version: 2.0.0(@planetscale/database@1.11.0)(lucia@2.4.2)
-      '@paralleldrive/cuid2':
-        specifier: ^2.2.2
-        version: 2.2.2
-      '@planetscale/database':
-        specifier: ^1.11.0
-        version: 1.11.0
-      '@t3-oss/env-core':
-        specifier: ^0.6.1
-        version: 0.6.1(typescript@5.2.2)(zod@3.22.2)
-      '@trpc/server':
-        specifier: ^10.38.0
-        version: 10.38.0
-      '@upstash/redis':
-        specifier: ^1.22.0
-        version: 1.22.0
-      drizzle-orm:
-        specifier: ^0.28.5
-        version: 0.28.5(@planetscale/database@1.11.0)(bun-types@1.0.1)
-      elysia:
-        specifier: latest
-        version: 0.6.20(typescript@5.2.2)
-      lucia:
-        specifier: ^2.4.2
-        version: 2.4.2
-      zod:
-        specifier: ^3.22.2
-        version: 3.22.2
-    devDependencies:
-      '@caho/contracts':
-        specifier: workspace:*
-        version: link:../contracts
-      '@caho/schemas':
-        specifier: workspace:*
-        version: link:../schemas
-      '@sn0wye/eslint-config':
-        specifier: ^3.0.0
-        version: 3.0.0(eslint@8.48.0)(typescript@5.2.2)
-      bun-types:
-        specifier: latest
-        version: 1.0.1
-      drizzle-kit:
-        specifier: ^0.19.13
-        version: 0.19.13
-      eslint:
-        specifier: ^8.48.0
-        version: 8.48.0
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -618,7 +618,7 @@ packages:
     peerDependencies:
       elysia: '>= 0.6.0'
     dependencies:
-      '@types/cookie': 0.5.1
+      '@types/cookie': 0.5.2
       '@types/cookie-signature': 1.1.0
       cookie: 0.5.0
       cookie-signature: 1.2.1
@@ -639,7 +639,7 @@ packages:
       elysia: '>= 0.6.0'
     dependencies:
       elysia: 0.6.20(typescript@5.2.2)
-      jose: 4.14.5
+      jose: 4.14.6
     dev: false
 
   /@elysiajs/websocket@0.2.8(elysia@0.6.20):
@@ -2278,8 +2278,8 @@ packages:
       '@types/node': 18.16.0
     dev: false
 
-  /@types/cookie@0.5.1:
-    resolution: {integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==}
+  /@types/cookie@0.5.2:
+    resolution: {integrity: sha512-DBpRoJGKJZn7RY92dPrgoMew8xCWc2P71beqsjyhEI/Ds9mOyVmBwtekyfhpwFIVt1WrxTonFifiOZ62V8CnNA==}
     dev: false
 
   /@types/cookies@0.7.7:
@@ -4956,8 +4956,8 @@ packages:
     resolution: {integrity: sha512-5eEbBDQT/jF1xg6l36P+mWGGoH9Spuy0PCdSr2dtWRDGC6ph/w9ZCL4lmESW8f8F7MwT3XKescfP0wnZWAKL9w==}
     hasBin: true
 
-  /jose@4.14.5:
-    resolution: {integrity: sha512-56ns1XlSI8d5V0t7hilPu8dMbE4YIwrTJU6e7bV1Abyu6oel4tSc4YmD742MoWV3U+vn7O0WlKpinzu2DP0HWw==}
+  /jose@4.14.6:
+    resolution: {integrity: sha512-EqJPEUlZD0/CSUMubKtMaYUOtWe91tZXTWMJZoKSbLk+KtdhNdcvppH8lA9XwVu2V4Ailvsj0GBZJ2ZwDjfesQ==}
     dev: false
 
   /joycon@3.1.1:

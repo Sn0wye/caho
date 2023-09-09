@@ -18,6 +18,8 @@
     "clean": "git clean -xdf node_modules"
   },
   "dependencies": {
+    "@caho/contracts": "workspace:*",
+    "@caho/schemas": "workspace:*",
     "@clerk/backend": "^0.28.0",
     "@elysiajs/cookie": "^0.6.1",
     "@elysiajs/cors": "^0.6.0",
@@ -36,8 +38,6 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "@caho/contracts": "workspace:*",
-    "@caho/schemas": "workspace:*",
     "@sn0wye/eslint-config": "^3.0.0",
     "bun-types": "latest",
     "drizzle-kit": "^0.19.13",

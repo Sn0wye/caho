@@ -1,6 +1,6 @@
 packages:
   - apps/web
-  - packages/api
+  - apps/backend
   - packages/contracts
   - packages/schemas
   - packages/tsconfig
