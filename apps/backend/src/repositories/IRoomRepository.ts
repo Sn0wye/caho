@@ -5,7 +5,7 @@ import {
   type LeaveRoom,
   type StartRoom
 } from '@caho/contracts';
-import { Ranking, type Player, type Room } from '@caho/schemas';
+import { type Player, type Ranking, type Room } from '@caho/schemas';
 
 export interface IRoomRepository {
   getRoom(roomCode: string): Promise<Room>;
