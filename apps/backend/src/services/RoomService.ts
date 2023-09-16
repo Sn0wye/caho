@@ -1,4 +1,3 @@
-import { type EndRoom, type StartRoom } from '@caho/contracts';
 import { type Player, type Room } from '@caho/schemas';
 import { type IRoomRepository } from '@/repositories/IRoomRepository';
 import { type CreateRoomInput } from '@/schemas/create-room';
@@ -28,17 +27,17 @@ export class RoomService implements IRoomService {
     return await this.roomRepository.addPlayerToRoom(args);
   }
 
-  public async startRoom(input: StartRoom): Promise<void> {
-    return await this.roomRepository.startRoom(input);
+  public async startRoom(roomCode: string): Promise<void> {
+    return await this.roomRepository.startRoom(roomCode);
   }
 
-  public async endRoom(input: EndRoom): Promise<
+  public async endRoom(roomCode: string): Promise<
     {
       score: number;
       player: Player;
     }[]
   > {
-    return await this.roomRepository.endRoom(input);
+    return await this.roomRepository.endRoom(roomCode);
   }
 
   public async joinRoom(input: JoinRoomInput): Promise<void> {
@@ -47,5 +46,9 @@ export class RoomService implements IRoomService {
 
   public async leaveRoom(input: LeaveRoomInput): Promise<void> {
     return await this.roomRepository.leaveRoom(input);
+  }
+
+  public async getRoomPlayers(roomCode: string): Promise<Player[]> {
+    return await this.roomRepository.getRoomPlayers(roomCode);
   }
 }

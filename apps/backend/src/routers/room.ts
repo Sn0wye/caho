@@ -133,16 +133,15 @@ export const roomRoutes = new Elysia()
               } satisfies Player;
 
               const room = await roomService.joinRoom({
-                roomCode: validatedBody.roomCode,
-                password: validatedBody.password,
+                ...validatedBody,
                 player
               });
 
               set.status = 200;
               return room;
-            } catch {
+            } catch (e) {
               set.status = 400;
-              return 'Invalid body';
+              return e;
             }
           },
           {
@@ -153,23 +152,21 @@ export const roomRoutes = new Elysia()
           '/start',
           async ({ body, set, cookie, store: { redis } }) => {
             try {
-              const validatedBody = startRoom.parse(body);
+              const { roomCode } = startRoom.parse(body);
 
               const roomRepository = new RedisRoomRepository(redis);
               const roomService = new RoomService(roomRepository);
 
               const session = await auth.getSession(cookie['session']);
 
-              const { hostId } = await roomService.getRoom(
-                validatedBody.roomCode
-              );
+              const { hostId } = await roomService.getRoom(roomCode);
 
               if (session.user.userId !== hostId) {
                 set.status = 400;
                 return ROOM_ERRORS.IS_NOT_ROOM_HOST;
               }
 
-              await roomService.startRoom(validatedBody);
+              await roomService.startRoom(roomCode);
 
               set.status = 204;
               return;
@@ -186,16 +183,14 @@ export const roomRoutes = new Elysia()
           '/end',
           async ({ set, body, cookie, store: { redis } }) => {
             try {
-              const validatedBody = endRoom.parse(body);
+              const { roomCode } = endRoom.parse(body);
 
               const roomRepository = new RedisRoomRepository(redis);
               const roomService = new RoomService(roomRepository);
 
               const session = await auth.getSession(cookie['session']);
 
-              const { hostId } = await roomService.getRoom(
-                validatedBody.roomCode
-              );
+              const { hostId } = await roomService.getRoom(roomCode);
 
               const isAdmin = session.user.userId === hostId;
 
@@ -204,7 +199,7 @@ export const roomRoutes = new Elysia()
                 return ROOM_ERRORS.IS_NOT_ROOM_HOST;
               }
 
-              const room = await roomService.endRoom(validatedBody);
+              const room = await roomService.endRoom(roomCode);
               console.log('depois do endroom');
 
               set.status = 200;
@@ -244,5 +239,16 @@ export const roomRoutes = new Elysia()
           {
             beforeHandle: isAuthed
           }
+        )
+        .get(
+          '/:roomCode/players',
+          async ({ params }) => {
+            const roomRepository = new RedisRoomRepository(redis);
+            const roomService = new RoomService(roomRepository);
+
+            const players = await roomService.getRoomPlayers(params.roomCode);
+            return players;
+          },
+          { beforeHandle: isAuthed }
         )
   );
