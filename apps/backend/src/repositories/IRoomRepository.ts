@@ -5,21 +5,15 @@ import {
   type LeaveRoom,
   type StartRoom
 } from '@caho/contracts';
-import { type Player, type Room } from '@caho/schemas';
+import { Ranking, type Player, type Room } from '@caho/schemas';
 
 export interface IRoomRepository {
   getRoom(roomCode: string): Promise<Room>;
   createRoom(room: CreateRoom): Promise<Room>;
   listPublicRooms(): Promise<Room[]>;
-  addPlayerToRoom(args: { roomCode: string; player: Player }): Promise<void>;
+  addPlayerToRoom(input: { roomCode: string; player: Player }): Promise<void>;
   startRoom(input: StartRoom): Promise<void>;
-  // TODO: ranking schema
-  endRoom(input: EndRoom): Promise<
-    {
-      score: number;
-      player: Player;
-    }[]
-  >;
+  endRoom(input: EndRoom): Promise<Ranking>;
   joinRoom(input: JoinRoom): Promise<void>;
   leaveRoom(input: LeaveRoom): Promise<void>;
 }
