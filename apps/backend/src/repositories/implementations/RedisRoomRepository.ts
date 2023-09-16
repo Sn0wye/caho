@@ -1,14 +1,8 @@
 import {
-  type CreateRoom,
-  type EndRoom,
-  type JoinRoom,
-  type LeaveRoom,
-  type StartRoom
-} from '@caho/contracts';
-import {
   playerSchema,
   roomSchema,
   type Player,
+  type Ranking,
   type Room
 } from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
@@ -17,6 +11,9 @@ import { generateCode } from '@/utils/generateCode';
 import { HTTPError } from '@/errors/HTTPError';
 import { ROOM_ERRORS } from '@/errors/room';
 import { type IRoomRepository } from '@/repositories/IRoomRepository';
+import { type CreateRoomInput } from '@/schemas/create-room';
+import { type JoinRoomInput } from '@/schemas/join-room';
+import { type LeaveRoomInput } from '@/schemas/leave-room';
 
 export class RedisRoomRepository implements IRoomRepository {
   private redis: Redis;
@@ -38,27 +35,25 @@ export class RedisRoomRepository implements IRoomRepository {
     return roomSchema.parse(room);
   }
 
-  async createRoom(room: CreateRoom): Promise<Room> {
+  async createRoom(input: CreateRoomInput): Promise<Room> {
+    const { host, ...data } = input;
     const roomCode = generateCode();
+
     const createdRoom: Room = {
       id: createId(),
       status: 'LOBBY',
       code: roomCode,
-      ...room
-    };
+      ...data
+    } satisfies Room;
 
     await this.redis.hmset(`room:${roomCode}`, createdRoom);
+    await this.redis.expire(`room:${roomCode}`, 60 * 60 * 24);
 
-    const roomListKey = room.isPublic ? 'public_rooms' : 'private_rooms';
+    const roomListKey = createdRoom.isPublic ? 'public_rooms' : 'private_rooms';
     await this.redis.lpush(roomListKey, roomCode);
 
-    const player = {
-      ...room.players[0],
-      isHost: true
-    } as Player;
-
     await this.addPlayerToRoom({
-      player,
+      player: host,
       roomCode
     });
 
@@ -72,6 +67,7 @@ export class RedisRoomRepository implements IRoomRepository {
 
     for (const roomCode of publicRoomCodes) {
       const room = await this.redis.hgetall(`room:${roomCode}`);
+      console.log(room);
       parsedRooms.push(roomSchema.parse(room));
     }
 
@@ -93,40 +89,7 @@ export class RedisRoomRepository implements IRoomRepository {
     });
   }
 
-  async startRoom(input: StartRoom): Promise<void> {
-    const { roomCode, playerId } = input;
-
-    const roomExists = await this.redis.exists(`room:${playerId}`);
-
-    if (!roomExists) {
-      throw new HTTPError({
-        code: 'NOT_FOUND',
-        message: ROOM_ERRORS.ROOM_NOT_FOUND
-      });
-    }
-
-    const hostId = await this.redis.hget(`room:${roomCode}`, 'hostId');
-
-    if (hostId !== playerId) {
-      throw new HTTPError({
-        code: 'BAD_REQUEST',
-        message: ROOM_ERRORS.IS_NOT_ROOM_HOST
-      });
-    }
-
-    await this.redis.hset(`room:${roomCode}`, {
-      status: 'IN_PROGRESS'
-    });
-  }
-
-  async endRoom(input: EndRoom): Promise<
-    {
-      score: number;
-      player: Player;
-    }[]
-  > {
-    const { roomCode, playerId } = input;
-
+  async startRoom(roomCode: string): Promise<void> {
     const roomExists = await this.redis.exists(`room:${roomCode}`);
 
     if (!roomExists) {
@@ -136,13 +99,18 @@ export class RedisRoomRepository implements IRoomRepository {
       });
     }
 
-    const hostId = await this.redis.hget(`room:${roomCode}`, 'hostId');
-    const isAdmin = hostId === playerId;
+    await this.redis.hset(`room:${roomCode}`, {
+      status: 'IN_PROGRESS'
+    });
+  }
 
-    if (!isAdmin) {
+  async endRoom(roomCode: string): Promise<Ranking> {
+    const roomExists = await this.redis.exists(`room:${roomCode}`);
+
+    if (!roomExists) {
       throw new HTTPError({
-        code: 'BAD_REQUEST',
-        message: ROOM_ERRORS.IS_NOT_ROOM_HOST
+        code: 'NOT_FOUND',
+        message: ROOM_ERRORS.ROOM_NOT_FOUND
       });
     }
 
@@ -150,7 +118,11 @@ export class RedisRoomRepository implements IRoomRepository {
       status: 'FINISHED'
     });
 
-    const ranking = await this.redis.zrange(`room:${roomCode}:ranking`, 0, -1);
+    const ranking = await this.redis.zrange(`room:${roomCode}:ranking`, 0, -1, {
+      withScores: true
+    });
+
+    console.log('ranking', JSON.stringify(ranking, null, 2));
 
     type Entry = {
       score: number;
@@ -159,6 +131,8 @@ export class RedisRoomRepository implements IRoomRepository {
 
     const parsed = (ranking as Entry[])
       .map(entry => {
+        console.log(JSON.stringify(entry));
+
         return {
           score: entry.score,
           player: playerSchema.parse(JSON.parse(entry.member))
@@ -169,7 +143,7 @@ export class RedisRoomRepository implements IRoomRepository {
     return parsed;
   }
 
-  async joinRoom(input: JoinRoom): Promise<void> {
+  async joinRoom(input: JoinRoomInput): Promise<void> {
     const { roomCode, player, password } = input;
 
     const roomExists = await this.redis.exists(`room:${roomCode}`);
@@ -181,8 +155,9 @@ export class RedisRoomRepository implements IRoomRepository {
     }
 
     const room = roomSchema.parse(await this.getRoom(roomCode));
+    const players = await this.getRoomPlayers(roomCode);
 
-    if (room.players.length >= room.maxPlayers) {
+    if (players.length >= room.maxPlayers) {
       throw new HTTPError({
         code: 'BAD_REQUEST',
         message: ROOM_ERRORS.ROOM_IS_FULL
@@ -196,7 +171,7 @@ export class RedisRoomRepository implements IRoomRepository {
       });
     }
 
-    const playerAlreadyInRoom = room.players.some(p => p.id === player.id);
+    const playerAlreadyInRoom = players.some(p => p.id === player.id);
 
     if (playerAlreadyInRoom) {
       throw new HTTPError({
@@ -211,7 +186,7 @@ export class RedisRoomRepository implements IRoomRepository {
     });
   }
 
-  async leaveRoom(input: LeaveRoom): Promise<void> {
+  async leaveRoom(input: LeaveRoomInput): Promise<void> {
     const { roomCode, playerId } = input;
 
     const roomExists = this.redis.exists(`room:${roomCode}`);
@@ -223,6 +198,16 @@ export class RedisRoomRepository implements IRoomRepository {
       });
     }
 
-    await this.redis.lrem(`room:${roomCode}:players`, 0, playerId);
+    const players = await this.getRoomPlayers(roomCode);
+
+    const playerToRemove = players.find(p => p.id === playerId);
+
+    await this.redis.lrem(`room:${roomCode}:players`, 0, playerToRemove);
+  }
+
+  async getRoomPlayers(roomCode: string): Promise<Player[]> {
+    const players = await this.redis.lrange(`room:${roomCode}:players`, 0, -1);
+
+    return players.map(player => playerSchema.parse(player));
   }
 }

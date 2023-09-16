@@ -1,12 +1,9 @@
-import {
-  type CreateRoom,
-  type EndRoom,
-  type JoinRoom,
-  type LeaveRoom,
-  type StartRoom
-} from '@caho/contracts';
+import { type EndRoom, type StartRoom } from '@caho/contracts';
 import { type Player, type Room } from '@caho/schemas';
 import { type IRoomRepository } from '@/repositories/IRoomRepository';
+import { type CreateRoomInput } from '@/schemas/create-room';
+import { type JoinRoomInput } from '@/schemas/join-room';
+import { type LeaveRoomInput } from '@/schemas/leave-room';
 import { type IRoomService } from './IRoomService';
 
 export class RoomService implements IRoomService {
@@ -16,7 +13,7 @@ export class RoomService implements IRoomService {
     return await this.roomRepository.getRoom(roomCode);
   }
 
-  public async createRoom(room: CreateRoom): Promise<Room> {
+  public async createRoom(room: CreateRoomInput): Promise<Room> {
     return await this.roomRepository.createRoom(room);
   }
 
@@ -44,11 +41,11 @@ export class RoomService implements IRoomService {
     return await this.roomRepository.endRoom(input);
   }
 
-  public async joinRoom(input: JoinRoom): Promise<void> {
+  public async joinRoom(input: JoinRoomInput): Promise<void> {
     return await this.roomRepository.joinRoom(input);
   }
 
-  public async leaveRoom(input: LeaveRoom): Promise<void> {
+  public async leaveRoom(input: LeaveRoomInput): Promise<void> {
     return await this.roomRepository.leaveRoom(input);
   }
 }

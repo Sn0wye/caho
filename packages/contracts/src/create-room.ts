@@ -1,10 +1,10 @@
-import { roomSchema } from '@caho/schemas';
-import { type z } from 'zod';
+import { z } from 'zod';
 
-export const createRoom = roomSchema.omit({
-  id: true,
-  status: true,
-  code: true
+export const createRoom = z.object({
+  maxPlayers: z.number().int().positive(),
+  maxPoints: z.number().int().positive(),
+  isPublic: z.boolean(),
+  password: z.string().or(z.null())
 });
 
 export type CreateRoom = z.infer<typeof createRoom>;

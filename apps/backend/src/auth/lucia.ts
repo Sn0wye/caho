@@ -1,4 +1,4 @@
-import { SetCookieOptions } from '@elysiajs/cookie';
+import { type SetCookieOptions } from '@elysiajs/cookie';
 import { planetscale } from '@lucia-auth/adapter-mysql';
 import { type HookHandler } from 'elysia';
 import { lucia, LuciaError } from 'lucia';
@@ -58,12 +58,10 @@ export const isAuthed = async ({
       });
     }
 
-    body = {
-      // TODO: check this
-      // @ts-ignore
-      ...body,
-      session: sessionInfo
-    };
+    // body = {
+    //   ...body,
+    //   session: sessionInfo
+    // };
   } catch (e) {
     if (e instanceof LuciaError && e.message === `AUTH_INVALID_SESSION_ID`) {
       unsignCookie('session');
