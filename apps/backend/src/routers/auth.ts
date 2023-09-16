@@ -1,4 +1,5 @@
 import cookie from '@elysiajs/cookie';
+import { createId } from '@paralleldrive/cuid2';
 import { eq } from 'drizzle-orm';
 import Elysia, { t } from 'elysia';
 import { auth, isAuthed } from '@/auth/lucia';
@@ -28,6 +29,7 @@ export const authRoutes = new Elysia().group(
         '/sign-up',
         async ({ body: { username, password } }) => {
           const user = await auth.createUser({
+            userId: createId(),
             key: {
               providerId: 'username',
               providerUserId: username,

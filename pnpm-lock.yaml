@@ -33,10 +33,10 @@ importers:
   apps/backend:
     dependencies:
       '@caho/contracts':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/contracts
       '@caho/schemas':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/schemas
       '@clerk/backend':
         specifier: ^0.28.0
@@ -106,10 +106,10 @@ importers:
   apps/web:
     dependencies:
       '@caho/contracts':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/contracts
       '@caho/schemas':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/schemas
       '@clerk/localizations':
         specifier: ^1.25.0
@@ -296,14 +296,14 @@ importers:
   packages/contracts:
     dependencies:
       '@caho/schemas':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../schemas
       zod:
         specifier: 3.22.2
         version: 3.22.2
     devDependencies:
       '@caho/tsconfig':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../tsconfig
 
   packages/schemas:
@@ -313,7 +313,7 @@ importers:
         version: 3.22.2
     devDependencies:
       '@caho/tsconfig':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../tsconfig
 
   packages/tsconfig: {}
