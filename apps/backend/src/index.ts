@@ -1,4 +1,3 @@
-import { cookie } from '@elysiajs/cookie';
 import { cors } from '@elysiajs/cors';
 import { Elysia } from 'elysia';
 import { redis } from './db/redis';
