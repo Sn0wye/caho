@@ -59,6 +59,8 @@ export const isAuthed = async ({
     }
 
     body = {
+      // TODO: check this
+      // @ts-ignore
       ...body,
       session: sessionInfo
     };
