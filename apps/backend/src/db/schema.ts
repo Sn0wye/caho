@@ -1,13 +1,10 @@
-import { bigint, index, mysqlTable, varchar } from 'drizzle-orm/mysql-core';
+import { bigint, mysqlTable, varchar } from 'drizzle-orm/mysql-core';
 
 export const users = mysqlTable('users', {
   id: varchar('id', {
     length: 24 // cuid
   }).primaryKey(),
   name: varchar('name', {
-    length: 255
-  }),
-  lastName: varchar('last_name', {
     length: 255
   }),
   email: varchar('email', {
