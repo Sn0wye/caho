@@ -12,7 +12,10 @@ export const users = mysqlTable('users', {
   }),
   username: varchar('username', {
     length: 255
-  }).notNull()
+  }).notNull(),
+  avatarUrl: varchar('avatar_url', {
+    length: 255
+  })
 });
 
 export const keys = mysqlTable('keys', {
