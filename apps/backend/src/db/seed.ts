@@ -12,8 +12,7 @@ const user = {
   username: 'Sn0wye',
   password: '12345678',
   email: 'gabriel@snowye.dev',
-  name: 'Gabriel',
-  last_name: 'Trzimajewski'
+  name: 'Gabriel'
 };
 
 await auth.createUser({
@@ -24,7 +23,6 @@ await auth.createUser({
   },
   attributes: {
     email: user.email,
-    last_name: user.last_name,
     name: user.name,
     username: user.username
   }

@@ -38,7 +38,6 @@ export const authRoutes = new Elysia().group(
             attributes: {
               email: null,
               name: null,
-              last_name: null,
               username
             }
           });
