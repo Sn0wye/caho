@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const env = createEnv({
   server: {
-    PORT: z.number().optional(),
+    PORT: z.string().transform(Number).optional(),
     NODE_ENV: z.enum(['PRODUCTION', 'DEVELOPMENT']),
     COOKIE_SECRET: z.string().min(1),
     UPSTASH_REDIS_REST_URL: z.string().min(1),
