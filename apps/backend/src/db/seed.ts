@@ -1,4 +1,3 @@
-import { createId } from '@paralleldrive/cuid2';
 import { auth } from '@/auth/lucia';
 import { db } from '.';
 import { keys, sessions, users } from './schema';
@@ -8,7 +7,6 @@ await db.delete(keys).execute();
 await db.delete(sessions).execute();
 
 const user = {
-  id: createId(),
   username: 'Sn0wye',
   password: '12345678',
   email: 'gabriel@snowye.dev',
@@ -18,7 +16,7 @@ const user = {
 await auth.createUser({
   key: {
     providerId: 'username',
-    providerUserId: user.id,
+    providerUserId: user.username,
     password: user.password
   },
   attributes: {
