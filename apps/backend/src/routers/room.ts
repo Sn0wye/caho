@@ -94,8 +94,7 @@ export const roomRoutes = new Elysia()
               return room;
             } catch (e) {
               set.status = 400;
-              console.log('ERRO!', JSON.stringify(e, null, 2));
-              return 'Invalid body';
+              return e;
             }
           },
           {
@@ -170,9 +169,9 @@ export const roomRoutes = new Elysia()
 
               set.status = 204;
               return;
-            } catch {
+            } catch (e) {
               set.status = 400;
-              return 'Invalid body';
+              return e;
             }
           },
           {
