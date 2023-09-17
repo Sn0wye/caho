@@ -1,6 +1,7 @@
 import { cors } from '@elysiajs/cors';
 import { Elysia } from 'elysia';
 import { redis } from './db/redis';
+import { env } from './env';
 import { authRoutes } from './routers/auth';
 import { roomRoutes } from './routers/room';
 
@@ -13,7 +14,7 @@ const app = new Elysia()
   .use(roomRoutes)
   .get('/ping', () => 'pong');
 
-app.listen(3333, server => {
+app.listen(env.PORT || 8080, server => {
   console.log(`🦊 Elysia is running at ${server.hostname}:${server.port}`);
 });
 
