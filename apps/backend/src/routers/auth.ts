@@ -2,7 +2,7 @@ import cookie from '@elysiajs/cookie';
 import { createId } from '@paralleldrive/cuid2';
 import { eq } from 'drizzle-orm';
 import Elysia, { t } from 'elysia';
-import { auth, isAuthed } from '@/auth/lucia';
+import { auth, githubAuth, isAuthed } from '@/auth/lucia';
 import { db } from '@/db';
 import { users } from '@/db/schema';
 import { env } from '@/env';
@@ -57,7 +57,10 @@ export const authRoutes = new Elysia().group(
             userId,
             attributes: {}
           });
-          setCookie('session', session.sessionId);
+
+          setCookie('session', session.sessionId, {
+            httpOnly: true
+          });
 
           return `Signed in as ${username}`;
         },
@@ -98,6 +101,55 @@ export const authRoutes = new Elysia().group(
           beforeHandle: isAuthed
         }
       )
+      .post('/github', async ({ setCookie, set }) => {
+        // get url to redirect the user to, with the state
+        const [url, state] = await githubAuth.getAuthorizationUrl();
+
+        setCookie('github_oauth_state', state, {
+          path: '/',
+          httpOnly: true,
+          maxAge: 60 * 60
+        });
+
+        set.redirect = String(url);
+      })
+      .get('/github/callback', async ({ request, cookie, setCookie, set }) => {
+        const requestUrl = new URL(request.url);
+
+        const code = requestUrl.searchParams.get('code');
+        const state = requestUrl.searchParams.get('state');
+
+        const storedState = cookie['github_oauth_state'];
+
+        if (!state || !storedState || state !== storedState) {
+          set.status = 401;
+          return `Unauthorized`;
+        }
+
+        if (!code) {
+          set.status = 400;
+          return `Bad Request`;
+        }
+
+        try {
+          const user = await validateCallbackAndGetUser(code);
+
+          const session = await auth.createSession({
+            userId: user.id,
+            attributes: {}
+          });
+
+          setCookie('session', session.sessionId, {
+            httpOnly: true
+          });
+
+          set.status = 200;
+          return;
+        } catch {
+          set.status = 401;
+          return `Unauthorized`;
+        }
+      })
   // .delete(
   //   '/user',
   //   async ({ cookie: { session } }) => {
@@ -113,3 +165,20 @@ export const authRoutes = new Elysia().group(
   //   }
   // )
 );
+
+const validateCallbackAndGetUser = async (code: string) => {
+  const { githubUser, getExistingUser, createUser } =
+    await githubAuth.validateCallback(code);
+
+  const existingUser = await getExistingUser();
+  if (existingUser) return existingUser;
+  // create a new user if the user does not exist
+  return await createUser({
+    userId: createId(),
+    attributes: {
+      email: githubUser.email,
+      name: githubUser.name,
+      username: githubUser.login
+    }
+  });
+};
