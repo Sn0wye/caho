@@ -7,6 +7,7 @@ import {
 } from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
 import { type Redis } from '@upstash/redis/nodejs';
+import { transformRankingData } from '@/utils/formatRankingData';
 import { generateCode } from '@/utils/generateCode';
 import { HTTPError } from '@/errors/HTTPError';
 import { ROOM_ERRORS } from '@/errors/room';
@@ -67,7 +68,6 @@ export class RedisRoomRepository implements IRoomRepository {
 
     for (const roomCode of publicRoomCodes) {
       const room = await this.redis.hgetall(`room:${roomCode}`);
-      console.log(room);
       parsedRooms.push(roomSchema.parse(room));
     }
 
@@ -118,29 +118,18 @@ export class RedisRoomRepository implements IRoomRepository {
       status: 'FINISHED'
     });
 
-    const ranking = await this.redis.zrange(`room:${roomCode}:ranking`, 0, -1, {
-      withScores: true
-    });
+    const ranking: (object | number)[] = await this.redis.zrange(
+      `room:${roomCode}:ranking`,
+      0,
+      -1,
+      {
+        withScores: true
+      }
+    );
 
-    console.log('ranking', JSON.stringify(ranking, null, 2));
+    const parsedRanking = transformRankingData(ranking);
 
-    type Entry = {
-      score: number;
-      member: string;
-    };
-
-    const parsed = (ranking as Entry[])
-      .map(entry => {
-        console.log(JSON.stringify(entry));
-
-        return {
-          score: entry.score,
-          player: playerSchema.parse(JSON.parse(entry.member))
-        };
-      })
-      .sort((a, b) => b.score - a.score);
-
-    return parsed;
+    return parsedRanking;
   }
 
   async joinRoom(input: JoinRoomInput): Promise<void> {
