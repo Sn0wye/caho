@@ -1,5 +1,4 @@
 import cookie from '@elysiajs/cookie';
-import { createId } from '@paralleldrive/cuid2';
 import { eq } from 'drizzle-orm';
 import Elysia, { t } from 'elysia';
 import { auth, githubAuth, isAuthed } from '@/auth/lucia';
@@ -29,7 +28,6 @@ export const authRoutes = new Elysia().group(
         '/sign-up',
         async ({ body: { username, password } }) => {
           const user = await auth.createUser({
-            userId: createId(),
             key: {
               providerId: 'username',
               providerUserId: username,
@@ -174,7 +172,6 @@ const validateCallbackAndGetUser = async (code: string) => {
   if (existingUser) return existingUser;
   // create a new user if the user does not exist
   return await createUser({
-    userId: createId(),
     attributes: {
       email: githubUser.email,
       name: githubUser.name,
