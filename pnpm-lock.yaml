@@ -59,6 +59,9 @@ importers:
       '@lucia-auth/adapter-mysql':
         specifier: ^2.0.0
         version: 2.0.0(@planetscale/database@1.11.0)(lucia@2.4.2)
+      '@lucia-auth/oauth':
+        specifier: ^3.2.0
+        version: 3.2.0(lucia@2.4.2)
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
@@ -1080,6 +1083,14 @@ packages:
         optional: true
     dependencies:
       '@planetscale/database': 1.11.0
+      lucia: 2.4.2
+    dev: false
+
+  /@lucia-auth/oauth@3.2.0(lucia@2.4.2):
+    resolution: {integrity: sha512-3HFOZurGvWU5jjdqwtFBha/sBvTE1N5Ed5UJGhdM2lozhuAQJUF9vubN5cPPJg5Svkcu/rlgLeTmBp8MmzlK6Q==}
+    peerDependencies:
+      lucia: ^2.0.0
+    dependencies:
       lucia: 2.4.2
     dev: false
 

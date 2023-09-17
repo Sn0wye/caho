@@ -1,5 +1,6 @@
 import { type SetCookieOptions } from '@elysiajs/cookie';
 import { planetscale } from '@lucia-auth/adapter-mysql';
+import { github } from '@lucia-auth/oauth/providers';
 import { type HookHandler } from 'elysia';
 import { lucia, LuciaError } from 'lucia';
 import { connection } from '@/db';
@@ -12,6 +13,11 @@ export const auth = lucia({
     key: 'keys',
     session: 'sessions'
   })
+});
+
+export const githubAuth = github(auth, {
+  clientId: env.GITHUB_CLIENT_ID,
+  clientSecret: env.GITHUB_CLIENT_SECRET
 });
 
 export type Auth = typeof auth;
@@ -35,7 +41,6 @@ export type AuthGuardParams = Parameters<HookHandler>[0] & {
 };
 
 export const isAuthed = async ({
-  body,
   cookie: { session },
   unsignCookie,
   setCookie,
