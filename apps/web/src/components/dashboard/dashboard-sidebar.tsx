@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
 import { Home, Plus, Settings } from 'lucide-react';
+import { Suspense } from 'react';
 import { LogoIcon } from '../brand/logo-icon';
 import { Separator } from '../ui/separator';
 import { Skeleton } from '../ui/skeleton';
@@ -10,7 +10,7 @@ interface DashboardSidebarProps {}
 
 export function DashboardSidebar({}: DashboardSidebarProps) {
   return (
-    <aside className="sticky top-0 flex h-screen flex-col items-center justify-between border-r border-zinc-100  bg-zinc-50 py-6 dark:border-zinc-900/75 dark:bg-zinc-950">
+    <aside className="sticky top-0 flex h-screen flex-col items-center justify-between bg-accent/5 py-6">
       <header className="flex w-full flex-col items-center gap-6">
         <LogoIcon size="md" />
         <Separator className="w-2/3" />

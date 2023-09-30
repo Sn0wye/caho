@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Lock } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Noise } from '../illustrations/noise';
 import { RoomCodeInput } from '../room-code-input';
 import { Button } from '../ui/button';
 import {
@@ -55,24 +54,21 @@ export function DashboardPrivateRoomModal() {
           as="button"
           title="Tenho um código"
           description="Meus amiguinhos já estão me esperando na sala. Vou entrar com o código!"
-          bgColor="purple"
           icon={<Lock />}
         />
       </DialogTrigger>
       <DialogContent className="flex max-w-2xl gap-8 p-8">
-        <figure className="relative flex w-full overflow-clip rounded-md bg-gradient-to-tr from-zinc-100 from-30% via-slate-200 to-slate-400 p-5 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-700">
-          <Noise className="rounded-md" />
-
+        <figure className="flex w-full overflow-clip rounded-md bg-gradient-to-tr from-accent/10 from-50% to-accent p-5">
           <div className="flex flex-col gap-1 self-end">
-            <Lock size={24} className="mb-4" />
-            <h2 className="text-2xl font-normal text-zinc-600 dark:text-zinc-400">
+            <Lock size={24} className="mb-4 text-muted-foreground" />
+            <h2 className="text-2xl font-normal text-muted-foreground opacity-80">
               Sala
-              <span className="font-semibold text-zinc-950 dark:text-zinc-200">
+              <span className="font-semibold text-secondary-foreground">
                 {' '}
                 privada!
               </span>
             </h2>
-            <span className="text-sm text-zinc-400 dark:text-zinc-400">
+            <span className="text-sm text-muted-foreground opacity-60">
               As vezes é melhor jogar com os amigos, não é mesmo?
             </span>
           </div>
@@ -100,7 +96,7 @@ export function DashboardPrivateRoomModal() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="space-y-px">
-                      <FormLabel className="text-zinc-700 dark:text-zinc-300">
+                      <FormLabel>
                         Código da sala:
                       </FormLabel>
                       <FormDescription>

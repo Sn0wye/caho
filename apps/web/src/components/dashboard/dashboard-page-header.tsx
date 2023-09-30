@@ -17,8 +17,8 @@ export function DashboardPageHeader({
       <DashboardPageHeaderIcon icon={icon} />
 
       <div className="flex w-full flex-col gap-1">
-        <h1 className="text-2xl font-bold sm:text-3xl">{title}</h1>
-        {subtitle && <span className="text-zinc-500">{subtitle}</span>}
+        <h1 className="text-2xl font-bold sm:text-3xl text-secondary-foreground">{title}</h1>
+        {subtitle && <span className="text-muted-foreground">{subtitle}</span>}
       </div>
     </header>
   );

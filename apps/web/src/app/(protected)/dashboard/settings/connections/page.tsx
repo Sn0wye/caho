@@ -1,10 +1,5 @@
 'use client';
 
-import { useSession, useUser } from '@clerk/nextjs';
-import { useQuery } from '@tanstack/react-query';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { Server } from 'lucide-react';
 import {
   DashboardBreadcrumbs,
   type BreadcrumbType
@@ -14,6 +9,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useSession, useUser } from '@clerk/nextjs';
+import { useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { Server } from 'lucide-react';
 
 dayjs.extend(relativeTime);
 
@@ -81,7 +81,7 @@ export default function ConnectionsSettingsPage() {
                     <Badge variant="secondary">This device</Badge>
                   )}
                 </span>
-                <span className="text-muted-foreground text-sm">
+                <span className="text-sm text-muted-foreground">
                   Last active {dayjs(session.lastActiveAt).fromNow()}
                 </span>
               </div>

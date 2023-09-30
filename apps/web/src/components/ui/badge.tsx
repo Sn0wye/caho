@@ -1,50 +1,36 @@
-import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/utils/cn';
+import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react"
+
+import { cn } from "@/utils/cn"
 
 const badgeVariants = cva(
-  'inline-flex rounded font-bold items-center justify-center border border-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 dark:border-zinc-800 dark:focus:ring-zinc-800',
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
   {
     variants: {
       variant: {
         default:
-          'border-transparent dark:border-transparent bg-zinc-900 text-zinc-50 dark:bg-zinc-50 dark:text-zinc-900',
+          "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
         secondary:
-          'border-transparent dark:border-transparent bg-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-400',
+          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive:
-          'border-transparent dark:border-transparent bg-red-400 text-zinc-50',
-        outline: 'text-zinc-950 dark:text-zinc-50',
-        teal: 'border-none bg-teal-500 text-white',
-        orange: 'border-none bg-orange-400 text-white',
-        ghost:
-          'border-none bg-zinc-200 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-700'
+          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+        outline: "text-foreground",
       },
-      size: {
-        default: 'px-2 py-1 text-xs',
-        avatar: 'p-1 text-2xs !leading-none w-full',
-        fit: 'px-2 py-1 text-xs w-fit'
-      }
     },
     defaultVariants: {
-      variant: 'default',
-      size: 'default'
-    }
+      variant: "default",
+    },
   }
-);
-
-export type BadgeVariants = VariantProps<typeof badgeVariants>;
+)
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    BadgeVariants {}
+    VariantProps<typeof badgeVariants> {}
 
-function Badge({ className, variant, size, ...props }: BadgeProps) {
+function Badge({ className, variant, ...props }: BadgeProps) {
   return (
-    <div
-      className={cn(badgeVariants({ variant, size }), className)}
-      {...props}
-    />
-  );
+    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+  )
 }
 
-export { Badge, badgeVariants };
+export { Badge, badgeVariants }

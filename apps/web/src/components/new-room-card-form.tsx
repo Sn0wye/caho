@@ -1,15 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { createRoom, type CreateRoom } from '@caho/contracts';
-import { type Player, type Room } from '@caho/schemas';
-import { useUser } from '@clerk/nextjs';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { SelectTrigger } from '@radix-ui/react-select';
-import { useMutation } from '@tanstack/react-query';
-import { Eye, EyeOff, Loader2, Lock, Trophy, Users } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { type z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -22,8 +12,18 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
-import { api } from '@/utils/api';
 import { NEW_ROOM_FORM } from '@/constants/room';
+import { api } from '@/utils/api';
+import { createRoom, type CreateRoom } from '@caho/contracts';
+import { type Player, type Room } from '@caho/schemas';
+import { useUser } from '@clerk/nextjs';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SelectTrigger } from '@radix-ui/react-select';
+import { useMutation } from '@tanstack/react-query';
+import { Eye, EyeOff, Loader2, Lock, Trophy, Users } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { type z } from 'zod';
 import { Select, SelectContent, SelectItem, SelectValue } from './ui/select';
 import { Separator } from './ui/separator';
 import { toast } from './ui/use-toast';
@@ -94,10 +94,10 @@ export const NewRoomCardForm = () => {
   return (
     <section className="flex flex-col gap-10">
       <div className="space-y-0.5">
-        <h1 className="text-xl font-semibold text-zinc-800 dark:text-zinc-200">
+        <h1 className="text-xl font-semibold text-secondary-foreground">
           Configurações da sala
         </h1>
-        <span className="text-sm text-zinc-500">
+        <span className="text-sm text-muted-foreground">
           Comece a se divertir sem pensar muito! Fique tranquilo, você pode
           mudar essas configurações depois.
         </span>
@@ -114,10 +114,10 @@ export const NewRoomCardForm = () => {
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center gap-4">
-                  <Users size={18} className="shrink-0 text-zinc-500" />
+                  <Users size={18} className="shrink-0 text-primary" />
 
                   <div>
-                    <FormLabel className="text-zinc-700 dark:text-zinc-300">
+                    <FormLabel>
                       Máximo de jogadores:
                     </FormLabel>
                     <FormDescription>
@@ -163,9 +163,9 @@ export const NewRoomCardForm = () => {
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center gap-4">
-                  <Trophy size={18} className="shrink-0 text-zinc-500" />
+                  <Trophy size={18} className="shrink-0 text-primary" />
                   <div>
-                    <FormLabel className="text-zinc-700 dark:text-zinc-300">
+                    <FormLabel>
                       Pontos para ganhar:
                     </FormLabel>
                     <FormDescription>
@@ -193,7 +193,7 @@ export const NewRoomCardForm = () => {
             )}
           />
 
-          <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-900">
+          <div className="rounded-md border p-4 border-border">
             <FormField
               control={form.control}
               name="isPublic"
@@ -201,12 +201,12 @@ export const NewRoomCardForm = () => {
                 <FormItem className="flex w-full flex-row items-center justify-between space-x-3">
                   <div className="flex items-center gap-4">
                     {isPublic ? (
-                      <Eye size={18} className="shrink-0 text-zinc-500" />
+                      <Eye size={18} className="shrink-0 text-primary" />
                     ) : (
-                      <EyeOff size={18} className="shrink-0 text-zinc-500" />
+                      <EyeOff size={18} className="shrink-0 text-primary" />
                     )}
                     <div>
-                      <FormLabel className="text-zinc-700 dark:text-zinc-300">
+                      <FormLabel>
                         Deixar a sala pública?
                       </FormLabel>
                       <FormDescription>
@@ -234,9 +234,9 @@ export const NewRoomCardForm = () => {
                   <FormItem className="ml-7">
                     <Separator className="mb-4 mt-6" />
                     <div className="flex items-center gap-4">
-                      <Lock size={18} className="shrink-0 text-zinc-500" />
+                      <Lock size={18} className="shrink-0 text-primary" />
                       <div>
-                        <FormLabel className="text-zinc-700 dark:text-zinc-300">
+                        <FormLabel>
                           Senha:
                         </FormLabel>
                         <FormDescription>

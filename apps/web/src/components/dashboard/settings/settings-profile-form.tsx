@@ -1,9 +1,5 @@
 'use client';
 
-import Image from 'next/image';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -16,6 +12,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
 interface SettingsProfileFormProps {
   user: {
@@ -82,14 +82,13 @@ export function SettingsProfileForm({ user }: SettingsProfileFormProps) {
                       alt=""
                       width={64}
                       height={64}
-                      className="bg-primary/10 h-16 w-16 rounded-full"
+                      className="h-16 w-16 rounded-full bg-primary/10"
                     />
                   </label>
                   <div>
-                    <span className="text-lg font-medium">Your avatar</span>
-                    <p className="text-muted-foreground text-sm">
-                      Click on the avatar to upload a custom one from your
-                      files.
+                    <span className="text-lg font-medium">Sua foto de perfil</span>
+                    <p className="text-sm text-muted-foreground">
+                      Clique na imagem para alterar sua foto de perfil.
                     </p>
                   </div>
                 </div>
@@ -104,7 +103,7 @@ export function SettingsProfileForm({ user }: SettingsProfileFormProps) {
             name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>First name</FormLabel>
+                <FormLabel>Primeiro nome</FormLabel>
                 <FormControl>
                   <Input placeholder="John" {...field} />
                 </FormControl>
@@ -118,7 +117,7 @@ export function SettingsProfileForm({ user }: SettingsProfileFormProps) {
             name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Last name</FormLabel>
+                <FormLabel>Sobrenome</FormLabel>
                 <FormControl>
                   <Input placeholder="Doe" {...field} />
                 </FormControl>
@@ -128,7 +127,7 @@ export function SettingsProfileForm({ user }: SettingsProfileFormProps) {
           />
         </div>
 
-        <Button type="submit">Update</Button>
+        <Button type="submit">Atualizar</Button>
       </form>
     </Form>
   );

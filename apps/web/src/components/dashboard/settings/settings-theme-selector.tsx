@@ -1,49 +1,18 @@
 'use client';
 
-import { type ComponentProps } from 'react';
+import { cn } from '@/utils/cn';
+import { themeAccentColors, themeModes } from 'config/theme';
 import { Check } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { type ThemeVariants } from 'types/theme';
-import { cn } from '@/utils/cn';
+import { useEffect, useState } from 'react';
+import { type ThemeAccentColors, type ThemeModes } from 'types/theme';
+import { splitThemeName } from '../../../utils/themes';
 
-interface SettingsThemeSelectorProps {}
-
-export function SettingsThemeSelector({}: SettingsThemeSelectorProps) {
-  const { theme, setTheme, themes } = useTheme();
-
-  return (
-    <div className="flex items-center gap-4">
-      {themes.map(mappedTheme => (
-        <SettingsThemeSelectorButton
-          key={mappedTheme}
-          isCurrentTheme={theme === mappedTheme}
-          onClick={() => setTheme(mappedTheme)}
-          variant={mappedTheme as ThemeVariants}
-        />
-      ))}
-    </div>
-  );
-}
-
-export function SettingsThemeSelectorCheckIndicator() {
-  return (
-    <div className="absolute bottom-4 right-4 flex items-center justify-center rounded-full bg-geist-orange p-2 text-white">
-      <Check size={18} />
-    </div>
-  );
-}
-
-type ThemeButtonColorVariant = {
+const themeModeIndicatorColorVariants: { [key in ThemeModes]: {
   background: string;
   foreground: string;
   text: string;
-};
-
-type ThemeButtonColorVariants = {
-  [key in ThemeVariants]: ThemeButtonColorVariant;
-};
-
-const themeButtonColorVariants: ThemeButtonColorVariants = {
+} } = {
   light: {
     background: 'bg-zinc-200',
     foreground: 'bg-white',
@@ -54,58 +23,153 @@ const themeButtonColorVariants: ThemeButtonColorVariants = {
     foreground: 'bg-zinc-950',
     text: 'text-zinc-50'
   },
-  system: {
-    background:
-      'bg-gradient-to-r from-zinc-200 from-50% via-zinc-900 via-50% to-zinc-900',
-    foreground:
-      'bg-gradient-to-r from-white from-[37.5%] via-zinc-950 via-[37.5%] to-zinc-950',
-    text: 'text-zinc-900'
-  }
 };
 
-const themeLabelVariants: { [key in ThemeVariants]: string } = {
-  light: 'Tema claro',
-  dark: 'Tema escuro',
-  system: 'Tema do sistema'
+const themeModeLabelVariants: { [key in ThemeModes]: string } = {
+  light: 'Aparência clara',
+  dark: 'Aparência escura',
 };
 
-type SettingsThemeSelectorButtonProps = ComponentProps<'button'> & {
-  variant: ThemeVariants;
-  isCurrentTheme?: boolean;
+const accentColorLabelVariants: { [key in ThemeAccentColors]: string } = {
+  blue: 'Azul',
+  green: 'Verde',
+  orange: 'Laranja',
+  red: 'Vermelho',
+  rose: 'Rosa',
+  violet: 'Violeta',
+  yellow: 'Amarelo',
+  zinc: 'Zinco',
 };
 
-export function SettingsThemeSelectorButton({
+
+function ThemeModeIndicator({
   variant,
-  isCurrentTheme,
-  ...props
-}: SettingsThemeSelectorButtonProps) {
+  isCurrentMode,
+}: {
+  variant: ThemeModes;
+  isCurrentMode?: boolean;
+}) {
   return (
-    <button
-      type="button"
-      className="group flex flex-col gap-3 rounded-lg p-4 text-left transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-900/20"
-      {...props}
-    >
+    <div className="group flex flex-col gap-3 rounded-lg p-4 text-left transition-colors hover:bg-accent">
       <figure
         className={cn(
           'relative h-44 w-64 rounded-md',
-          themeButtonColorVariants[variant].background
+          themeModeIndicatorColorVariants[variant].background
         )}
       >
         <div
           className={cn(
             'absolute bottom-0 right-0 h-2/3 w-4/5 rounded-br-md rounded-tl-md p-4 text-2xl font-medium',
-            themeButtonColorVariants[variant].foreground
+            themeModeIndicatorColorVariants[variant].foreground
           )}
         >
-          <span className={themeButtonColorVariants[variant].text}>Aa</span>
+          <span className={themeModeIndicatorColorVariants[variant].text}>Aa</span>
         </div>
 
-        {isCurrentTheme && <SettingsThemeSelectorCheckIndicator />}
+        {isCurrentMode && (
+          <div className="absolute bottom-4 right-4 flex items-center justify-center rounded-full bg-primary p-2 text-primary-foreground">
+            <Check size={18} />
+          </div>
+        )}
       </figure>
 
-      <span className="text-zinc-500 transition-colors group-hover:text-zinc-700 group-hover:dark:text-zinc-300">
-        {themeLabelVariants[variant]}
+      <span className="text-muted-foreground">
+        {themeModeLabelVariants[variant]}
       </span>
-    </button>
+    </div>
+  );
+}
+
+function AccentColorIndicator({ color, isCurrentAccentColor }: {
+  color: ThemeAccentColors;
+  isCurrentAccentColor?: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-3 rounded-lg p-3 w-40 transition-colors hover:bg-accent">
+      <figure
+        className={cn(
+          'aspect-square w-6 rounded-full',
+          `bg-${color}-500`
+        )}
+      >
+      </figure>
+
+      <div className='flex-1 flex items-center gap-1'>
+        <span className="text-muted-foreground">{accentColorLabelVariants[color]}</span>
+        {isCurrentAccentColor && (
+          <span className="text-muted-foreground opacity-75 text-xs">(atual)</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function SettingsThemeSelector() {
+  const { theme, setTheme } = useTheme();
+  const [accentColor, setAccentColor] = useState<ThemeAccentColors>();
+  const [themeMode, setThemeMode] = useState<ThemeModes>();
+
+  useEffect(() => {
+    const { mode, accentColor } = splitThemeName(theme);
+    setThemeMode(mode);
+    setAccentColor(accentColor);
+  }, [theme, setThemeMode, setAccentColor, setTheme]);
+
+  useEffect(() => {
+    if (accentColor && themeMode) {
+      setTheme(`${themeMode}-${accentColor}`);
+    }
+  }, [accentColor, themeMode, setTheme]);
+
+  return (
+    <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-1">
+          <h3 className="text-2xl font-medium leading-none text-secondary-foreground">
+            Paleta de cor
+          </h3>
+          <span className="text-muted-foreground">
+            Escolha o tema que mais combina com você.
+          </span>
+        </div>
+
+        <div className="flex items-center gap-4">
+          {themeModes.map(mappedTheme => (
+            <button key={mappedTheme} onClick={() => setThemeMode(mappedTheme)}>
+              <ThemeModeIndicator
+                isCurrentMode={themeMode === mappedTheme}
+                variant={mappedTheme as ThemeModes}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-1">
+          <h3 className="text-2xl font-medium leading-none text-secondary-foreground">
+            Cor de destaque
+          </h3>
+          <span className="text-muted-foreground">
+            Escolha o tema que mais combina com você.
+          </span>
+        </div>
+
+        <div className="flex items-center gap-4 flex-wrap">
+          {themeAccentColors.map(mappedAccentColor => (
+            <button
+              type="button"
+              key={mappedAccentColor}
+              onClick={() => setAccentColor(mappedAccentColor)}
+            >
+              <AccentColorIndicator
+                color={mappedAccentColor as ThemeAccentColors}
+                isCurrentAccentColor={accentColor === mappedAccentColor}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

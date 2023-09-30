@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import { cn } from '@/utils/cn';
+import Image from 'next/image';
 import noiseImage from '../../assets/noise.png';
 
 interface NoiseProps {

@@ -1,7 +1,7 @@
-import { Fragment } from 'react';
-import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+import { Fragment } from 'react';
 
 export type BreadcrumbType = {
   label: string;
@@ -16,7 +16,7 @@ export function DashboardBreadcrumbs({
   breadcrumbs
 }: DashboardBreadcrumbsProps) {
   return (
-    <nav className="flex items-center">
+    <nav className="flex items-center gap-2">
       {breadcrumbs.map((breadcrumb, index) => (
         <Fragment key={breadcrumb.href}>
           <DashboardBreadcrumb
@@ -46,9 +46,8 @@ function DashboardBreadcrumb({
     <Link
       href={href}
       className={cn(
-        'rounded px-1.5 py-1 text-sm font-medium leading-none text-zinc-400 transition-all hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-600 dark:hover:bg-zinc-900 dark:hover:text-zinc-400',
-        isCurrentPage &&
-          'text-zinc-500 hover:cursor-default hover:bg-transparent hover:text-zinc-500 dark:text-zinc-400 dark:hover:bg-transparent hover:dark:text-zinc-400'
+        'text-sm font-medium leading-none text-muted-foreground transition-all',
+        isCurrentPage ? 'hover:cursor-default' : 'opacity-50 hover:opacity-75',
       )}
     >
       {label}
@@ -57,5 +56,5 @@ function DashboardBreadcrumb({
 }
 
 function DashboardBreadcrumbSeparator() {
-  return <ChevronRight className="h-4 w-4 text-zinc-300 dark:text-zinc-500 " />;
+  return <ChevronRight className="h-4 w-4 text-muted-foreground opacity-50" />;
 }

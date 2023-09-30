@@ -1,10 +1,10 @@
-import { PaintBucket } from 'lucide-react';
 import {
   DashboardBreadcrumbs,
   type BreadcrumbType
 } from '@/components/dashboard/dashboard-breadcrumbs';
 import { DashboardPageHeader } from '@/components/dashboard/dashboard-page-header';
 import { SettingsThemeSelector } from '@/components/dashboard/settings/settings-theme-selector';
+import { PaintBucket } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbType[] = [
   {
@@ -34,18 +34,7 @@ export default function ThemesSettingsPage() {
         />
       </div>
 
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-1">
-          <h3 className="text-2xl font-medium leading-none text-zinc-700 dark:text-zinc-300">
-            Paleta de cor
-          </h3>
-          <span className="text-zinc-500">
-            Escolha o tema que mais combina com você.
-          </span>
-        </div>
-
-        <SettingsThemeSelector />
-      </div>
+      <SettingsThemeSelector />
     </section>
   );
 }

@@ -10,7 +10,8 @@
     "format": "prettier --cache --write --plugin-search-dir=. **/*.{cjs,mjs,ts,tsx}",
     "clean": "git clean -xdf node_modules",
     "clean:workspaces": "turbo clean",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "front": "turbo run dev --filter=nextjs"
   },
   "devDependencies": {
     "@caho/tsconfig": "*",

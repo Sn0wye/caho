@@ -1,19 +1,18 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
-import Link from 'next/link';
+import { cn } from '@/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import Link from 'next/link';
+import { useState, type ReactNode } from 'react';
 
 const alertTopBarVariants = cva(
   'flex flex-col rounded-md lg:flex-row w-full lg:items-center lg:justify-center gap-4 lg:gap-2 p-4 lg:px-8 lg:py-2  text-sm font-medium relative',
   {
     variants: {
       variant: {
-        default:
-          'bg-gradient-to-r from-slate-100 to-slate-300 dark:bg-gradient-to-r dark:from-zinc-900 dark:to-zinc-950 text-zinc-800 dark:text-zinc-200',
+        default: 'bg-gradient-to-r from-slate-100 to-slate-300 dark:bg-gradient-to-r dark:from-zinc-900 dark:to-zinc-950 text-zinc-800 dark:text-zinc-200',
         warning: 'bg-geist-orange text-zinc-950',
         destructive: 'bg-geist-red text-zinc-950'
       }

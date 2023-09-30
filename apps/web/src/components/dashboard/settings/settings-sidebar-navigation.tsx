@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const settingsSidebarLinks = [
   { href: '/dashboard/settings', title: 'Perfil' },
@@ -17,8 +17,8 @@ export function SettingsSidebarNavigation() {
   return (
     <aside className="flex h-full w-full max-w-xs flex-col gap-8">
       <header className="flex flex-col gap-1">
-        <h3 className="text-xl font-semibold sm:text-2xl">Configurações</h3>
-        <span className="text-sm text-zinc-600 dark:text-zinc-400">
+        <h3 className="text-xl font-semibold sm:text-2xl text-secondary-foreground">Configurações</h3>
+        <span className="text-sm text-muted-foreground">
           Algumas telas ainda estão em construção.
         </span>
       </header>
@@ -32,8 +32,8 @@ export function SettingsSidebarNavigation() {
               data-current={pathname === href}
               className={cn(
                 buttonVariants({ variant: 'ghost' }),
-                'justify-start',
-                'data-[current=true]:bg-zinc-500 data-[current=true]:hover:bg-zinc-500'
+                'justify-start hover:bg-transparent',
+                'data-[current=true]:bg-muted data-[current=true]:hover:bg-muted',
               )}
             >
               {title}

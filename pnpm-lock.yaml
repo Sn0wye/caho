@@ -43,16 +43,16 @@ importers:
         version: 0.28.0
       '@elysiajs/cookie':
         specifier: ^0.6.1
-        version: 0.6.1(elysia@0.6.23)
+        version: 0.6.1(elysia@0.7.12)
       '@elysiajs/cors':
         specifier: ^0.6.0
-        version: 0.6.0(elysia@0.6.23)
+        version: 0.6.0(elysia@0.7.12)
       '@elysiajs/jwt':
         specifier: ^0.6.3
-        version: 0.6.3(elysia@0.6.23)
+        version: 0.6.3(elysia@0.7.12)
       '@elysiajs/websocket':
         specifier: ^0.2.8
-        version: 0.2.8(elysia@0.6.23)
+        version: 0.2.8(elysia@0.7.12)
       '@faker-js/faker':
         specifier: ^8.0.2
         version: 8.0.2
@@ -76,10 +76,10 @@ importers:
         version: 1.22.0
       drizzle-orm:
         specifier: ^0.28.5
-        version: 0.28.5(@planetscale/database@1.11.0)(bun-types@1.0.2)
+        version: 0.28.5(@planetscale/database@1.11.0)(bun-types@1.0.3)
       elysia:
         specifier: latest
-        version: 0.6.23(typescript@5.2.2)
+        version: 0.7.12(typescript@5.2.2)
       lucia:
         specifier: ^2.4.2
         version: 2.4.2
@@ -92,7 +92,7 @@ importers:
         version: 3.0.0(eslint@8.48.0)(typescript@5.2.2)
       bun-types:
         specifier: latest
-        version: 1.0.2
+        version: 1.0.3
       drizzle-kit:
         specifier: ^0.19.13
         version: 0.19.13
@@ -613,7 +613,7 @@ packages:
     resolution: {integrity: sha512-ps5qF0tMxWRVu+V5gvCRrQNqlY92aTnIKdq27gm9LZMSdaKYZt6AVvSK1dlUMzs6Rt0Jm80b+eWct6xShBKhIw==}
     dev: true
 
-  /@elysiajs/cookie@0.6.1(elysia@0.6.23):
+  /@elysiajs/cookie@0.6.1(elysia@0.7.12):
     resolution: {integrity: sha512-E/swYyYcgfUa3LtVjmJfwsL7GUF9nbp+gxouWs0z0z305UaBgx7N0zclQnoaRdL5lPn73J/bEkfTjL0hOBJHIg==}
     peerDependencies:
       elysia: '>= 0.6.0'
@@ -622,32 +622,32 @@ packages:
       '@types/cookie-signature': 1.1.0
       cookie: 0.5.0
       cookie-signature: 1.2.1
-      elysia: 0.6.23(typescript@5.2.2)
+      elysia: 0.7.12(typescript@5.2.2)
     dev: false
 
-  /@elysiajs/cors@0.6.0(elysia@0.6.23):
+  /@elysiajs/cors@0.6.0(elysia@0.7.12):
     resolution: {integrity: sha512-TpkdYRVDLJYn9XHwO3eFu1GG1/p1xZMcujU354N0YG5pbFNy5kSeKFDZRMoh14fPvkRN7tWgRpsZfuCs15IHKA==}
     peerDependencies:
       elysia: '>= 0.5.12'
     dependencies:
-      elysia: 0.6.23(typescript@5.2.2)
+      elysia: 0.7.12(typescript@5.2.2)
     dev: false
 
-  /@elysiajs/jwt@0.6.3(elysia@0.6.23):
+  /@elysiajs/jwt@0.6.3(elysia@0.7.12):
     resolution: {integrity: sha512-6PNFwkVTBEwQhw5XSpQrQNc0osoe29MqBW7qBg3CjE9nqRR8US8b/SSomO/d405dqDbJuDSkpO69A85Lvu19cQ==}
     peerDependencies:
       elysia: '>= 0.6.0'
     dependencies:
-      elysia: 0.6.23(typescript@5.2.2)
+      elysia: 0.7.12(typescript@5.2.2)
       jose: 4.14.6
     dev: false
 
-  /@elysiajs/websocket@0.2.8(elysia@0.6.23):
+  /@elysiajs/websocket@0.2.8(elysia@0.7.12):
     resolution: {integrity: sha512-K9KLmYL1SYuAV353GvmK0V9DG5w7XTOGsa1H1dGB5BUTzvBaMvnwNeqnJQ3cjf9V1c0EjQds0Ty4LfUFvV45jw==}
     peerDependencies:
       elysia: '>= 0.2.2'
     dependencies:
-      elysia: 0.6.23(typescript@5.2.2)
+      elysia: 0.7.12(typescript@5.2.2)
       nanoid: 4.0.2
       raikiri: 0.0.0-beta.8
     dev: false
@@ -3111,8 +3111,8 @@ packages:
       ieee754: 1.2.1
     dev: false
 
-  /bun-types@1.0.2:
-    resolution: {integrity: sha512-yqBp2SX9cqr5/GReb56uCfM+YP+Hntx3XPjbqX1VJXqOBu+Yqw8iWRFLKFIsz9uEfykLgflhramQ8a5Jgo+Tlg==}
+  /bun-types@1.0.3:
+    resolution: {integrity: sha512-XlyKVdYCHa7K5PHYGcwOVOrGE/bMnLS51y7zFA3ZAAXyiQ6dTaNXNCWTTufgII/6ruN770uhAXphQmzvU/r2fQ==}
 
   /bundle-require@4.0.1(esbuild@0.18.20):
     resolution: {integrity: sha512-9NQkRHlNdNpDBGmLpngF3EFDcwodhMUuLz9PaWYciVcQF9SE4LFjM2DB/xV1Li5JiuDMv7ZUWuC3rGbqR0MAXQ==}
@@ -3482,7 +3482,7 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.28.5(@planetscale/database@1.11.0)(bun-types@1.0.2):
+  /drizzle-orm@0.28.5(@planetscale/database@1.11.0)(bun-types@1.0.3):
     resolution: {integrity: sha512-6r6Iw4c38NAmW6TiKH3TUpGUQ1YdlEoLJOQptn8XPx3Z63+vFNKfAiANqrIiYZiMjKR9+NYAL219nFrmo1duXA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -3545,22 +3545,19 @@ packages:
         optional: true
     dependencies:
       '@planetscale/database': 1.11.0
-      bun-types: 1.0.2
+      bun-types: 1.0.3
     dev: false
 
   /electron-to-chromium@1.4.508:
     resolution: {integrity: sha512-FFa8QKjQK/A5QuFr2167myhMesGrhlOBD+3cYNxO9/S4XzHEXesyTD/1/xF644gC8buFPz3ca6G1LOQD0tZrrg==}
 
-  /elysia@0.6.23(typescript@5.2.2):
-    resolution: {integrity: sha512-Pg4imIefGhHZsGGhfGQm6zX2fiRsN6DVoYp8gyjPQ1hvmjXBamVM5S9kAKuB6TP+E6b/KzRH+y+76PWYQpvVyQ==}
+  /elysia@0.7.12(typescript@5.2.2):
+    resolution: {integrity: sha512-2dHTLgrkWdgt81zJvJD6nMWDXp77NcU/L80nIl8VjzQVtkvPQ26/dbEze+XMQ8stKcI4cv5f+S02JV3rV67DmA==}
     peerDependencies:
-      '@elysiajs/fn': '*'
       '@sinclair/typebox': '>= 0.28.10'
       openapi-types: '>= 12.0.0'
       typescript: '>= 5.0.0'
     peerDependenciesMeta:
-      '@elysiajs/fn':
-        optional: true
       '@sinclair/typebox':
         optional: true
       openapi-types:
@@ -3568,9 +3565,11 @@ packages:
       typescript:
         optional: true
     dependencies:
+      cookie: 0.5.0
+      cookie-signature: 1.2.1
+      eventemitter3: 5.0.1
       fast-querystring: 1.1.2
       memoirist: 0.1.4
-      mergician: 1.1.0
       typescript: 5.2.2
     dev: false
 
@@ -4303,6 +4302,10 @@ packages:
       d: 1.0.1
       es5-ext: 0.10.62
     dev: true
+
+  /eventemitter3@5.0.1:
+    resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
+    dev: false
 
   /execa@5.1.1:
     resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
@@ -5158,11 +5161,6 @@ packages:
   /merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
-
-  /mergician@1.1.0:
-    resolution: {integrity: sha512-FXbxzU6BBhGkV8XtUr8Sk015ZRaAALviit8Lle6OEgd1udX8wlu6tBeUMLGQGdz1MfHpAVNNQkXowyDnJuhXpA==}
-    engines: {node: '>=10.0.0'}
-    dev: false
 
   /micromatch@4.0.5:
     resolution: {integrity: sha512-DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA==}

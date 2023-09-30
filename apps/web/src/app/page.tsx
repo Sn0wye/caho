@@ -1,8 +1,8 @@
-import { siteConfig } from 'config/site';
 import { AlertTopBar } from '@/components/alert-top-bar';
 import { Navbar } from '@/components/navbar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { siteConfig } from 'config/site';
 
 export default async function HomePage() {
   return (
@@ -13,7 +13,7 @@ export default async function HomePage() {
         <Navbar />
 
         <section className="flex max-w-[70%] flex-col gap-6">
-          <Badge variant="secondary" size="fit">
+          <Badge variant="secondary" className="w-fit">
             {siteConfig.descriptionShort}
           </Badge>
 
@@ -21,7 +21,7 @@ export default async function HomePage() {
             <h1 className="text-3xl font-bold leading-relaxed sm:text-4xl md:text-6xl">
               {siteConfig.nameLong}
             </h1>
-            <span className="max-w-[70%] text-base leading-10 text-zinc-500 md:text-lg">
+            <span className="max-w-[70%] text-base leading-10 text-muted-foreground md:text-lg">
               {siteConfig.descriptionLong}
             </span>
           </div>

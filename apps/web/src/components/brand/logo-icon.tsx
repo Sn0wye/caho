@@ -18,16 +18,29 @@ type LogoIconProps = VariantProps<typeof logoIconVariants> & {
   variant?: 'ghost' | 'default' | 'blackCard' | 'whiteCard';
 };
 
+// const logoIconVariantsStyles = {
+//   default: [
+//     'fill-zinc-950',
+//     'fill-zinc-50'
+//   ],
+//   blackCard: ['fill-zinc-50', 'fill-zinc-950'],
+//   whiteCard: ['fill-zinc-950', 'fill-zinc-50'],
+//   ghost: [
+//     'fill-zinc-500',
+//     'fill-zinc-100'
+//   ]
+// };
+
 const logoIconVariantsStyles = {
   default: [
-    'fill-zinc-950 dark:fill-zinc-50',
-    'fill-zinc-50 dark:fill-zinc-950'
+    'fill-primary',
+    'fill-primary-foreground'
   ],
   blackCard: ['fill-zinc-50', 'fill-zinc-950'],
   whiteCard: ['fill-zinc-950', 'fill-zinc-50'],
   ghost: [
-    'fill-zinc-500 dark:fill-zinc-700',
-    'fill-zinc-100 dark:fill-zinc-950'
+    'fill-zinc-500',
+    'fill-zinc-100'
   ]
 };
 
