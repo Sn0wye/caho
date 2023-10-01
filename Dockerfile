@@ -13,7 +13,7 @@ COPY packages/contracts/package.json ./packages/contracts/package.json
 COPY packages/schemas/package.json ./packages/schemas/package.json
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 COPY . .
-RUN pnpm run build --filter=contracts --filter=schemas
+RUN pnpm run build --filter=\!nextjs
 
 # Run using bun
 FROM oven/bun:latest AS api
@@ -26,5 +26,5 @@ COPY --from=build /app/apps/backend ./apps/backend
 COPY --from=build /app/apps/backend/node_modules ./apps/backend/node_modules
 COPY --from=build /app/apps/backend/package.json ./apps/backend/package.json
 
-EXPOSE 3333
+EXPOSE 8080
 CMD cd apps/backend && bun run start
