@@ -1,20 +1,14 @@
-import cookie from '@elysiajs/cookie';
 import { eq } from 'drizzle-orm';
 import Elysia, { t } from 'elysia';
-import { auth, githubAuth, isAuthed } from '@/auth/lucia';
-import { db } from '@/db';
+import { githubAuth, isAuthed } from '@/auth/lucia';
+import { ctx } from '@/context';
 import { users } from '@/db/schema';
-import { env } from '@/env';
 
-export const authRoutes = new Elysia().group(
+export const authRoutes = new Elysia().use(ctx).group(
   '/auth',
   app =>
     app
-      .use(
-        cookie({
-          secret: env.COOKIE_SECRET
-        })
-      )
+
       .model(
         'auth',
         t.Object({
@@ -26,7 +20,7 @@ export const authRoutes = new Elysia().group(
       )
       .post(
         '/sign-up',
-        async ({ body: { username, password } }) => {
+        async ({ body: { username, password }, auth }) => {
           const user = await auth.createUser({
             key: {
               providerId: 'username',
@@ -48,7 +42,7 @@ export const authRoutes = new Elysia().group(
       )
       .post(
         '/sign-in',
-        async ({ setCookie, body: { username, password } }) => {
+        async ({ cookie, body: { username, password }, auth }) => {
           const { userId } = await auth.useKey('username', username, password);
 
           const session = await auth.createSession({
@@ -56,20 +50,24 @@ export const authRoutes = new Elysia().group(
             attributes: {}
           });
 
-          setCookie('session', session.sessionId, {
+          cookie.session.set({
+            value: session.sessionId,
             httpOnly: true
           });
 
           return `Signed in as ${username}`;
         },
         {
-          body: 'auth'
+          body: 'auth',
+          cookie: t.Cookie({
+            session: t.String()
+          })
         }
       )
       .get(
         '/profile',
-        async ({ set, cookie: { session } }) => {
-          const userSession = await auth.getSession(session);
+        async ({ set, cookie: { session }, db, auth }) => {
+          const userSession = await auth.getSession(session.value);
 
           const user = await db.query.users.findFirst({
             where: eq(users.id, userSession.user.userId)
@@ -83,15 +81,20 @@ export const authRoutes = new Elysia().group(
           return user;
         },
         {
-          beforeHandle: isAuthed
+          beforeHandle: isAuthed,
+          cookie: t.Cookie({
+            session: t.String()
+          })
         }
       )
       .get(
         '/sign-out',
-        async ({ cookie: { session }, unsignCookie, set }) => {
-          await auth.invalidateSession(session);
+        async ({ cookie: { session }, set, auth }) => {
+          await auth.invalidateSession(session.value);
 
-          unsignCookie('session');
+          session.set({
+            value: null
+          });
 
           set.status = 200;
         },
@@ -99,55 +102,74 @@ export const authRoutes = new Elysia().group(
           beforeHandle: isAuthed
         }
       )
-      .post('/github', async ({ setCookie, set }) => {
-        // get url to redirect the user to, with the state
-        const [url, state] = await githubAuth.getAuthorizationUrl();
+      .post(
+        '/github',
+        async ({ cookie, set }) => {
+          // get url to redirect the user to, with the state
+          const [url, state] = await githubAuth.getAuthorizationUrl();
 
-        setCookie('github_oauth_state', state, {
-          path: '/',
-          httpOnly: true,
-          maxAge: 60 * 60
-        });
-
-        set.redirect = String(url);
-      })
-      .get('/github/callback', async ({ request, cookie, setCookie, set }) => {
-        const requestUrl = new URL(request.url);
-
-        const code = requestUrl.searchParams.get('code');
-        const state = requestUrl.searchParams.get('state');
-
-        const storedState = cookie['github_oauth_state'];
-
-        if (!state || !storedState || state !== storedState) {
-          set.status = 401;
-          return `Unauthorized`;
-        }
-
-        if (!code) {
-          set.status = 400;
-          return `Bad Request`;
-        }
-
-        try {
-          const user = await validateCallbackAndGetUser(code);
-
-          const session = await auth.createSession({
-            userId: user.id,
-            attributes: {}
+          cookie.github_oauth_state.set({
+            value: state,
+            path: '/',
+            httpOnly: true,
+            maxAge: 60 * 60
           });
 
-          setCookie('session', session.sessionId, {
-            httpOnly: true
-          });
-
-          set.status = 200;
-          return;
-        } catch {
-          set.status = 401;
-          return `Unauthorized`;
+          set.redirect = String(url);
+        },
+        {
+          cookie: t.Cookie({
+            github_oauth_state: t.String()
+          })
         }
-      })
+      )
+      .get(
+        '/github/callback',
+        async ({ request, cookie, set, auth }) => {
+          const requestUrl = new URL(request.url);
+
+          const code = requestUrl.searchParams.get('code');
+          const state = requestUrl.searchParams.get('state');
+
+          const storedState = cookie['github_oauth_state'].value;
+
+          if (!state || !storedState || state !== storedState) {
+            set.status = 401;
+            return `Unauthorized`;
+          }
+
+          if (!code) {
+            set.status = 400;
+            return `Bad Request`;
+          }
+
+          try {
+            const user = await validateCallbackAndGetUser(code);
+
+            const session = await auth.createSession({
+              userId: user.id,
+              attributes: {}
+            });
+
+            cookie.session.set({
+              value: session.sessionId,
+              httpOnly: true
+            });
+
+            set.status = 200;
+            return;
+          } catch {
+            set.status = 401;
+            return `Unauthorized`;
+          }
+        },
+        {
+          cookie: t.Cookie({
+            github_oauth_state: t.String(),
+            session: t.String()
+          })
+        }
+      )
   // .delete(
   //   '/user',
   //   async ({ cookie: { session } }) => {
