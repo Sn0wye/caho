@@ -1,14 +1,12 @@
 import { cors } from '@elysiajs/cors';
 import { Elysia } from 'elysia';
-import { redis } from './db/redis';
+import { ctx } from './context';
 import { env } from './env';
 import { authRoutes } from './routers/auth';
 import { roomRoutes } from './routers/room';
 
-const setup = (app: Elysia) => app.state('redis', redis);
-
 const app = new Elysia()
-  .use(setup)
+  .use(ctx)
   .use(cors())
   .use(authRoutes)
   .use(roomRoutes)
