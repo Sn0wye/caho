@@ -1,5 +1,5 @@
 {
-  "name": "@caho/api",
+  "name": "@caho/backend",
   "version": "1.0.50",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -19,6 +19,7 @@
     "clean": "git clean -xdf node_modules"
   },
   "dependencies": {
+    "@bogeychan/elysia-logger": "^0.0.11",
     "@caho/contracts": "workspace:*",
     "@caho/schemas": "workspace:*",
     "@clerk/backend": "^0.30.1",
@@ -27,21 +28,24 @@
     "@elysiajs/jwt": "^0.7.0",
     "@elysiajs/websocket": "^0.2.8",
     "@faker-js/faker": "^8.1.0",
-    "@lucia-auth/adapter-mysql": "^2.1.0",
-    "@lucia-auth/oauth": "^3.3.0",
+    "@lucia-auth/adapter-mysql": "^2.0.0",
+    "@lucia-auth/oauth": "^3.2.0",
     "@paralleldrive/cuid2": "^2.2.2",
     "@planetscale/database": "^1.11.0",
     "@t3-oss/env-core": "^0.6.1",
+    "@tlscipher/holt": "^1.1.1",
     "@trpc/server": "^10.38.5",
     "@upstash/redis": "^1.22.1",
     "drizzle-orm": "^0.28.6",
-    "elysia": "^0.7.15",
+    "elysia": "^0.7.0",
     "lucia": "^2.7.1",
+    "pino-pretty": "^10.2.3",
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@sinclair/typebox": "^0.31.17",
     "@sn0wye/eslint-config": "^3.0.0",
-    "bun-types": "latest",
+    "bun-types": "1.0.4",
     "drizzle-kit": "^0.19.13",
     "eslint": "^8.50.0",
     "typescript": "^5.2.2"
