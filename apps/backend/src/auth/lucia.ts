@@ -2,13 +2,13 @@ import { planetscale } from '@lucia-auth/adapter-mysql';
 import { github, google } from '@lucia-auth/oauth/providers';
 import { type Cookie } from 'elysia';
 import { lucia, LuciaError } from 'lucia';
+import { elysia } from 'lucia/middleware';
 import { connection } from '@/db';
 import { env } from '@/env';
-import { elysiaMiddleware } from './middleware';
 
 export const auth = lucia({
   env: env.NODE_ENV === 'PRODUCTION' ? 'PROD' : 'DEV',
-  middleware: elysiaMiddleware(),
+  middleware: elysia(),
   adapter: planetscale(connection, {
     user: 'users',
     key: 'keys',
@@ -62,6 +62,7 @@ export const isAuthed = async ({
     if (e instanceof LuciaError && e.message === `AUTH_INVALID_SESSION_ID`) {
       session.remove();
     }
+    console.log('error', e);
 
     set.status = 401;
     return `Unauthorized`;
