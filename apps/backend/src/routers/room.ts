@@ -11,7 +11,6 @@ import { Elysia } from 'elysia';
 import { isAuthed } from '@/auth/lucia';
 import { ctx } from '@/context';
 import { db } from '@/db';
-import { redis } from '@/db/redis';
 import { users } from '@/db/schema';
 import { HTTPError } from '@/errors/HTTPError';
 import { ROOM_ERRORS } from '@/errors/room';
@@ -25,15 +24,6 @@ export const roomRoutes = new Elysia().use(ctx).group(
   },
   app =>
     app
-      .get('/:roomCode', async ({ set, params: { roomCode }, redis }) => {
-        const roomRepository = new RedisRoomRepository(redis);
-        const roomService = new RoomService(roomRepository);
-
-        const room = await roomService.getRoom(roomCode);
-
-        set.status = 200;
-        return room;
-      })
       .get('/list', async ({ set, redis }) => {
         const roomRepository = new RedisRoomRepository(redis);
         const roomService = new RoomService(roomRepository);
@@ -42,6 +32,15 @@ export const roomRoutes = new Elysia().use(ctx).group(
 
         set.status = 200;
         return publicRooms;
+      })
+      .get('/:roomCode', async ({ set, params: { roomCode }, redis }) => {
+        const roomRepository = new RedisRoomRepository(redis);
+        const roomService = new RoomService(roomRepository);
+
+        const room = await roomService.getRoom(roomCode);
+
+        set.status = 200;
+        return room;
       })
       .post('/create', async ({ body, set, redis, session }) => {
         try {
@@ -218,7 +217,7 @@ export const roomRoutes = new Elysia().use(ctx).group(
           return e;
         }
       })
-      .get('/:roomCode/players', async ({ params }) => {
+      .get('/:roomCode/players', async ({ params, redis }) => {
         const roomRepository = new RedisRoomRepository(redis);
         const roomService = new RoomService(roomRepository);
 
