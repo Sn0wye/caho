@@ -1,14 +1,14 @@
 import { planetscale } from '@lucia-auth/adapter-mysql';
 import { github, google } from '@lucia-auth/oauth/providers';
-import { type Cookie } from 'elysia';
-import { lucia, LuciaError } from 'lucia';
-import { elysia } from 'lucia/middleware';
+import { type FastifyReply, type FastifyRequest } from 'fastify';
+import { lucia } from 'lucia';
+import { fastify } from 'lucia/middleware';
 import { connection } from '@/db';
 import { env } from '@/env';
 
 export const auth = lucia({
-  env: env.NODE_ENV === 'PRODUCTION' ? 'PROD' : 'DEV',
-  middleware: elysia(),
+  env: env.NODE_ENV === 'production' ? 'PROD' : 'DEV',
+  middleware: fastify(),
   adapter: planetscale(connection, {
     user: 'users',
     key: 'keys',
@@ -29,42 +29,20 @@ export const googleAuth = google(auth, {
 
 export type Auth = typeof auth;
 
-// export type AuthGuardParams = Parameters<HookHandler>[0];
-
-export const isAuthed = async ({
-  cookie: { session },
-  set
-}: {
-  cookie: Record<string, Cookie<string>>;
-  set: {
-    status?: number | string;
-  };
-}) => {
-  if (!session.value) {
-    set.status = 401;
-
-    return `Unauthorized`;
+/**
+ * Get session from the request, return 401 if not found
+ * @param req FastifyRequest
+ * @param res FastifyReply
+ * @returns Session
+ */
+export const getSession = async (req: FastifyRequest, res: FastifyReply) => {
+  const cookie = req.cookies['auth_session'];
+  if (!cookie) {
+    return res.unauthorized();
   }
-
-  try {
-    const sessionInfo = await auth.validateSession(session.value);
-
-    if (sessionInfo.fresh) {
-      // expiration extended
-      const sessionCookie = auth.createSessionCookie(sessionInfo);
-
-      session.set({
-        value: sessionCookie.value,
-        httpOnly: true
-      });
-    }
-  } catch (e) {
-    if (e instanceof LuciaError && e.message === `AUTH_INVALID_SESSION_ID`) {
-      session.remove();
-    }
-    console.log('error', e);
-
-    set.status = 401;
-    return `Unauthorized`;
+  const session = await auth.validateSession(cookie);
+  if (!session) {
+    return res.unauthorized();
   }
+  return session;
 };

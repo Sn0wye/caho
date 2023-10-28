@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
+    "target": "ES2022",
+    "module": "CommonJS",
     "moduleResolution": "node",
-    "types": ["bun-types"],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -11,9 +10,12 @@
     "strictPropertyInitialization": true,
     "skipLibCheck": true,
     "baseUrl": ".",
+    "outDir": "dist",
+    "lib": ["ES2022"],
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", ".eslintrc.cjs", "drizzle.config.ts", "auth.d.ts"]
+  "include": ["src/**/*", ".eslintrc.cjs", "drizzle.config.ts", "auth.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }
