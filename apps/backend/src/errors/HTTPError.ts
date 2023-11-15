@@ -1,17 +1,27 @@
-type Code = 'NOT_FOUND' | 'BAD_REQUEST' | 'INTERNAL_SERVER_ERROR';
-type Message = string | undefined;
-
-type HTTPErrorArgs = {
-  message: Message;
-  code: Code;
+export const HTTP_ERROR_CODES = {
+  BAD_REQUEST: 400,
+  NOT_FOUND: 404,
+  UNPROCESSABLE_CONTENT: 422,
+  INTERNAL_SERVER_ERROR: 500
 };
 
-export class HTTPError {
-  public readonly message: Message;
-  public readonly code: Code;
+type HttpErrorCode = keyof typeof HTTP_ERROR_CODES;
 
-  constructor({ message, code }: HTTPErrorArgs) {
-    this.message = message;
-    this.code = code;
+type HTTPErrorOpts = {
+  message?: string;
+  code: HttpErrorCode;
+};
+
+export class HTTPError extends Error {
+  public readonly code: HttpErrorCode;
+  public readonly statusCode: number;
+
+  constructor(opts: HTTPErrorOpts) {
+    super(opts.message);
+    this.name = 'HTTPError';
+    this.code = opts.code;
+    this.statusCode = HTTP_ERROR_CODES[opts.code];
+
+    Object.setPrototypeOf(this, new.target.prototype);
   }
 }
