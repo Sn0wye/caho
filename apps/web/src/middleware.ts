@@ -1,7 +1,8 @@
 import { authMiddleware } from '@clerk/nextjs';
 
 export default authMiddleware({
-  publicRoutes: ['/', '/api/(.*)']
+  // TODO: remove new-login from public routes
+  publicRoutes: ['/', '/api/(.*)', '/new-login']
 });
 
 export const config = {
