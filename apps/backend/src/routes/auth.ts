@@ -68,7 +68,13 @@ export const authRoutes = async (app: App) => {
       authRequest.setSession(session);
       auth.createSessionCookie(session);
 
-      return `Signed in as ${username}`;
+      const user = await app.db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.id, session.user.userId)
+      });
+
+      if (user) {
+        return user;
+      }
     }
   );
 
