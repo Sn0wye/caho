@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { currentUser, SignOutButton } from '@clerk/nextjs';
+import { getUser } from '@/auth';
 import { Avatar, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import {
@@ -13,8 +13,9 @@ import {
   DropdownMenuTrigger
 } from '../ui/dropdown-menu';
 
+// TODO: sign out logic
 export async function DashboardUserNav() {
-  const user = await currentUser();
+  const user = await getUser();
 
   if (!user) {
     throw new Error('Not authenticated.');
@@ -28,7 +29,7 @@ export async function DashboardUserNav() {
           className="relative h-8 w-8 select-none rounded-full"
         >
           <Avatar className="h-8 w-8">
-            <AvatarImage src={user.imageUrl} alt="" />
+            <AvatarImage src={user.avatarUrl ?? undefined} alt="" />
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -41,15 +42,9 @@ export async function DashboardUserNav() {
       >
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-2">
-            <p className="text-sm font-medium leading-none">
-              {user.firstName + ' ' + user.lastName}
-            </p>
+            <p className="text-sm font-medium leading-none">{user.name}</p>
             <p className="text-muted-foreground text-xs leading-none">
-              {
-                user.emailAddresses.find(
-                  email => email.id === user.primaryEmailAddressId
-                )?.emailAddress
-              }
+              {user.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -66,12 +61,12 @@ export async function DashboardUserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <SignOutButton>
-          <DropdownMenuItem>
-            Sair
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </SignOutButton>
+        {/* <SignOutButton> */}
+        <DropdownMenuItem>
+          Sair
+          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+        </DropdownMenuItem>
+        {/* </SignOutButton> */}
       </DropdownMenuContent>
     </DropdownMenu>
   );

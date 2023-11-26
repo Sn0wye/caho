@@ -7,12 +7,7 @@ await import('./src/env.mjs');
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
-  images: {
-    domains: ['img.clerk.com']
-  },
-  experimental: {
-    appDir: true
-  }
+  images: {}
 };
 
 export default config;

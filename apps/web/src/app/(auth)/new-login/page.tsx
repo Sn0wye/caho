@@ -51,15 +51,18 @@ export default function Page() {
 
   const onSubmit = (data: FormValues) => {
     mutate(data, {
-      onSuccess: data => {
-        console.log(data);
+      onSuccess: async () => {
+        await fetch('/api/auth', {
+          method: 'POST',
+          credentials: 'include'
+        });
       }
     });
   };
 
   return (
     <div className="w-full">
-      <div className="m-0 flex w-auto max-w-none flex-col gap-8 rounded-none bg-white p-0 text-zinc-950 shadow-none">
+      <div className="m-0 flex w-auto max-w-none flex-col gap-8 rounded-none bg-white p-0 text-zinc-950 shadow-none dark:bg-zinc-950">
         <header className="flex flex-col items-stretch gap-1">
           <h1 className="text-2xl font-medium text-zinc-900 dark:text-zinc-50">
             Entrar

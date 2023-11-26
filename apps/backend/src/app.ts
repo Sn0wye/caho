@@ -37,7 +37,10 @@ app.register(fastifyWebsocket, {
 });
 
 app.register(fastifyCors, {
-  origin: 'http://localhost:3000',
+  origin:
+    env.NODE_ENV === 'production'
+      ? 'https://caho.vercel.app'
+      : 'http://localhost:3000',
   credentials: true
 });
 app.register(fastifySensible);

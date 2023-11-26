@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { createRoom, type CreateRoom } from '@caho/contracts';
-import { type Player, type Room } from '@caho/schemas';
-import { useUser } from '@clerk/nextjs';
+import { type Player, type Room, type User } from '@caho/schemas';
+// import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SelectTrigger } from '@radix-ui/react-select';
 import { useMutation } from '@tanstack/react-query';
@@ -38,6 +38,7 @@ const createRoomMutation = async (data: CreateRoom) => {
   return room;
 };
 
+// TODO: client component hook for getting user
 export const NewRoomCardForm = () => {
   const { mutate, isLoading } = useMutation(createRoomMutation);
 
@@ -49,18 +50,19 @@ export const NewRoomCardForm = () => {
       isPublic: false
     }
   });
-  const { user } = useUser();
+  // const { user } = useUser();
+  const user = {} as User;
   const router = useRouter();
 
   const onSubmit = async (values: FormSchema) => {
     if (!user) return;
 
     const player: Player = {
-      avatarUrl: user.imageUrl,
+      avatarUrl: user.avatarUrl,
       id: user.id,
       isHost: true,
       score: 0,
-      username: user.fullName || user.username || 'Anônimo'
+      username: user.username || 'Anônimo'
     };
 
     const payload = {

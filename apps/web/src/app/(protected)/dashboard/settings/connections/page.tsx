@@ -1,7 +1,6 @@
 'use client';
 
-import { useSession, useUser } from '@clerk/nextjs';
-import { useQuery } from '@tanstack/react-query';
+// import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Server } from 'lucide-react';
@@ -10,10 +9,11 @@ import {
   type BreadcrumbType
 } from '@/components/dashboard/dashboard-breadcrumbs';
 import { DashboardPageHeader } from '@/components/dashboard/dashboard-page-header';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+
+// import { Badge } from '@/components/ui/badge';
+// import { Button } from '@/components/ui/button';
+// import { Card } from '@/components/ui/card';
+// import { Skeleton } from '@/components/ui/skeleton';
 
 dayjs.extend(relativeTime);
 
@@ -32,17 +32,18 @@ const breadcrumbs: BreadcrumbType[] = [
   }
 ];
 
+//TODO: refactor this page
 export default function ConnectionsSettingsPage() {
-  const { user, isLoaded } = useUser();
-  const { session: currentSession } = useSession();
+  // const { user, isLoaded } = useUser();
+  // const { session: currentSession } = useSession();
 
-  const { data = [], isLoading } = useQuery({
-    queryKey: ['connections'],
-    queryFn: async () => {
-      return user?.getSessions();
-    },
-    enabled: isLoaded && !!user
-  });
+  // const { data = [], isLoading } = useQuery({
+  //   queryKey: ['connections'],
+  //   queryFn: async () => {
+  //     return user?.getSessions();
+  //   },
+  //   enabled: isLoaded && !!user
+  // });
 
   return (
     <section className="flex w-full flex-col gap-12">
@@ -56,16 +57,16 @@ export default function ConnectionsSettingsPage() {
         />
       </div>
 
-      {isLoading && (
+      {/* {isLoading && (
         <div className="space-y-4">
           <Skeleton className="h-28" />
           <Skeleton className="h-28" />
           <Skeleton className="h-28" />
         </div>
-      )}
+      )} */}
 
       <div className="space-y-4">
-        {data.map(session => {
+        {/* {data.map(session => {
           const isCurrentSession = currentSession?.id === session.id;
 
           return (
@@ -91,7 +92,7 @@ export default function ConnectionsSettingsPage() {
               </Button>
             </Card>
           );
-        })}
+        })} */}
       </div>
     </section>
   );
