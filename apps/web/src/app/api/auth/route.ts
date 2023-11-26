@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-export async function POST(req: Request) {
+export async function POST(_req: Request) {
   const sessionCookie = cookies().get('auth_session');
   console.log('route handler session cookie');
 
