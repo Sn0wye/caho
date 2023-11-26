@@ -6,6 +6,7 @@ import {
   startRoom
 } from '@caho/contracts';
 import { Type } from '@fastify/type-provider-typebox';
+import { z } from 'zod';
 import { type App } from '@/app';
 import { nodeRedis } from '@/db/redis';
 import { NodeRedisRoomRepository } from '@/repositories/implementations/NodeRedisRoomRepository';
@@ -13,8 +14,61 @@ import { getSession } from '../auth/lucia';
 import { ROOM_ERRORS } from '../errors/room';
 import { RoomService } from '../services/RoomService';
 
+const wsMessageSchema = z.union([
+  z.object({
+    type: z.literal('READY'),
+    payload: z.object({
+      roomCode: z.string(),
+      ready: z.boolean()
+    })
+  }),
+  z.object({
+    roomCode: z.string(),
+    type: z.literal('MESSAGE'),
+    payload: z.object({
+      roomCode: z.string(),
+      message: z.string()
+    })
+  })
+]);
+
+// type WsMessage = z.infer<typeof wsMessageSchema>;
+
 export const roomRoutes = async (app: App) => {
   const roomService = new RoomService(new NodeRedisRoomRepository(nodeRedis));
+
+  app.get(
+    '/ws',
+    {
+      websocket: true
+    },
+    async (conn, _req) => {
+      conn.socket.on('message', async message => {
+        const parsedMessage = wsMessageSchema.safeParse(
+          JSON.parse(message.toString())
+        );
+
+        if (!parsedMessage.success) {
+          return conn.socket.send('Invalid message');
+        }
+
+        const data = parsedMessage.data;
+
+        switch (data.type) {
+          case 'READY': {
+            conn.socket.send(JSON.stringify(data));
+            break;
+          }
+          case 'MESSAGE': {
+            conn.socket.send(JSON.stringify(data));
+            break;
+          }
+        }
+
+        console.log(data);
+      });
+    }
+  );
 
   app.get('/list', async () => {
     const publicRooms = await roomService.listPublicRooms();
