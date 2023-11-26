@@ -2,6 +2,7 @@ import { fastifyCookie } from '@fastify/cookie';
 import { fastifyCors } from '@fastify/cors';
 import { fastifySensible } from '@fastify/sensible';
 import { type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import fastifyWebsocket from '@fastify/websocket';
 import { fastify } from 'fastify';
 import { db } from '@/db';
 import { redis } from '@/db/redis';
@@ -27,12 +28,18 @@ declare module 'fastify' {
 }
 
 // decorators
-
 app.decorate('db', db);
 app.decorate('redis', redis);
-// fastify plugins
 
-app.register(fastifyCors);
+// fastify plugins
+app.register(fastifyWebsocket, {
+  options: { maxPayload: 1048576 }
+});
+
+app.register(fastifyCors, {
+  origin: 'http://localhost:3000',
+  credentials: true
+});
 app.register(fastifySensible);
 app.register(fastifyCookie, {
   secret: env.COOKIE_SECRET,

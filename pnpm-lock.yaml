@@ -59,6 +59,9 @@ importers:
       '@fastify/type-provider-typebox':
         specifier: ^3.5.0
         version: 3.5.0(@sinclair/typebox@0.31.17)
+      '@fastify/websocket':
+        specifier: ^8.2.0
+        version: 8.2.0
       '@lucia-auth/adapter-mysql':
         specifier: ^2.0.0
         version: 2.1.0(@planetscale/database@1.11.0)(lucia@2.7.1)(mysql2@3.6.2)
@@ -117,6 +120,9 @@ importers:
       '@types/node':
         specifier: ^18.16.0
         version: 18.18.1
+      '@types/ws':
+        specifier: ^8.5.10
+        version: 8.5.10
       dotenv-cli:
         specifier: ^7.3.0
         version: 7.3.0
@@ -977,6 +983,16 @@ packages:
       '@sinclair/typebox': '>=0.26 <=0.31'
     dependencies:
       '@sinclair/typebox': 0.31.17
+    dev: false
+
+  /@fastify/websocket@8.2.0:
+    resolution: {integrity: sha512-B4tlHFBKCX7tenEG9aUcQEpksW2e0+dgRTaH/05+cro1Xsq1+kSj+9IB9Gep7a0KbHZGrat+zBsOas6lRs5dFQ==}
+    dependencies:
+      fastify-plugin: 4.5.1
+      ws: 8.14.2
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
     dev: false
 
   /@floating-ui/core@1.5.0:
@@ -2740,6 +2756,12 @@ packages:
       '@types/mime': 3.0.2
       '@types/node': 18.18.1
     dev: false
+
+  /@types/ws@8.5.10:
+    resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
+    dependencies:
+      '@types/node': 18.18.1
+    dev: true
 
   /@typescript-eslint/eslint-plugin@6.0.0(@typescript-eslint/parser@6.7.3)(eslint@8.50.0)(typescript@5.2.2):
     resolution: {integrity: sha512-xuv6ghKGoiq856Bww/yVYnXGsKa588kY3M0XK7uUW/3fJNNULKRfZfSBkMTSpqGG/8ZCXCadfh8G/z/B4aqS/A==}
@@ -7726,6 +7748,19 @@ packages:
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+
+  /ws@8.14.2:
+    resolution: {integrity: sha512-wEBG1ftX4jcglPxgFCMJmZ2PLtSbJ2Peg6TmpJFTbe9GZYOQCDPdMYu/Tm0/bGZkw8paZnJY45J4K2PZrLYq8g==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dev: false
 
   /yallist@2.1.2:
     resolution: {integrity: sha512-ncTzHV7NvsQZkYe1DW7cbDLm0YpzHmZF5r/iyP3ZnQtMiJ+pjzisCiMNI+Sj+xQF5pXhSHxSB3uDbsBTzY/c2A==}
