@@ -1,12 +1,9 @@
 'use client';
 
 import { type ComponentProps } from 'react';
-import { type User } from '@caho/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -17,47 +14,23 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { api } from '@/utils/api';
-
-const formSchema = z.object({
-  username: z.string().min(5),
-  password: z.string().min(8)
-});
-
-type FormValues = z.infer<typeof formSchema>;
-
-const loginService = async (payload: FormValues) => {
-  const { data } = await api.post<User>('/auth/sign-in', payload);
-
-  return data;
-};
-
-const useLogin = () => {
-  return useMutation({
-    mutationFn: loginService
-  });
-};
+import { useAction } from '@/hooks';
+import { login } from './login.action';
+import { loginSchema, type LoginDTO } from './login.dto';
 
 export default function Page() {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<LoginDTO>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       username: '',
       password: ''
     }
   });
 
-  const { mutate, isLoading } = useLogin();
+  const { mutate, isLoading } = useAction(login);
 
-  const onSubmit = (data: FormValues) => {
-    mutate(data, {
-      onSuccess: async () => {
-        await fetch('/api/auth', {
-          method: 'POST',
-          credentials: 'include'
-        });
-      }
-    });
+  const onSubmit = async (data: LoginDTO) => {
+    await mutate(data);
   };
 
   return (
