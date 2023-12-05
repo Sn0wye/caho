@@ -58,22 +58,26 @@ export const authRoutes = async (app: App) => {
     async (req, res) => {
       const authRequest = auth.handleRequest(req, res);
       const { username, password } = req.body;
-      const { userId } = await auth.useKey('username', username, password);
+      try {
+        const { userId } = await auth.useKey('username', username, password);
 
-      const session = await auth.createSession({
-        userId,
-        attributes: {}
-      });
+        const session = await auth.createSession({
+          userId,
+          attributes: {}
+        });
 
-      authRequest.setSession(session);
-      auth.createSessionCookie(session);
+        authRequest.setSession(session);
+        auth.createSessionCookie(session);
 
-      const user = await app.db.query.users.findFirst({
-        where: (users, { eq }) => eq(users.id, session.user.userId)
-      });
+        const user = await app.db.query.users.findFirst({
+          where: (users, { eq }) => eq(users.id, session.user.userId)
+        });
 
-      if (user) {
-        return user;
+        if (user) {
+          return user;
+        }
+      } catch (e) {
+        res.unauthorized('Usuário ou senha inválidos');
       }
     }
   );

@@ -7,8 +7,9 @@ import { cn } from '@/utils/cn';
 
 const settingsSidebarLinks = [
   { href: '/dashboard/settings', title: 'Perfil' },
-  { href: '/dashboard/settings/themes', title: 'Aparência' },
-  { href: '/dashboard/settings/connections', title: 'Dispositivos' }
+  { href: '/dashboard/settings/themes', title: 'Aparência' }
+  // TODO: check if this will stay
+  // { href: '/dashboard/settings/connections', title: 'Dispositivos' }
 ];
 
 export function SettingsSidebarNavigation() {

@@ -12,7 +12,7 @@ export function SettingsThemeSelector({}: SettingsThemeSelectorProps) {
   const { theme, setTheme, themes } = useTheme();
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="grid grid-cols-1 items-center gap-4 lg:grid-cols-2 xl:grid-cols-3">
       {themes.map(mappedTheme => (
         <SettingsThemeSelectorButton
           key={mappedTheme}

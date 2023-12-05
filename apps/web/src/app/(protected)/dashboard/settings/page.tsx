@@ -1,11 +1,11 @@
-import { currentUser } from '@clerk/nextjs';
 import { User } from 'lucide-react';
 import {
   DashboardBreadcrumbs,
   type BreadcrumbType
 } from '@/components/dashboard/dashboard-breadcrumbs';
 import { DashboardPageHeader } from '@/components/dashboard/dashboard-page-header';
-import { SettingsProfileForm } from '@/components/dashboard/settings/settings-profile-form';
+// import { SettingsProfileForm } from '@/components/dashboard/settings/settings-profile-form';
+import { getUser } from '@/auth';
 
 const breadcrumbs: BreadcrumbType[] = [
   {
@@ -19,13 +19,11 @@ const breadcrumbs: BreadcrumbType[] = [
 ];
 
 export default async function ProfileSettingsPage() {
-  const user = await currentUser();
+  const user = await getUser();
 
   if (!user) {
     throw new Error('Not authenticated');
   }
-
-  const { firstName, lastName, imageUrl } = user;
 
   return (
     <section className="flex w-full flex-col gap-12">
@@ -39,7 +37,8 @@ export default async function ProfileSettingsPage() {
         />
       </div>
 
-      <SettingsProfileForm user={{ firstName, lastName, imageUrl }} />
+      {/* TODO: uncomment this */}
+      {/* <SettingsProfileForm user={{ name, imageUrl: avatarUrl }} /> */}
     </section>
   );
 }

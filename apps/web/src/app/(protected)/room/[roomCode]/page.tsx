@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { type Player, type Room as RoomType } from '@caho/schemas';
-import { currentUser } from '@clerk/nextjs';
 import { api } from '@/utils/api';
+import { getUser } from '@/auth';
 import { Game } from './game';
 
 type GamePageProps = {
@@ -28,7 +28,7 @@ export default async function GamePage({ params }: GamePageProps) {
     redirect('/dashboard');
   }
 
-  const user = await currentUser();
+  const user = await getUser();
   const roomPlayers = await getRoomPlayers(params.roomCode);
 
   const userIsInRoom = roomPlayers.some(player => player.id === user?.id);
