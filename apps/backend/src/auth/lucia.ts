@@ -13,7 +13,16 @@ export const auth = lucia({
     user: 'users',
     key: 'keys',
     session: 'sessions'
-  })
+  }),
+  getUserAttributes: databaseUser => {
+    return {
+      id: databaseUser.id,
+      name: databaseUser.name,
+      username: databaseUser.username,
+      email: databaseUser.email,
+      avatarUrl: databaseUser.avatar_url
+    };
+  }
 });
 
 export const githubAuth = github(auth, {
@@ -43,6 +52,18 @@ export const getSession = async (req: FastifyRequest, res: FastifyReply) => {
   const session = await auth.validateSession(cookie);
   if (!session) {
     return res.unauthorized();
+  }
+  return session;
+};
+
+export const getSocketSession = async (req: FastifyRequest) => {
+  const cookie = req.cookies['auth_session'];
+  if (!cookie) {
+    return null;
+  }
+  const session = await auth.validateSession(cookie);
+  if (!session) {
+    return null;
   }
   return session;
 };

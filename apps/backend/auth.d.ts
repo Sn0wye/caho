@@ -6,6 +6,7 @@ declare namespace Lucia {
     name: string | null;
     email: string | null;
     username: string;
+    avatar_url: string | null;
   };
   // eslint-disable-next-line @typescript-eslint/ban-types
   type DatabaseSessionAttributes = {};
