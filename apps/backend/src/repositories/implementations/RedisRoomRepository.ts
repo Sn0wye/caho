@@ -6,8 +6,8 @@ import {
   type Room
 } from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
-import { type Redis } from '@upstash/redis/nodejs';
-import { transformRankingData } from '@/utils/formatRankingData';
+import { type Redis } from 'ioredis';
+import { transformStringRankingData } from '@/utils/formatRankingData';
 import { generateCode } from '@/utils/generateCode';
 import { HTTPError } from '@/errors/HTTPError';
 import { ROOM_ERRORS } from '@/errors/room';
@@ -87,6 +87,7 @@ export class RedisRoomRepository implements IRoomRepository {
 
   async listPublicRooms(): Promise<Room[]> {
     const publicRoomCodes = await this.redis.lrange('public_rooms', 0, -1);
+    console.log('publicRoomCodes', publicRoomCodes);
 
     const roomsPromises = publicRoomCodes.map(roomCode =>
       this.redis.hgetall(`room:${roomCode}`)
@@ -132,10 +133,11 @@ export class RedisRoomRepository implements IRoomRepository {
       await Promise.all([
         this.redis.rpush(`room:${roomCode}:players`, JSON.stringify(player)),
 
-        this.redis.zadd(`room:${roomCode}:ranking`, {
-          score: player.score,
-          member: JSON.stringify(player)
-        })
+        this.redis.zadd(
+          `room:${roomCode}:ranking`,
+          player.score,
+          JSON.stringify(player)
+        )
       ]);
     } catch {
       throw new HTTPError({
@@ -182,16 +184,14 @@ export class RedisRoomRepository implements IRoomRepository {
         status: 'FINISHED'
       });
 
-      const ranking: (object | number)[] = await this.redis.zrange(
+      const ranking = await this.redis.zrange(
         `room:${roomCode}:ranking`,
         0,
         -1,
-        {
-          withScores: true
-        }
+        'WITHSCORES'
       );
 
-      const parsedRanking = transformRankingData(ranking);
+      const parsedRanking = transformStringRankingData(ranking);
 
       return parsedRanking;
     } catch {
@@ -269,7 +269,13 @@ export class RedisRoomRepository implements IRoomRepository {
 
       const playerToRemove = players.find(p => p.id === playerId);
 
-      await this.redis.lrem(`room:${roomCode}:players`, 0, playerToRemove);
+      if (playerToRemove) {
+        await this.redis.lrem(
+          `room:${roomCode}:players`,
+          0,
+          JSON.stringify(playerToRemove)
+        );
+      }
     } catch {
       throw new HTTPError({
         code: 'INTERNAL_SERVER_ERROR',
@@ -286,7 +292,7 @@ export class RedisRoomRepository implements IRoomRepository {
         -1
       );
 
-      return players.map(player => playerSchema.parse(player));
+      return players.map(player => playerSchema.parse(JSON.parse(player)));
     } catch {
       throw new HTTPError({
         code: 'INTERNAL_SERVER_ERROR',
@@ -294,4 +300,7 @@ export class RedisRoomRepository implements IRoomRepository {
       });
     }
   }
+
+  // set when player is ready
+  async setPlayerReady(roomCode: string, playerId: string): Promise<void> {}
 }
