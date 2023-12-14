@@ -1,3 +1,11 @@
 import Redis from 'ioredis';
 
-export const redis = new Redis();
+declare global {
+  // eslint-disable-next-line no-var
+  var redis: Redis | undefined;
+}
+export const redis = global.redis || new Redis();
+
+if (process.env.NODE_ENV !== 'production') {
+  global.redis = redis;
+}
