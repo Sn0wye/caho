@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const joinRoomInput = z.object({
   roomCode: z.string().length(6),
-  password: z.string().optional(),
+  password: z.string().or(z.null()),
   player: playerSchema
 });
 

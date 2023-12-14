@@ -5,7 +5,8 @@ export const playerSchema = z.object({
   score: z.coerce.number().min(0),
   username: z.string().min(1),
   avatarUrl: z.string().url().or(z.null()),
-  isHost: z.coerce.boolean()
+  isHost: z.coerce.boolean(),
+  isReady: z.coerce.boolean().default(false)
 });
 
 export type Player = z.infer<typeof playerSchema>;

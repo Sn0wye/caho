@@ -301,6 +301,59 @@ export class RedisRoomRepository implements IRoomRepository {
     }
   }
 
-  // set when player is ready
-  async setPlayerReady(roomCode: string, playerId: string): Promise<void> {}
+  async setPlayerReady(
+    roomCode: string,
+    playerId: string,
+    isReady: boolean
+  ): Promise<void> {
+    try {
+      const players = await this.getRoomPlayers(roomCode);
+
+      const player = players.find(p => p.id === playerId);
+
+      if (!player) {
+        throw new HTTPError({
+          code: 'NOT_FOUND',
+          message: 'Jogador não encontrado.'
+        });
+      }
+
+      // TODO: fix this
+      await this.redis.lrem(
+        `room:${roomCode}:players`,
+        0,
+        JSON.stringify(player)
+      );
+
+      await this.redis.rpush(
+        `room:${roomCode}:players`,
+        JSON.stringify(
+          playerSchema.parse({
+            ...player,
+            isReady
+          })
+        )
+      );
+    } catch {
+      throw new HTTPError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Erro ao alterar status do jogador.'
+      });
+    }
+  }
+
+  async getPlayerFromRoom(roomCode: string, playerId: string): Promise<Player> {
+    const players = await this.getRoomPlayers(roomCode);
+
+    const player = players.find(p => p.id === playerId);
+
+    if (!player) {
+      throw new HTTPError({
+        code: 'NOT_FOUND',
+        message: 'Jogador não encontrado.'
+      });
+    }
+
+    return player;
+  }
 }

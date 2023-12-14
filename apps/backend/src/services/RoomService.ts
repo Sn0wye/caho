@@ -47,4 +47,19 @@ export class RoomService implements IRoomService {
   public async getRoomPlayers(roomCode: string): Promise<Player[]> {
     return await this.roomRepository.getRoomPlayers(roomCode);
   }
+
+  public async setPlayerReady(
+    roomCode: string,
+    playerId: string,
+    ready: boolean
+  ): Promise<void> {
+    return await this.roomRepository.setPlayerReady(roomCode, playerId, ready);
+  }
+
+  public async getPlayerFromRoom(
+    roomCode: string,
+    playerId: string
+  ): Promise<Player> {
+    return await this.roomRepository.getPlayerFromRoom(roomCode, playerId);
+  }
 }

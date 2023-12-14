@@ -1,7 +1,7 @@
 import { planetscale } from '@lucia-auth/adapter-mysql';
 import { github, google } from '@lucia-auth/oauth/providers';
 import { type FastifyReply, type FastifyRequest } from 'fastify';
-import { lucia } from 'lucia';
+import { lucia, type Session } from 'lucia';
 import { fastify } from 'lucia/middleware';
 import { connection } from '@/db';
 import { env } from '@/env';
@@ -44,7 +44,10 @@ export type Auth = typeof auth;
  * @param res FastifyReply
  * @returns Session
  */
-export const getSession = async (req: FastifyRequest, res: FastifyReply) => {
+export const getSession = async (
+  req: FastifyRequest,
+  res: FastifyReply
+): Promise<Session> => {
   const cookie = req.cookies['auth_session'];
   if (!cookie) {
     return res.unauthorized();
@@ -56,7 +59,9 @@ export const getSession = async (req: FastifyRequest, res: FastifyReply) => {
   return session;
 };
 
-export const getSocketSession = async (req: FastifyRequest) => {
+export const getSocketSession = async (
+  req: FastifyRequest
+): Promise<Session | null> => {
   const cookie = req.cookies['auth_session'];
   if (!cookie) {
     return null;

@@ -13,4 +13,10 @@ export interface IRoomService {
   joinRoom(input: JoinRoomInput): Promise<void>;
   leaveRoom(input: LeaveRoomInput): Promise<void>;
   getRoomPlayers(roomCode: string): Promise<Player[]>;
+  setPlayerReady(
+    roomCode: string,
+    playerId: string,
+    ready: boolean
+  ): Promise<void>;
+  getPlayerFromRoom(roomCode: string, playerId: string): Promise<Player>;
 }
