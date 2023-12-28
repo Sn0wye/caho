@@ -6,3 +6,10 @@ services:
     restart: always
     ports:
       - '6379:6379'
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '8080:8080'
