@@ -31,5 +31,16 @@
     "zrange",
     "zustand"
   ],
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "rest-client.rememberCookiesForSubsequentRequests": true,
+  "rest-client.environmentVariables": {
+    "development": {
+      "host": "localhost:8080",
+      "baseUrl": "http://localhost:8080"
+    },
+    "production": {
+      "host": "caho.fly.dev",
+      "baseUrl": "https://caho.fly.dev"
+    }
+  }
 }
