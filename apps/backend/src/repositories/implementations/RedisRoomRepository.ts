@@ -87,7 +87,6 @@ export class RedisRoomRepository implements IRoomRepository {
 
   async listPublicRooms(): Promise<Room[]> {
     const publicRoomCodes = await this.redis.lrange('public_rooms', 0, -1);
-    console.log('publicRoomCodes', publicRoomCodes);
 
     const roomsPromises = publicRoomCodes.map(roomCode =>
       this.redis.hgetall(`room:${roomCode}`)
