@@ -5,7 +5,22 @@ declare global {
   // eslint-disable-next-line no-var
   var redis: Redis | undefined;
 }
-export const redis = global.redis || new Redis(env.REDIS_URL);
+
+const config =
+  env.NODE_ENV === 'production'
+    ? {
+        username: env.REDIS_USERNAME,
+        password: env.REDIS_PASSWORD,
+        host: env.REDIS_HOST,
+        port: 6379,
+        family: 6
+      }
+    : {
+        host: 'localhost',
+        port: 6379
+      };
+
+export const redis = global.redis || new Redis(config);
 
 if (process.env.NODE_ENV !== 'production') {
   global.redis = redis;
