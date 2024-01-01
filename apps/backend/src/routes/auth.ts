@@ -29,6 +29,7 @@ export const authRoutes = async (app: App) => {
         attributes: {
           email: null,
           name: null,
+          avatar_url: null,
           username
         }
       });
@@ -173,7 +174,8 @@ const validateCallbackAndGetUser = async (code: string) => {
     attributes: {
       email: githubUser.email,
       name: githubUser.name,
-      username: githubUser.login
+      username: githubUser.login,
+      avatar_url: githubUser.avatar_url
     }
   });
 };
