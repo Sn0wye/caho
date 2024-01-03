@@ -6,7 +6,7 @@ declare global {
   var redis: Redis | undefined;
 }
 
-const config =
+export const redisOpts =
   env.NODE_ENV === 'production'
     ? {
         username: env.REDIS_USERNAME,
@@ -20,7 +20,7 @@ const config =
         port: 6379
       };
 
-export const redis = global.redis || new Redis(config);
+export const redis = global.redis || new Redis(redisOpts);
 
 if (process.env.NODE_ENV !== 'production') {
   global.redis = redis;
