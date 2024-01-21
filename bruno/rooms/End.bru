@@ -1,0 +1,30 @@
+meta {
+  name: End
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{BASE_URL}}/rooms/end
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:basic {
+  username: 
+  password: 
+}
+
+auth:bearer {
+  token: 
+}
+
+body:json {
+  {
+    "roomCode": "PVM814"
+  }
+}
