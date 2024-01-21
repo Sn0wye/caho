@@ -7,16 +7,21 @@ export interface IRoomRepository {
   getRoom(roomCode: string): Promise<Room>;
   createRoom(room: CreateRoomInput): Promise<Room>;
   listPublicRooms(): Promise<Room[]>;
-  addPlayerToRoom(input: { roomCode: string; player: Player }): Promise<void>;
   startRoom(roomCode: string): Promise<void>;
   endRoom(roomCode: string): Promise<Ranking>;
   joinRoom(input: JoinRoomInput): Promise<void>;
   leaveRoom(input: LeaveRoomInput): Promise<void>;
   getRoomPlayers(roomCode: string): Promise<Player[]>;
+  addPlayerToRoom(input: { roomCode: string; player: Player }): Promise<void>;
   getPlayerFromRoom(roomCode: string, playerId: string): Promise<Player>;
-  setPlayerReady(
+  updatePlayerInRoom(
     roomCode: string,
     playerId: string,
-    ready: boolean
+    payload: Partial<Player>
   ): Promise<void>;
+  incrementPlayerScore(input: {
+    roomCode: string;
+    playerId: string;
+    by: number;
+  }): Promise<void>;
 }

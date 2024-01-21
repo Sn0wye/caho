@@ -1,5 +1,5 @@
 import { type Player, type Ranking, type Room } from '@caho/schemas';
-import { type IRoomRepository } from '@/repositories/IRoomRepository';
+import { type IRoomRepository } from '@/repositories/room';
 import { type CreateRoomInput } from '@/schemas/create-room';
 import { type JoinRoomInput } from '@/schemas/join-room';
 import { type LeaveRoomInput } from '@/schemas/leave-room';
@@ -48,12 +48,16 @@ export class RoomService implements IRoomService {
     return await this.roomRepository.getRoomPlayers(roomCode);
   }
 
-  public async setPlayerReady(
+  public async updatePlayerInRoom(
     roomCode: string,
     playerId: string,
-    ready: boolean
+    payload: Partial<Player>
   ): Promise<void> {
-    return await this.roomRepository.setPlayerReady(roomCode, playerId, ready);
+    return await this.roomRepository.updatePlayerInRoom(
+      roomCode,
+      playerId,
+      payload
+    );
   }
 
   public async getPlayerFromRoom(
@@ -61,5 +65,13 @@ export class RoomService implements IRoomService {
     playerId: string
   ): Promise<Player> {
     return await this.roomRepository.getPlayerFromRoom(roomCode, playerId);
+  }
+
+  public async incrementPlayerScore(input: {
+    roomCode: string;
+    playerId: string;
+    by: number;
+  }): Promise<void> {
+    return await this.roomRepository.incrementPlayerScore(input);
   }
 }

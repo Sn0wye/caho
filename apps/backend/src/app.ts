@@ -2,13 +2,13 @@ import { fastifyCookie } from '@fastify/cookie';
 import { fastifyCors } from '@fastify/cors';
 import { fastifySensible } from '@fastify/sensible';
 import { type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
-import fastifyWebsocket from '@fastify/websocket';
 import { fastify } from 'fastify';
 import { db } from '@/db';
 import { redis } from '@/db/redis';
 import { env } from '@/env';
-import { authRoutes } from './routes/auth';
-import { roomRoutes } from './routes/room';
+import { authRoutes } from './http/routes/auth';
+import { roomRoutes } from './http/routes/room';
+import { fastifySocketIO } from './plugins/socketio';
 
 export const app = fastify({
   logger: {
@@ -20,6 +20,10 @@ export const app = fastify({
 
 export type App = typeof app;
 
+// decorators
+app.decorate('db', db);
+app.decorate('redis', redis);
+
 declare module 'fastify' {
   interface FastifyInstance {
     db: typeof db;
@@ -27,21 +31,19 @@ declare module 'fastify' {
   }
 }
 
-// decorators
-app.decorate('db', db);
-app.decorate('redis', redis);
-
-// fastify plugins
-app.register(fastifyWebsocket, {
-  options: { maxPayload: 1048576 }
-});
-
-app.register(fastifyCors, {
+const corsOpts = {
   origin:
     env.NODE_ENV === 'production'
       ? 'https://caho.vercel.app'
       : 'http://localhost:3000',
   credentials: true
+};
+
+// plugins
+app.register(fastifyCors, corsOpts);
+app.register(fastifySocketIO, {
+  pingInterval: 1000,
+  cors: corsOpts
 });
 app.register(fastifySensible);
 app.register(fastifyCookie, {
@@ -49,8 +51,8 @@ app.register(fastifyCookie, {
   hook: 'onRequest',
   parseOptions: {}
 });
-// routes
 
+// routes
 app.register(authRoutes, {
   prefix: '/auth'
 });

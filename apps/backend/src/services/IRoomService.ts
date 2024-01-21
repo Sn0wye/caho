@@ -13,10 +13,15 @@ export interface IRoomService {
   joinRoom(input: JoinRoomInput): Promise<void>;
   leaveRoom(input: LeaveRoomInput): Promise<void>;
   getRoomPlayers(roomCode: string): Promise<Player[]>;
-  setPlayerReady(
+  updatePlayerInRoom(
     roomCode: string,
     playerId: string,
-    ready: boolean
+    payload: Partial<Player>
   ): Promise<void>;
   getPlayerFromRoom(roomCode: string, playerId: string): Promise<Player>;
+  incrementPlayerScore(input: {
+    roomCode: string;
+    playerId: string;
+    by: number;
+  }): Promise<void>;
 }

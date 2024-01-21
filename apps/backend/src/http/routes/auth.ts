@@ -1,6 +1,6 @@
 import { Type } from '@sinclair/typebox';
 import { type App } from '@/app';
-import { auth, githubAuth } from '../auth/lucia';
+import { auth, githubAuth } from '../../auth/lucia';
 
 const AuthBody = Type.Object({
   username: Type.String(),
@@ -20,7 +20,7 @@ export const authRoutes = async (app: App) => {
     async (req, res) => {
       const authRequest = auth.handleRequest(req, res);
       const { username, password } = req.body;
-      const { userId } = await auth.createUser({
+      const { userId, ...user } = await auth.createUser({
         key: {
           providerId: 'username',
           providerUserId: username,
@@ -36,14 +36,12 @@ export const authRoutes = async (app: App) => {
 
       const session = await auth.createSession({
         userId,
-        attributes: {}
+        attributes: {
+          ...user
+        }
       });
 
       authRequest.setSession(session);
-
-      const user = await app.db.query.users.findFirst({
-        where: (users, { eq }) => eq(users.id, session.user.userId)
-      });
 
       return user;
     }
