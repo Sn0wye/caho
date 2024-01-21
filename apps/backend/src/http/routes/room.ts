@@ -8,24 +8,12 @@ import {
 import { Type } from '@fastify/type-provider-typebox';
 import { type App } from '@/app';
 import { getSession } from '@/auth/lucia';
-import { RoomWebsocketController } from '@/controllers/Room/RoomWebsocketController';
-import { redis } from '@/db/redis';
-import { RedisRoomRepository } from '@/repositories/implementations/RedisRoomRepository';
-import { ROOM_ERRORS } from '../errors/room';
-import { RoomService } from '../services/RoomService';
+import { ROOM_ERRORS } from '@/errors/room';
+import { RedisRoomRepository } from '@/repositories/room';
+import { RoomService } from '@/services/RoomService';
 
 export const roomRoutes = async (app: App) => {
-  const roomService = new RoomService(new RedisRoomRepository(redis));
-
-  app.get(
-    '/ws/:roomCode',
-    {
-      websocket: true
-    },
-    async (conn, req) => {
-      await RoomWebsocketController(conn, req);
-    }
-  );
+  const roomService = new RoomService(new RedisRoomRepository(app.redis));
 
   app.get('/list', async () => {
     const publicRooms = await roomService.listPublicRooms();
@@ -73,25 +61,23 @@ export const roomRoutes = async (app: App) => {
         return res.unauthorized();
       }
 
-      const user = await app.db.query.users.findFirst({
-        where: (users, { eq }) => eq(users.id, session.user.userId)
-      });
-
-      if (!user) {
-        return res.notFound('User not found');
-      }
-
       const host = {
-        ...user,
+        ...session.user,
         isHost: true,
         score: 0,
         isReady: false
       };
+
       const room = await roomService.createRoom({
         ...validatedBody,
-        hostId: user.id,
-        host
+        hostId: host.id
       });
+
+      await roomService.addPlayerToRoom({
+        roomCode: room.code,
+        player: host
+      });
+
       res.status(201);
       return room;
     } catch (e) {
@@ -104,20 +90,13 @@ export const roomRoutes = async (app: App) => {
     const session = await getSession(req, res);
     try {
       const validatedBody = joinRoom.parse(req.body);
-      const user = await app.db.query.users.findFirst({
-        where: (users, { eq }) => eq(users.id, session.user.userId)
-      });
-
-      if (!user) {
-        return res.notFound('User not found');
-      }
 
       const player = {
-        id: user.id,
+        id: session.user.id,
         isHost: false,
         score: 0,
-        username: user.username,
-        avatarUrl: user.avatarUrl,
+        username: session.user.username,
+        avatarUrl: session.user.avatarUrl,
         isReady: false
       };
       const room = await roomService.joinRoom({

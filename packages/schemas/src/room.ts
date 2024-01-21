@@ -15,7 +15,10 @@ export const roomSchema = z.object({
     .positive(),
   status: z.enum(['LOBBY', 'IN_PROGRESS', 'FINISHED']),
   hostId: z.string().min(1),
-  password: z.string().or(z.null()),
+  password: z
+    .string()
+    .or(z.null())
+    .transform(v => (v === '' ? null : v)),
   isPublic: z.coerce.boolean()
 });
 

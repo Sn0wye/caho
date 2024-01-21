@@ -11,11 +11,18 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "outDir": "dist",
+    "types": ["vitest/globals"],
     "lib": ["ES2022"],
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", ".eslintrc.cjs", "drizzle.config.ts", "auth.d.ts"],
+  "include": [
+    "src/**/*",
+    ".eslintrc.cjs",
+    "drizzle.config.ts",
+    "vitest.config.ts",
+    "auth.d.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

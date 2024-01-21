@@ -3,7 +3,7 @@ import { env } from '@/env';
 
 declare global {
   // eslint-disable-next-line no-var
-  var redis: Redis | undefined;
+  var redis: Redis;
 }
 
 export const redisOpts =
