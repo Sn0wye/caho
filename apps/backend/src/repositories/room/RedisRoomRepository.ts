@@ -130,6 +130,16 @@ export class RedisRoomRepository implements IRoomRepository {
       });
     }
 
+    const players = await this.getRoomPlayers(roomCode);
+    const playersReady = players.every(p => p.isReady);
+
+    if (!playersReady) {
+      throw new HTTPError({
+        code: 'BAD_REQUEST',
+        message: 'Oops, nem todos os jogadores estão prontos.'
+      });
+    }
+
     try {
       await this.redis.hset(`room:${roomCode}`, {
         status: 'IN_PROGRESS'
