@@ -1,7 +1,13 @@
-import { type Player } from '@caho/schemas';
+import { type Player, type Room } from '@caho/schemas';
 import { Server, type ServerOptions } from 'socket.io';
 import { type App } from '@/app';
 import { auth } from '@/auth/lucia';
+import basePack, { type WhiteCard } from '@/cards/base-pack';
+import { HTTPError } from '@/errors/HTTPError';
+import { RedisRoomRepository } from '@/repositories/room';
+import { CardService } from '@/services/CardService';
+import { type IRoomService } from '@/services/IRoomService';
+import { RoomService } from '@/services/RoomService';
 import { getOrCreatePlayer } from './redis';
 
 export const fastifySocketIO = async (
@@ -15,20 +21,33 @@ export const fastifySocketIO = async (
   });
 
   app.io.on('connection', async socket => {
-    let roomCode: string | null = null;
+    const roomCode = socket.handshake.query['roomCode']?.toString();
 
     if (!roomCode) {
       socket.emit('message', 'no room code provided');
-    }
-
-    const cookie = socket.request.headers['auth_session']?.toString();
-    if (!cookie) {
       socket.disconnect();
       return;
     }
 
+    const cookie = socket.request.headers['auth_session']?.toString();
+    if (!cookie) {
+      socket.emit('message', 'no cookie provided');
+      socket.disconnect();
+      return;
+    }
     const session = await auth.validateSession(cookie);
-    let player: Player | null = null;
+    const roomService = new RoomService(new RedisRoomRepository(app.redis));
+    const cardService = new CardService(basePack);
+
+    const player = await getOrCreatePlayer({
+      roomCode,
+      session,
+      redis: app.redis
+    });
+
+    socket.join(roomCode);
+    socket.join(player.id);
+    socket.to(roomCode).emit('playerJoined', player);
 
     socket.on('message', msg => {
       if (!roomCode) return;
@@ -39,18 +58,52 @@ export const fastifySocketIO = async (
       socket.emit('message', 'pong');
     });
 
-    socket.on('joinRoom', async code => {
-      roomCode = code;
-      socket.join(code);
+    // socket.on('joinRoom', async code => {
+    //   socket.join(code);
 
-      player = await getOrCreatePlayer({
-        roomCode,
-        session,
-        redis: app.redis
-      });
+    //   player = await getOrCreatePlayer({
+    //     roomCode,
+    //     session,
+    //     redis: app.redis
+    //   });
 
-      socket.to(code).emit('playerJoined', player);
+    //   socket.to(code).emit('playerJoined', player);
+    // });
+
+    socket.on('leaveRoom', () => {
+      if (!roomCode) return;
+      socket.leave(roomCode);
+
+      if (player) {
+        socket.to(roomCode).emit('playerLeft', player.id);
+      }
     });
+
+    socket.on('startRoom', async () => {
+      try {
+        await roomService.startRoom(roomCode);
+        const room = await roomService.getRoom(roomCode);
+        socket.to(roomCode).emit('roomUpdated', room);
+        setNextJudge(room, roomService);
+
+        // give players new cards
+        const players = await roomService.getRoomPlayers(room.code);
+
+        for (const player of players) {
+          const cards = cardService.getNewWhiteCards(6);
+          socket.to(player.id).emit('newCards', cards);
+          await roomService.updatePlayerInRoom(room.code, player.id, {
+            cards
+          });
+        }
+      } catch (e) {
+        if (e instanceof HTTPError) {
+          socket.emit('error', e);
+        }
+      }
+    });
+
+    // socket.on("")
 
     socket.on('isReady', isReady => {
       if (!roomCode || !player) return;
@@ -71,34 +124,25 @@ export const fastifySocketIO = async (
 
 interface ServerToClientEvents {
   message: (data: string) => void;
+  error: (error: HTTPError) => void;
   playerJoined: (data: Player) => void;
   playerLeft: (playerId: string) => void;
   playerReady: (playerId: string, isReady: boolean) => void;
-  // emitCard: (card: WhiteCard) => void;
+  roomUpdated: (room: Room) => void;
+  newCards: (cards: WhiteCard[]) => void;
 }
 
 interface ClientToServerEvents {
   message: (data: string) => void;
   ping: () => void;
   joinRoom: (roomCode: string) => void;
+  leaveRoom: () => void;
   isReady: (isReady: boolean) => void;
+  startRoom: () => void;
   // getCard: (count?: number) => WhiteCard;
 }
 
-// interface InterServerEvents {
-// message: (data: string) => void;
-// }
-
-// interface SocketData {
-// userId: string;
-// }
-
-export type IO = Server<
-  ClientToServerEvents,
-  ServerToClientEvents
-  // InterServerEvents,
-  // SocketData
->;
+export type IO = Server<ClientToServerEvents, ServerToClientEvents>;
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -106,4 +150,24 @@ declare module 'fastify' {
   }
 }
 
-// utils
+export async function setNextJudge(room: Room, roomService: IRoomService) {
+  const prevJudgeId = room.state.prevJudgeId;
+
+  if (prevJudgeId) {
+    await roomService.updatePlayerInRoom(room.code, prevJudgeId, {
+      isJudge: false
+    });
+  }
+
+  const players = await roomService.getRoomPlayers(room.code);
+  const playersWithoutJudge = players.filter(
+    player => player.id !== prevJudgeId
+  );
+
+  const randomIndex = Math.floor(Math.random() * playersWithoutJudge.length);
+  const newJudge = playersWithoutJudge[randomIndex];
+
+  await roomService.updatePlayerInRoom(room.code, newJudge.id, {
+    isJudge: true
+  });
+}
