@@ -25,18 +25,22 @@ const hostPlayerMock = {
   id: 'player-id',
   isHost: true,
   isReady: false,
+  isJudge: false,
   score: 0,
   username: 'host-player',
-  avatarUrl: null
+  avatarUrl: null,
+  cards: []
 } satisfies Player;
 
 const notHostPlayerMock = {
   id: 'player-id2',
   isHost: false,
   isReady: false,
+  isJudge: false,
   score: 0,
   username: 'not-host-player',
-  avatarUrl: null
+  avatarUrl: null,
+  cards: []
 } satisfies Player;
 
 describe('RedisRoomRepository', () => {

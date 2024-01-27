@@ -64,7 +64,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: '8 onças de heroína mexicana pura.',
+        text: '200 gramas de doce heroína mexicana.',
         packId: 'base-pack'
       },
       {
@@ -2204,7 +2204,7 @@ const basePack: CardPack = {
         packId: 'base-pack'
       },
       {
-        text: 'Meio quilo de heroína pura China White.',
+        text: 'Meio quilo de heroína pura.',
         packId: 'base-pack'
       },
       {
