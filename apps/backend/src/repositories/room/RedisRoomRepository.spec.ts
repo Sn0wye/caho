@@ -84,10 +84,29 @@ describe('RedisRoomRepository', () => {
 
   it('should be able to start a room', async () => {
     const room = await roomRepository.createRoom(publicRoomMock);
+    await roomRepository.joinRoom({
+      roomCode: room.code,
+      player: hostPlayerMock,
+      password: publicRoomMock.password
+    });
+    await roomRepository.updatePlayerInRoom(room.code, hostPlayerMock.id, {
+      isReady: true
+    });
     await roomRepository.startRoom(room.code);
     const updatedRoom = await roomRepository.getRoom(room.code);
 
     expect(updatedRoom.status).toBe('IN_PROGRESS');
+  });
+
+  it('should not be able to start a room when not all players are ready', async () => {
+    const room = await roomRepository.createRoom(publicRoomMock);
+    await roomRepository.joinRoom({
+      roomCode: room.code,
+      player: hostPlayerMock,
+      password: publicRoomMock.password
+    });
+
+    expect(roomRepository.startRoom(room.code)).rejects.toThrow();
   });
 
   it('should be able to end a room', async () => {
@@ -111,6 +130,14 @@ describe('RedisRoomRepository', () => {
       roomCode: room.code,
       player: notHostPlayerMock,
       password: publicRoomMock.password
+    });
+
+    await roomRepository.updatePlayerInRoom(room.code, hostPlayerMock.id, {
+      isReady: true
+    });
+
+    await roomRepository.updatePlayerInRoom(room.code, notHostPlayerMock.id, {
+      isReady: true
     });
 
     await roomRepository.startRoom(room.code);
@@ -137,10 +164,12 @@ describe('RedisRoomRepository', () => {
     expect(ranking).toHaveLength(2);
     expect(ranking.find(p => p.id === hostPlayerMock.id)).toMatchObject({
       ...hostPlayerMock,
+      isReady: true,
       score: 4
     });
     expect(ranking.find(p => p.id === notHostPlayerMock.id)).toMatchObject({
       ...notHostPlayerMock,
+      isReady: true,
       score: 1
     });
   });
