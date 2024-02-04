@@ -1,7 +1,6 @@
 import { connect } from '@planetscale/database';
 import { drizzle } from 'drizzle-orm/planetscale-serverless';
 import { env } from '@/env';
-import * as relations from './relations';
 import * as schema from './schema';
 
 const connection = connect({
@@ -11,10 +10,7 @@ const connection = connect({
 });
 
 const db = drizzle(connection, {
-  schema: {
-    ...schema,
-    ...relations
-  }
+  schema
 });
 
 export { connection, db };

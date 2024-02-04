@@ -8,6 +8,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(['production', 'development']),
     COOKIE_SECRET: z.string().min(1),
     DATABASE_HOST: z.string().min(1),
+    DATABASE_NAME: z.string().min(1),
     DATABASE_USERNAME: z.string().min(1),
     DATABASE_PASSWORD: z.string().min(1),
     DATABASE_URL: z.string().min(1),
