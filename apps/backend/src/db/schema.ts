@@ -16,6 +16,9 @@ export const users = mysqlTable('users', {
   username: varchar('username', {
     length: 255
   }).notNull(),
+  password: varchar('password', {
+    length: 255
+  }).notNull(),
   avatarUrl: varchar('avatar_url', {
     length: 255
   })
@@ -23,12 +26,15 @@ export const users = mysqlTable('users', {
 
 export const userSessions = mysqlTable('user_sessions', {
   id: varchar('id', {
-    length: 128
+    length: 255
   }).primaryKey(),
   userId: varchar('user_id', {
-    length: 15
+    length: 24
   })
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, {
+      onDelete: 'cascade',
+      onUpdate: 'cascade'
+    }),
   expiresAt: datetime('expires_at').notNull()
 });

@@ -5,9 +5,10 @@ import {
   leaveRoom,
   startRoom
 } from '@caho/contracts';
+import { type Player } from '@caho/schemas';
 import { Type } from '@fastify/type-provider-typebox';
 import { type App } from '@/app';
-import { getSession } from '@/auth/lucia';
+import { validateSession } from '@/auth/lucia';
 import { ROOM_ERRORS } from '@/errors/room';
 import { RedisRoomRepository } from '@/repositories/room';
 import { RoomService } from '@/services/RoomService';
@@ -30,7 +31,7 @@ export const roomRoutes = async (app: App) => {
       }
     },
     async (req, res) => {
-      await getSession(req, res);
+      await validateSession(req, res);
       const { roomCode } = req.params;
       const room = await roomService.getRoom(roomCode);
       return room;
@@ -54,18 +55,22 @@ export const roomRoutes = async (app: App) => {
   );
 
   app.post('/create', async (req, res) => {
-    const session = await getSession(req, res);
+    const session = await validateSession(req, res);
+
+    if (!session) {
+      return res.unauthorized();
+    }
+
     try {
       const validatedBody = createRoom.parse(req.body);
-      if (!session) {
-        return res.unauthorized();
-      }
 
-      const host = {
+      const host: Player = {
         ...session.user,
         isHost: true,
         score: 0,
-        isReady: false
+        isReady: false,
+        isJudge: false,
+        cards: []
       };
 
       const room = await roomService.createRoom({
@@ -87,18 +92,21 @@ export const roomRoutes = async (app: App) => {
   });
 
   app.post('/join', async (req, res) => {
-    const session = await getSession(req, res);
+    const session = await validateSession(req, res);
     try {
       const validatedBody = joinRoom.parse(req.body);
 
-      const player = {
+      const player: Player = {
         id: session.user.id,
         isHost: false,
         score: 0,
         username: session.user.username,
         avatarUrl: session.user.avatarUrl,
-        isReady: false
+        isReady: false,
+        isJudge: false,
+        cards: []
       };
+
       const room = await roomService.joinRoom({
         ...validatedBody,
         player,
@@ -112,12 +120,12 @@ export const roomRoutes = async (app: App) => {
   });
 
   app.post('/leave', async (req, res) => {
-    const session = await getSession(req, res);
+    const { user } = await validateSession(req, res);
     try {
       const { roomCode } = leaveRoom.parse(req.body);
       await roomService.leaveRoom({
         roomCode,
-        playerId: session.user.userId
+        playerId: user.id
       });
       return res.status(204);
     } catch (e) {
@@ -127,12 +135,12 @@ export const roomRoutes = async (app: App) => {
   });
 
   app.post('/start', async (req, res) => {
-    const session = await getSession(req, res);
+    const { user } = await validateSession(req, res);
     try {
       const { roomCode } = startRoom.parse(req.body);
       const { hostId } = await roomService.getRoom(roomCode);
 
-      if (session.user.userId !== hostId) {
+      if (user.id !== hostId) {
         return res.badRequest(ROOM_ERRORS.IS_NOT_ROOM_HOST);
       }
 
@@ -145,11 +153,11 @@ export const roomRoutes = async (app: App) => {
   });
 
   app.post('/end', async (req, res) => {
-    const session = await getSession(req, res);
+    const { user } = await validateSession(req, res);
     try {
       const { roomCode } = endRoom.parse(req.body);
       const { hostId } = await roomService.getRoom(roomCode);
-      const isAdmin = session.user.userId === hostId;
+      const isAdmin = user.id === hostId;
 
       if (!isAdmin) {
         return res.badRequest(ROOM_ERRORS.IS_NOT_ROOM_HOST);

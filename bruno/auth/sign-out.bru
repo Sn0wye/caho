@@ -6,15 +6,10 @@ meta {
 
 post {
   url: {{BASE_URL}}/auth/sign-out
-  body: none
+  body: json
   auth: none
 }
 
-auth:basic {
-  username: 
-  password: 
-}
-
-auth:bearer {
-  token: 
+body:json {
+  {}
 }
