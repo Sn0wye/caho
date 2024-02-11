@@ -8,6 +8,8 @@ import { redis } from '@/db/redis';
 import { env } from '@/env';
 import { authRoutes } from './http/routes/auth';
 import { roomRoutes } from './http/routes/room';
+import { authPlugin } from './plugins/auth';
+import { csrfPlugin } from './plugins/csrf';
 import { fastifySocketIO } from './plugins/socketio';
 
 export const app = fastify({
@@ -51,6 +53,10 @@ app.register(fastifyCookie, {
   hook: 'onRequest',
   parseOptions: {}
 });
+app.register(csrfPlugin, {
+  enabled: env.NODE_ENV === 'production'
+});
+app.register(authPlugin);
 
 // routes
 app.register(authRoutes, {
