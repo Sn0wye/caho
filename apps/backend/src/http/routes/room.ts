@@ -7,8 +7,10 @@ import {
 } from '@caho/contracts';
 import { type Player } from '@caho/schemas';
 import { Type } from '@fastify/type-provider-typebox';
+import { z } from 'zod';
 import { type App } from '@/app';
 import { validateSession } from '@/auth/lucia';
+import { HTTPError } from '@/errors/HTTPError';
 import { ROOM_ERRORS } from '@/errors/room';
 import { RedisRoomRepository } from '@/repositories/room';
 import { RoomService } from '@/services/RoomService';
@@ -25,16 +27,22 @@ export const roomRoutes = async (app: App) => {
     '/:roomCode',
     {
       schema: {
-        params: Type.Object({
-          roomCode: Type.String()
+        params: z.object({
+          roomCode: z.string().min(6).max(6)
         })
       }
     },
     async (req, res) => {
       await validateSession(req, res);
       const { roomCode } = req.params;
-      const room = await roomService.getRoom(roomCode);
-      return room;
+      try {
+        const room = await roomService.getRoom(roomCode);
+        return room;
+      } catch (e) {
+        if (e instanceof HTTPError) {
+          return e;
+        }
+      }
     }
   );
 
@@ -42,8 +50,8 @@ export const roomRoutes = async (app: App) => {
     '/:roomCode/players',
     {
       schema: {
-        params: Type.Object({
-          roomCode: Type.String()
+        params: z.object({
+          roomCode: z.string().min(6).max(6)
         })
       }
     },
@@ -78,10 +86,10 @@ export const roomRoutes = async (app: App) => {
         hostId: host.id
       });
 
-      await roomService.addPlayerToRoom({
-        roomCode: room.code,
-        player: host
-      });
+      // await roomService.addPlayerToRoom({
+      //   roomCode: room.code,
+      //   player: host
+      // });
 
       res.status(201);
       return room;

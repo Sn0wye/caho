@@ -1,12 +1,27 @@
 import { fastifyCookie } from '@fastify/cookie';
 import { fastifyCors } from '@fastify/cors';
 import { fastifySensible } from '@fastify/sensible';
-import { type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
-import { fastify } from 'fastify';
+import { fastifySwagger } from '@fastify/swagger';
+import { fastifySwaggerUi } from '@fastify/swagger-ui';
+import {
+  fastify,
+  type FastifyBaseLogger,
+  type FastifyInstance,
+  type RawReplyDefaultExpression,
+  type RawRequestDefaultExpression,
+  type RawServerDefault
+} from 'fastify';
+import {
+  jsonSchemaTransform,
+  serializerCompiler,
+  validatorCompiler,
+  type ZodTypeProvider
+} from 'fastify-type-provider-zod';
 import { db } from '@/db';
 import { redis } from '@/db/redis';
 import { env } from '@/env';
 import { authRoutes } from './http/routes/auth';
+import { pingRoute } from './http/routes/ping';
 import { roomRoutes } from './http/routes/room';
 import { authPlugin } from './plugins/auth';
 import { csrfPlugin } from './plugins/csrf';
@@ -18,9 +33,36 @@ export const app = fastify({
       target: '@fastify/one-line-logger'
     }
   }
-}).withTypeProvider<TypeBoxTypeProvider>();
+}).withTypeProvider<TypeProvider>();
 
-export type App = typeof app;
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
+
+app.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: 'CAHO API',
+      description: 'Caho game API',
+      version: '0.1.0'
+    },
+    servers: []
+  },
+  transform: jsonSchemaTransform
+});
+
+app.register(fastifySwaggerUi, {
+  routePrefix: '/docs'
+});
+
+export type App = FastifyInstance<
+  RawServerDefault,
+  RawRequestDefaultExpression<RawServerDefault>,
+  RawReplyDefaultExpression<RawServerDefault>,
+  FastifyBaseLogger,
+  ZodTypeProvider
+>;
+
+export type TypeProvider = ZodTypeProvider;
 
 // decorators
 app.decorate('db', db);
@@ -65,4 +107,4 @@ app.register(authRoutes, {
 app.register(roomRoutes, {
   prefix: '/rooms'
 });
-app.get('/ping', () => 'pong');
+app.register(pingRoute);
