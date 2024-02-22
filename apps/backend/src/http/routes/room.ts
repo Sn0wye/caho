@@ -6,7 +6,6 @@ import {
   startRoom
 } from '@caho/contracts';
 import { type Player } from '@caho/schemas';
-import { Type } from '@fastify/type-provider-typebox';
 import { z } from 'zod';
 import { type App } from '@/app';
 import { validateSession } from '@/auth/lucia';
