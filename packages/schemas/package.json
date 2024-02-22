@@ -1,9 +1,10 @@
 {
   "name": "@caho/schemas",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "private": true,
   "scripts": {
     "build": "tsup",
