@@ -3,9 +3,10 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "build:packages": "turbo run build --filter=contracts --filter=schemas",
     "start": "turbo run start",
     "dev": "turbo run dev",
+    "dev:fe": "turbo run dev --filter=frontend...",
+    "dev:be": "turbo run dev --filter=backend...",
     "lint": "SKIP_ENV_VALIDATION=1 turbo run lint",
     "format": "prettier --cache --write --plugin-search-dir=. **/*.{cjs,mjs,ts,tsx}",
     "clean": "git clean -xdf node_modules",

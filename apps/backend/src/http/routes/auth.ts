@@ -1,22 +1,29 @@
-import { Type } from '@sinclair/typebox';
+import {
+  getProfileResponse,
+  signInRequest,
+  signInResponse,
+  signUpRequest,
+  signUpResponse
+} from '@caho/contracts';
+import { errorSchema } from '@caho/schemas';
+import { z } from 'zod';
 import { hash, verify } from '@/utils/password';
-import { type App } from '@/app';
+import { type App, type TypeProvider } from '@/app';
 import { auth } from '@/auth/lucia';
 import { users } from '@/db/schema';
 
-const AuthBody = Type.Object({
-  username: Type.String(),
-  password: Type.String({
-    minLength: 8
-  })
-});
-
 export const authRoutes = async (app: App) => {
+  app.withTypeProvider<TypeProvider>();
+
   app.post(
     '/sign-up',
     {
       schema: {
-        body: AuthBody
+        body: signUpRequest,
+        response: {
+          200: signUpResponse,
+          401: errorSchema
+        }
       }
     },
     async (req, res) => {
@@ -68,11 +75,15 @@ export const authRoutes = async (app: App) => {
     '/sign-in',
     {
       schema: {
-        body: AuthBody
+        body: signInRequest,
+        response: {
+          200: signInResponse,
+          401: errorSchema
+        }
       }
     },
     async (req, res) => {
-      if (req.session) {
+      if (req.session && req.user) {
         return req.user;
       }
 
@@ -106,34 +117,55 @@ export const authRoutes = async (app: App) => {
           avatarUrl: user.avatarUrl
         };
       } catch (e) {
-        res.unauthorized('Usuário ou senha inválidos');
+        return res.unauthorized('Usuário ou senha inválidos');
       }
     }
   );
 
-  app.get('/profile', (req, res) => {
-    if (!req.session || !req.user) {
-      return res.unauthorized();
+  app.get(
+    '/profile',
+    {
+      schema: {
+        response: {
+          200: getProfileResponse,
+          401: errorSchema
+        }
+      }
+    },
+    async (req, res) => {
+      if (!req.session || !req.user) {
+        return res.unauthorized();
+      }
+
+      return req.user;
     }
+  );
 
-    return req.user;
-  });
+  app.post(
+    '/sign-out',
+    {
+      schema: {
+        response: {
+          204: z.never()
+        }
+      }
+    },
+    async (req, res) => {
+      if (!req.session) {
+        res.status(204);
+        return;
+      }
 
-  app.post('/sign-out', async (req, res) => {
-    if (!req.session) {
+      const session = req.session;
+      await auth.invalidateSession(session.id);
+      const cookie = auth.createBlankSessionCookie();
+
+      res.setCookie(cookie.name, cookie.value, cookie.attributes);
+
       res.status(204);
       return;
     }
-
-    const session = req.session;
-    await auth.invalidateSession(session.id);
-    const cookie = auth.createBlankSessionCookie();
-
-    res.setCookie(cookie.name, cookie.value, cookie.attributes);
-
-    res.status(204);
-    return;
-  });
+  );
 
   // app.get('/github', async (req, res) => {
   //   const [url, state] = await githubAuth.getAuthorizationUrl();

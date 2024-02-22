@@ -4,3 +4,4 @@ export * from './ranking';
 export * from './profile';
 export * from './card';
 export * from './error';
+export * from './user';

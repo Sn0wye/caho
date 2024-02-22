@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-const blackCard = z.object({
+export const blackCard = z.object({
   text: z.string(),
   packId: z.string(),
   pick: z.number()
 });
-const whiteCard = z.object({
+export const whiteCard = z.object({
   text: z.string(),
   packId: z.string()
 });

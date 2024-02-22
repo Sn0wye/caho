@@ -18,15 +18,18 @@ export const roomSchema = z.object({
   password: z
     .string()
     .or(z.null())
-    .transform(v => (v === '' ? null : v)),
-  isPublic: z.coerce.boolean(),
-  state: z.object({
-    round: z.number().min(0).nonnegative().default(0),
-    prevJudgeId: z.string().min(1).or(z.null()).default(null),
-    judgeId: z.string().min(1).or(z.null()).default(null)
-  })
+    .transform(v => (v === '' || v === undefined ? null : v)),
+  isPublic: z.coerce.boolean()
+});
+
+export const roomStateSchema = z.object({
+  round: z.number().min(0).nonnegative().default(0),
+  judgeId: z.string().min(1).or(z.null()).default(null),
+  prevJudgeId: z.string().min(1).or(z.null()).default(null)
 });
 
 export type Room = z.infer<typeof roomSchema>;
 
 export type RoomStatus = Room['status'];
+
+export type RoomState = z.infer<typeof roomStateSchema>;
