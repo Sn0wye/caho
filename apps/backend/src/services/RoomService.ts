@@ -74,4 +74,27 @@ export class RoomService implements IRoomService {
   }): Promise<void> {
     return await this.roomRepository.incrementPlayerScore(input);
   }
+
+  public async getRoomState(roomCode: string): Promise<{
+    round: number;
+    judgeId: string | null;
+    prevJudgeId: string | null;
+  }> {
+    return await this.roomRepository.getRoomState(roomCode);
+  }
+
+  public async roomExists(roomCode: string): Promise<boolean> {
+    return await this.roomRepository.roomExists(roomCode);
+  }
+
+  public async updateRoomState(
+    roomCode: string,
+    state: {
+      round?: number;
+      judgeId?: string | null;
+      prevJudgeId?: string | null;
+    }
+  ): Promise<void> {
+    return await this.roomRepository.updateRoomState(roomCode, state);
+  }
 }
