@@ -1,9 +1,11 @@
 import {
   playerSchema,
   roomSchema,
+  roomStateSchema,
   type Player,
   type Ranking,
-  type Room
+  type Room,
+  type RoomState
 } from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
 import { type Redis } from 'ioredis';
@@ -27,7 +29,7 @@ export class RedisRoomRepository implements IRoomRepository {
     try {
       const room = await this.redis.hgetall(`room:${roomCode}`);
 
-      if (!room) {
+      if (!room || Object.keys(room).length === 0) {
         throw new HTTPError({
           code: 'NOT_FOUND',
           message: ROOM_ERRORS.ROOM_NOT_FOUND
@@ -36,6 +38,10 @@ export class RedisRoomRepository implements IRoomRepository {
 
       return roomSchema.parse(room);
     } catch (error) {
+      if (error instanceof HTTPError) {
+        throw error;
+      }
+
       console.error(error);
       throw new HTTPError({
         code: 'INTERNAL_SERVER_ERROR',
@@ -51,14 +57,22 @@ export class RedisRoomRepository implements IRoomRepository {
       id: createId(),
       status: 'LOBBY',
       code: roomCode,
+
       ...input
     } satisfies Room;
+
+    const createdRoomState = {
+      round: 0,
+      judgeId: null,
+      prevJudgeId: null
+    } satisfies RoomState;
 
     const roomListKey = createdRoom.isPublic ? 'public_rooms' : 'private_rooms';
 
     try {
       await Promise.all([
         this.redis.hmset(`room:${roomCode}`, createdRoom),
+        this.redis.hmset(`room:${roomCode}:state`, createdRoomState),
         this.redis.lpush(roomListKey, roomCode)
       ]);
 
@@ -66,8 +80,7 @@ export class RedisRoomRepository implements IRoomRepository {
 
       await Promise.all([
         this.redis.expire(`room:${roomCode}`, EXPIRE_TIME),
-        this.redis.expire(`room:${roomCode}:ranking`, EXPIRE_TIME),
-        this.redis.expire(`room:${roomCode}:players`, EXPIRE_TIME)
+        this.redis.expire(`room:${roomCode}:state`, EXPIRE_TIME)
       ]);
 
       return createdRoom;
@@ -121,7 +134,7 @@ export class RedisRoomRepository implements IRoomRepository {
   }
 
   async startRoom(roomCode: string): Promise<void> {
-    const roomExists = await this.redis.exists(`room:${roomCode}`);
+    const roomExists = await this.roomExists(roomCode);
 
     if (!roomExists) {
       throw new HTTPError({
@@ -205,7 +218,16 @@ export class RedisRoomRepository implements IRoomRepository {
       }
 
       const room = await this.getRoom(roomCode);
+      player.isHost = room.hostId === player.id;
       const players = await this.getRoomPlayers(roomCode);
+
+      const playerAlreadyInRoom = players.some(p => p.id === player.id);
+      if (playerAlreadyInRoom) {
+        throw new HTTPError({
+          code: 'BAD_REQUEST',
+          message: ROOM_ERRORS.PLAYER_ALREADY_IN_ROOM
+        });
+      }
 
       if (players.length >= room.maxPlayers) {
         throw new HTTPError({
@@ -218,14 +240,6 @@ export class RedisRoomRepository implements IRoomRepository {
         throw new HTTPError({
           code: 'BAD_REQUEST',
           message: ROOM_ERRORS.WRONG_PASSWORD
-        });
-      }
-
-      const playerAlreadyInRoom = players.some(p => p.id === player.id);
-      if (playerAlreadyInRoom) {
-        throw new HTTPError({
-          code: 'BAD_REQUEST',
-          message: ROOM_ERRORS.PLAYER_ALREADY_IN_ROOM
         });
       }
 
@@ -310,11 +324,17 @@ export class RedisRoomRepository implements IRoomRepository {
     player: Player;
     roomCode: string;
   }): Promise<void> {
+    const EXPIRE_TIME = 60 * 60 * 24;
+
     try {
       await Promise.all([
         this.redis.rpush(`room:${roomCode}:players`, JSON.stringify(player)),
-
         this.redis.zadd(`room:${roomCode}:ranking`, player.score, player.id)
+      ]);
+
+      await Promise.all([
+        this.redis.expire(`room:${roomCode}:players`, EXPIRE_TIME),
+        this.redis.expire(`room:${roomCode}:ranking`, EXPIRE_TIME)
       ]);
     } catch {
       throw new HTTPError({
@@ -403,6 +423,38 @@ export class RedisRoomRepository implements IRoomRepository {
       throw new HTTPError({
         code: 'INTERNAL_SERVER_ERROR',
         message: 'Erro ao incrementar pontuação do jogador.'
+      });
+    }
+  }
+
+  async roomExists(roomCode: string): Promise<boolean> {
+    return !!this.redis.exists(`room:${roomCode}`);
+  }
+
+  async getRoomState(roomCode: string): Promise<RoomState> {
+    try {
+      const rawRoomState = await this.redis.hgetall(`room:${roomCode}:state`);
+      const roomState = roomStateSchema.parse(rawRoomState);
+
+      return roomState;
+    } catch {
+      throw new HTTPError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Erro ao buscar estado da sala.'
+      });
+    }
+  }
+
+  async updateRoomState(
+    roomCode: string,
+    state: Partial<RoomState>
+  ): Promise<void> {
+    try {
+      await this.redis.hset(`room:${roomCode}:state`, state);
+    } catch {
+      throw new HTTPError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Erro ao atualizar estado da sala.'
       });
     }
   }
