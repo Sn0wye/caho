@@ -21,7 +21,8 @@ async function main() {
     attributes: {
       email: user.email,
       name: user.name,
-      username: user.username
+      username: user.username,
+      avatar_url: null
     }
   });
 }

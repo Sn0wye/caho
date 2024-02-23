@@ -3,7 +3,7 @@ import { env } from '@/env';
 
 declare global {
   // eslint-disable-next-line no-var
-  var redis: Redis | undefined;
+  var redis: Redis;
 }
 
 export const redisOpts =
@@ -16,7 +16,7 @@ export const redisOpts =
         family: 6
       }
     : {
-        host: 'localhost',
+        host: env.DOCKER_ENV ? 'redis' : 'localhost',
         port: 6379
       };
 

@@ -1,12 +1,12 @@
-import { type Config } from 'drizzle-kit';
+import { defineConfig } from 'drizzle-kit';
 import { env } from '@/env';
 
-export default {
+export default defineConfig({
   out: './migrations',
   schema: './src/db/schema.ts',
   breakpoints: true,
   driver: 'mysql2',
   dbCredentials: {
-    connectionString: env.DATABASE_URL
+    uri: env.DATABASE_URL
   }
-} satisfies Config;
+});

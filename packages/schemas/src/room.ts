@@ -15,10 +15,21 @@ export const roomSchema = z.object({
     .positive(),
   status: z.enum(['LOBBY', 'IN_PROGRESS', 'FINISHED']),
   hostId: z.string().min(1),
-  password: z.string().or(z.null()),
+  password: z
+    .string()
+    .or(z.null())
+    .transform(v => (v === '' || v === undefined ? null : v)),
   isPublic: z.coerce.boolean()
+});
+
+export const roomStateSchema = z.object({
+  round: z.number().min(0).nonnegative().default(0),
+  judgeId: z.string().min(1).or(z.null()).default(null),
+  prevJudgeId: z.string().min(1).or(z.null()).default(null)
 });
 
 export type Room = z.infer<typeof roomSchema>;
 
 export type RoomStatus = Room['status'];
+
+export type RoomState = z.infer<typeof roomStateSchema>;

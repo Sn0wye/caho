@@ -1,17 +1,11 @@
-import { randomBytes, scryptSync } from 'crypto';
+import { Argon2id } from 'oslo/password';
 
-const encryptPassword = (password: string, salt: string) => {
-  return scryptSync(password, salt, 32).toString('hex');
-};
+const secret = Buffer.from('e0ad73dc-4c6e-47f6-84dd-e76c22872dc2');
+const argon = new Argon2id({
+  secret
+});
 
-export const encrypt = (password: string): string => {
-  const salt = randomBytes(16).toString('hex');
-  return encryptPassword(password, salt) + salt;
-};
+export const hash = (password: string) => argon.hash(password);
 
-export const compare = (hashed: string, password: string): boolean => {
-  const salt = hashed.slice(64);
-  const originalPassHash = hashed.slice(0, 64);
-  const currentPassHash = encryptPassword(password, salt);
-  return originalPassHash === currentPassHash;
-};
+export const verify = async (hashed: string, password: string) =>
+  argon.verify(hashed, password);

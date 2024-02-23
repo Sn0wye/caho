@@ -1,0 +1,38 @@
+meta {
+  name: Sign In
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{BASE_URL}}/auth/sign-in
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:basic {
+  username: 
+  password: 
+}
+
+auth:bearer {
+  token: 
+}
+
+body:json {
+  {
+    "username": "Sn0wye",
+    "password": "12345678"
+  }
+}
+
+tests {
+  test("should be able to login", () => {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(200);
+  });
+}

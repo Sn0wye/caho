@@ -1,9 +1,12 @@
-import { bigint, mysqlTable, varchar } from 'drizzle-orm/mysql-core';
+import { createId } from '@paralleldrive/cuid2';
+import { datetime, mysqlTable, varchar } from 'drizzle-orm/mysql-core';
 
 export const users = mysqlTable('users', {
   id: varchar('id', {
-    length: 24 // cuid
-  }).primaryKey(),
+    length: 24
+  })
+    .primaryKey()
+    .$defaultFn(() => createId()),
   name: varchar('name', {
     length: 255
   }),
@@ -13,34 +16,25 @@ export const users = mysqlTable('users', {
   username: varchar('username', {
     length: 255
   }).notNull(),
+  password: varchar('password', {
+    length: 255
+  }).notNull(),
   avatarUrl: varchar('avatar_url', {
     length: 255
   })
 });
 
-export const keys = mysqlTable('keys', {
+export const userSessions = mysqlTable('user_sessions', {
   id: varchar('id', {
     length: 255
   }).primaryKey(),
   userId: varchar('user_id', {
     length: 24
-  }).notNull(),
-  hashedPassword: varchar('hashed_password', {
-    length: 255
   })
-});
-
-export const sessions = mysqlTable('sessions', {
-  id: varchar('id', {
-    length: 128
-  }).primaryKey(),
-  userId: varchar('user_id', {
-    length: 15
-  }).notNull(),
-  activeExpires: bigint('active_expires', {
-    mode: 'number'
-  }).notNull(),
-  idleExpires: bigint('idle_expires', {
-    mode: 'number'
-  }).notNull()
+    .notNull()
+    .references(() => users.id, {
+      onDelete: 'cascade',
+      onUpdate: 'cascade'
+    }),
+  expiresAt: datetime('expires_at').notNull()
 });
