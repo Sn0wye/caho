@@ -16,7 +16,7 @@ export const redisOpts =
         family: 6
       }
     : {
-        host: 'localhost',
+        host: env.DOCKER_ENV ? 'redis' : 'localhost',
         port: 6379
       };
 
