@@ -24,7 +24,7 @@ import { authRoutes } from './http/routes/auth';
 import { pingRoute } from './http/routes/ping';
 import { roomRoutes } from './http/routes/room';
 import { authPlugin } from './plugins/auth';
-import { csrfPlugin } from './plugins/csrf';
+// import { csrfPlugin } from './plugins/csrf';
 import { fastifySocketIO } from './plugins/socketio';
 
 export const app = fastify({
@@ -79,7 +79,7 @@ const corsOpts = {
   origin:
     env.NODE_ENV === 'production'
       ? 'https://caho.vercel.app'
-      : 'http://localhost:3000',
+      : ['http://localhost:3000', 'http://localhost:3001'],
   credentials: true
 };
 
@@ -95,9 +95,9 @@ app.register(fastifyCookie, {
   hook: 'onRequest',
   parseOptions: {}
 });
-app.register(csrfPlugin, {
-  enabled: env.NODE_ENV === 'production'
-});
+// app.register(csrfPlugin, {
+//   enabled: env.NODE_ENV === 'production'
+// });
 app.register(authPlugin);
 
 // routes
