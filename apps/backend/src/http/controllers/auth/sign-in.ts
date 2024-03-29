@@ -3,6 +3,7 @@ import { errorSchema } from '@caho/schemas';
 import { verify } from '@/utils/password';
 import { type App } from '@/app';
 import { auth } from '@/auth/lucia';
+import { db } from '@/db';
 
 export const signInController = async (app: App) => {
   app.post(
@@ -24,7 +25,7 @@ export const signInController = async (app: App) => {
       const { username, password } = req.body;
 
       try {
-        const user = await app.db.query.users.findFirst({
+        const user = await db.query.users.findFirst({
           where: (users, { eq }) => eq(users.username, username)
         });
 
