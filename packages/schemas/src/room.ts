@@ -19,7 +19,7 @@ export const roomSchema = z.object({
     .string()
     .or(z.null())
     .transform(v => (v === '' || v === undefined ? null : v)),
-  isPublic: z.coerce.boolean()
+  isPublic: z.string().transform(v => v === 'true')
 });
 
 export const roomStateSchema = z.object({
