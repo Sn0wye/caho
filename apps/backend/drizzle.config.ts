@@ -5,8 +5,10 @@ export default defineConfig({
   out: './migrations',
   schema: './src/db/schema.ts',
   breakpoints: true,
-  driver: 'mysql2',
+  driver: 'turso',
+  verbose: true,
   dbCredentials: {
-    uri: env.DATABASE_URL
+    url: env.DATABASE_URL,
+    authToken: env.DATABASE_AUTH_TOKEN
   }
 });

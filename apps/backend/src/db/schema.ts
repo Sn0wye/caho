@@ -1,34 +1,34 @@
 import { createId } from '@paralleldrive/cuid2';
-import { datetime, mysqlTable, varchar } from 'drizzle-orm/mysql-core';
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
-export const users = mysqlTable('users', {
-  id: varchar('id', {
+export const users = sqliteTable('users', {
+  id: text('id', {
     length: 24
   })
     .primaryKey()
     .$defaultFn(() => createId()),
-  name: varchar('name', {
+  name: text('name', {
     length: 255
   }),
-  email: varchar('email', {
+  email: text('email', {
     length: 255
   }),
-  username: varchar('username', {
+  username: text('username', {
     length: 255
   }).notNull(),
-  password: varchar('password', {
+  password: text('password', {
     length: 255
   }).notNull(),
-  avatarUrl: varchar('avatar_url', {
+  avatarUrl: text('avatar_url', {
     length: 255
   })
 });
 
-export const userSessions = mysqlTable('user_sessions', {
-  id: varchar('id', {
+export const userSessions = sqliteTable('user_sessions', {
+  id: text('id', {
     length: 255
   }).primaryKey(),
-  userId: varchar('user_id', {
+  userId: text('user_id', {
     length: 24
   })
     .notNull()
@@ -36,5 +36,5 @@ export const userSessions = mysqlTable('user_sessions', {
       onDelete: 'cascade',
       onUpdate: 'cascade'
     }),
-  expiresAt: datetime('expires_at').notNull()
+  expiresAt: integer('expires_at').notNull()
 });
