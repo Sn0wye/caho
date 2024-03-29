@@ -6,6 +6,7 @@ import { getRoomPlayersController } from '../controllers/room/get-room-players';
 import { joinRoomController } from '../controllers/room/join-room';
 import { leaveRoomController } from '../controllers/room/leave-room';
 import { listPublicController } from '../controllers/room/list-public-rooms';
+import { playerReadyController } from '../controllers/room/player-ready';
 import { startRoomController } from '../controllers/room/start-room';
 
 export const roomRoutes = async (app: App) => {
@@ -17,4 +18,5 @@ export const roomRoutes = async (app: App) => {
   app.register(leaveRoomController);
   app.register(startRoomController);
   app.register(endRoomController);
+  app.register(playerReadyController);
 };
