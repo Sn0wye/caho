@@ -1,5 +1,6 @@
 import { getProfileResponse } from '@caho/contracts';
 import { errorSchema } from '@caho/schemas';
+import { type z } from 'zod';
 import { type App } from '@/app';
 
 export const getProfileController = async (app: App) => {

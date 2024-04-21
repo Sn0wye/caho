@@ -36,7 +36,10 @@ export const signUpController = async (app: App) => {
           .insert(users)
           .values({
             username,
-            password: hashedPassword
+            password: hashedPassword,
+            avatarUrl: null,
+            email: null,
+            name: null
           })
           .returning()
       )[0];

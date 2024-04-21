@@ -1,6 +1,5 @@
 import { startRoom } from '@caho/contracts';
 import { type App } from '@/app';
-import { validateSession } from '@/auth/lucia';
 import { basePack } from '@/cards/base-pack';
 import { ROOM_ERRORS } from '@/errors/room';
 import { pubsub } from '@/lib/pub-sub';
@@ -12,11 +11,11 @@ export const startRoomController = async (app: App) => {
   const roomService = new RoomService(new RedisRoomRepository(app.redis));
 
   app.post('/start', async (req, res) => {
-    if (!req.user) {
+    const { user } = req;
+
+    if (!user) {
       return res.unauthorized();
     }
-
-    const { user } = await validateSession(req, res);
 
     try {
       const { roomCode } = startRoom.parse(req.body);

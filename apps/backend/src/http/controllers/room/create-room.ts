@@ -1,7 +1,6 @@
 import { createRoom } from '@caho/contracts';
 import { type Player } from '@caho/schemas';
 import { type App } from '@/app';
-import { validateSession } from '@/auth/lucia';
 import { RedisRoomRepository } from '@/repositories/room';
 import { RoomService } from '@/services/RoomService';
 
@@ -9,9 +8,9 @@ export const createRoomController = async (app: App) => {
   const roomService = new RoomService(new RedisRoomRepository(app.redis));
 
   app.post('/create', async (req, res) => {
-    const session = await validateSession(req, res);
+    const { session, user } = req;
 
-    if (!session) {
+    if (!user || !session) {
       return res.unauthorized();
     }
 
@@ -19,7 +18,9 @@ export const createRoomController = async (app: App) => {
       const validatedBody = createRoom.parse(req.body);
 
       const host: Player = {
-        ...session.user,
+        id: user.id,
+        username: user.username,
+        avatarUrl: user.avatarUrl,
         isHost: true,
         score: 0,
         isReady: false,

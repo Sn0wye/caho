@@ -1,7 +1,6 @@
 // import { github, google } from '@lucia-auth/oauth/providers';
 import { DrizzleSQLiteAdapter } from '@lucia-auth/adapter-drizzle';
-import { type FastifyReply, type FastifyRequest } from 'fastify';
-import { Lucia, TimeSpan, type Session, type User } from 'lucia';
+import { Lucia, TimeSpan } from 'lucia';
 import { db } from '@/db';
 import { users, userSessions } from '@/db/schema';
 import { env } from '@/env';
@@ -20,7 +19,7 @@ type DatabaseUserAttributes = {
   name: string | null;
   email: string | null;
   username: string;
-  avatar_url: string | null;
+  avatarUrl: string | null;
 };
 
 const adapter = new DrizzleSQLiteAdapter(db, userSessions, users);
@@ -39,7 +38,7 @@ export const auth = new Lucia(adapter, {
       name: databaseUser.name,
       username: databaseUser.username,
       email: databaseUser.email,
-      avatarUrl: databaseUser.avatar_url
+      avatarUrl: databaseUser.avatarUrl
     };
   },
   sessionExpiresIn: new TimeSpan(30, 'd')
@@ -60,56 +59,31 @@ export const auth = new Lucia(adapter, {
 
 export type Auth = typeof auth;
 
-/**
- * Get session from the request, return 401 if not found
- * @param req FastifyRequest
- * @param res FastifyReply
- * @returns Session
- */
-export const validateSession = async (
-  req: FastifyRequest,
-  res: FastifyReply
-): Promise<{
-  user: User;
-  session: Session;
-}> => {
-  const cookie = req.cookies['auth_session'];
-  if (!cookie) {
-    return res.unauthorized();
-  }
-
-  const sessionAndUser = await auth.validateSession(cookie);
-  if (!sessionAndUser.session || !sessionAndUser.user) {
-    return res.unauthorized();
-  }
-  return sessionAndUser;
-};
-
-export const getSessionFromToken = async (
-  token?: string
-): Promise<
-  | {
-      user: User;
-      session: Session;
-    }
-  | {
-      user: null;
-      session: null;
-    }
-> => {
-  // const cookie = req.cookies['auth_session'];
-  if (!token) {
-    return {
-      user: null,
-      session: null
-    };
-  }
-  const sessionAndUser = await auth.validateSession(token);
-  if (!sessionAndUser) {
-    return {
-      user: null,
-      session: null
-    };
-  }
-  return sessionAndUser;
-};
+// export const getSessionFromToken = async (
+//   token?: string
+// ): Promise<
+//   | {
+//       user: User;
+//       session: Session;
+//     }
+//   | {
+//       user: null;
+//       session: null;
+//     }
+// > => {
+//   // const cookie = req.cookies['auth_session'];
+//   if (!token) {
+//     return {
+//       user: null,
+//       session: null
+//     };
+//   }
+//   const sessionAndUser = await auth.validateSession(token);
+//   if (!sessionAndUser) {
+//     return {
+//       user: null,
+//       session: null
+//     };
+//   }
+//   return sessionAndUser;
+// };

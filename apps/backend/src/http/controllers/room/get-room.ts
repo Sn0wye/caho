@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { type App } from '@/app';
-import { validateSession } from '@/auth/lucia';
 import { HTTPError } from '@/errors/HTTPError';
 import { RedisRoomRepository } from '@/repositories/room';
 import { RoomService } from '@/services/RoomService';
@@ -18,7 +17,10 @@ export const getRoomController = async (app: App) => {
       }
     },
     async (req, res) => {
-      await validateSession(req, res);
+      if (!req.user || !req.session) {
+        return res.unauthorized();
+      }
+
       const { roomCode } = req.params;
       try {
         const room = await roomService.getRoom(roomCode);
