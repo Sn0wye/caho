@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { type App } from '@/app';
-import { pubsub } from '@/lib/pub-sub';
 
 export const wsRoutes = async (app: App) => {
   app.get(
@@ -14,7 +13,8 @@ export const wsRoutes = async (app: App) => {
       }
     },
     (conn, req) => {
-      pubsub.subscribe(req.params.roomCode, message => {
+      app.pubsub.subscribe(req.params.roomCode, message => {
+        console.log('message', message);
         conn.socket.send(JSON.stringify(message));
       });
     }
@@ -31,7 +31,7 @@ export const wsRoutes = async (app: App) => {
       }
     },
     (conn, req) => {
-      pubsub.subscribe(req.params.userId, message => {
+      app.pubsub.subscribe(req.params.userId, message => {
         conn.socket.send(JSON.stringify(message));
       });
     }

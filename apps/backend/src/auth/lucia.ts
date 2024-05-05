@@ -1,5 +1,5 @@
 // import { github, google } from '@lucia-auth/oauth/providers';
-import { DrizzleSQLiteAdapter } from '@lucia-auth/adapter-drizzle';
+import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { Lucia, TimeSpan } from 'lucia';
 import { db } from '@/db';
 import { users, userSessions } from '@/db/schema';
@@ -22,7 +22,7 @@ type DatabaseUserAttributes = {
   avatarUrl: string | null;
 };
 
-const adapter = new DrizzleSQLiteAdapter(db, userSessions, users);
+const adapter = new DrizzlePostgreSQLAdapter(db, userSessions, users);
 
 export const auth = new Lucia(adapter, {
   sessionCookie: {

@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import { type App } from '@/app';
 import { HTTPError } from '@/errors/HTTPError';
-import { RedisRoomRepository } from '@/repositories/room';
+import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
 
 export const getRoomController = async (app: App) => {
-  const roomService = new RoomService(new RedisRoomRepository(app.redis));
+  const roomService = new RoomService(new PostgresRoomRepository());
 
   app.get(
     '/:roomCode',
@@ -23,8 +23,10 @@ export const getRoomController = async (app: App) => {
 
       const { roomCode } = req.params;
       try {
-        const room = await roomService.getRoom(roomCode);
-        return room;
+        const { password, ...sanitizedRoom } = await roomService.getRoom(
+          roomCode
+        );
+        return sanitizedRoom;
       } catch (e) {
         if (e instanceof HTTPError) {
           return e;

@@ -18,6 +18,7 @@ import {
   validatorCompiler,
   type ZodTypeProvider
 } from 'fastify-type-provider-zod';
+import { type Redis } from 'ioredis';
 import { redis } from '@/db/redis';
 import { env } from '@/env';
 import { db } from './db';
@@ -25,6 +26,7 @@ import { authRoutes } from './http/routes/auth';
 import { pingRoute } from './http/routes/ping';
 import { roomRoutes } from './http/routes/room';
 import { wsRoutes } from './http/routes/ws';
+import { Pubsub } from './lib/pub-sub';
 import { authPlugin } from './plugins/auth';
 
 // import { csrfPlugin } from './plugins/csrf';
@@ -70,11 +72,13 @@ export type TypeProvider = ZodTypeProvider;
 // decorators
 app.decorate('db', db);
 app.decorate('redis', redis);
+app.decorate('pubsub', new Pubsub(redis));
 
 declare module 'fastify' {
   interface FastifyInstance {
     db: typeof db;
-    redis: typeof redis;
+    redis: Redis;
+    pubsub: Pubsub;
   }
 }
 
@@ -88,10 +92,6 @@ const corsOpts = {
 
 // plugins
 app.register(fastifyCors, corsOpts);
-// app.register(fastifySocketIO, {
-//   pingInterval: 1000,
-//   cors: corsOpts
-// });
 app.register(fastifyWebsocket);
 app.register(fastifySensible);
 app.register(fastifyCookie, {

@@ -1,12 +1,11 @@
 import { joinRoom } from '@caho/contracts';
 import { type Player } from '@caho/schemas';
 import { type App } from '@/app';
-import { pubsub } from '@/lib/pub-sub';
-import { RedisRoomRepository } from '@/repositories/room';
+import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
 
 export const joinRoomController = async (app: App) => {
-  const roomService = new RoomService(new RedisRoomRepository(app.redis));
+  const roomService = new RoomService(new PostgresRoomRepository());
 
   app.post(
     '/join',
@@ -31,8 +30,7 @@ export const joinRoomController = async (app: App) => {
           username: user.username,
           avatarUrl: user.avatarUrl,
           isReady: false,
-          isJudge: false,
-          cards: []
+          isJudge: false
         };
 
         const room = await roomService.joinRoom({
@@ -41,7 +39,7 @@ export const joinRoomController = async (app: App) => {
           player
         });
 
-        pubsub.publish(roomCode, {
+        app.pubsub.publish(roomCode, {
           event: 'player-joined',
           payload: player
         });

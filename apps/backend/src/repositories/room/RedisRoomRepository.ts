@@ -445,10 +445,7 @@ export class RedisRoomRepository implements IRoomRepository {
     }
   }
 
-  async updateRoomState(
-    roomCode: string,
-    state: Partial<RoomState>
-  ): Promise<void> {
+  async updateRoom(roomCode: string, state: Partial<RoomState>): Promise<void> {
     try {
       await this.redis.hset(`room:${roomCode}:state`, state);
     } catch {

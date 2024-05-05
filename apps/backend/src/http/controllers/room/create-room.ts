@@ -1,11 +1,11 @@
 import { createRoom } from '@caho/contracts';
 import { type Player } from '@caho/schemas';
 import { type App } from '@/app';
-import { RedisRoomRepository } from '@/repositories/room';
+import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
 
 export const createRoomController = async (app: App) => {
-  const roomService = new RoomService(new RedisRoomRepository(app.redis));
+  const roomService = new RoomService(new PostgresRoomRepository());
 
   app.post('/create', async (req, res) => {
     const { session, user } = req;
@@ -24,8 +24,7 @@ export const createRoomController = async (app: App) => {
         isHost: true,
         score: 0,
         isReady: false,
-        isJudge: false,
-        cards: []
+        isJudge: false
       };
 
       const room = await roomService.createRoom({
@@ -33,10 +32,10 @@ export const createRoomController = async (app: App) => {
         hostId: host.id
       });
 
-      // await roomService.addPlayerToRoom({
-      //   roomCode: room.code,
-      //   player: host
-      // });
+      await roomService.addPlayerToRoom({
+        roomCode: room.code,
+        player: host
+      });
 
       res.status(201);
       return room;

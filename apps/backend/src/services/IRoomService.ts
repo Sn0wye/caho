@@ -1,9 +1,4 @@
-import {
-  type Player,
-  type Ranking,
-  type Room,
-  type RoomState
-} from '@caho/schemas';
+import { type Player, type Ranking, type Room } from '@caho/schemas';
 import { type CreateRoomInput } from '@/schemas/create-room';
 import { type JoinRoomInput } from '@/schemas/join-room';
 import { type LeaveRoomInput } from '@/schemas/leave-room';
@@ -29,7 +24,5 @@ export interface IRoomService {
     playerId: string;
     by: number;
   }): Promise<void>;
-  roomExists(roomCode: string): Promise<boolean>;
-  getRoomState(roomCode: string): Promise<RoomState>;
-  updateRoomState(roomCode: string, state: Partial<RoomState>): Promise<void>;
+  updateRoom(roomCode: string, data: Partial<Room>): Promise<Room>;
 }

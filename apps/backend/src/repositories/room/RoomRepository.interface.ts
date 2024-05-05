@@ -29,7 +29,5 @@ export interface IRoomRepository {
     playerId: string;
     by: number;
   }): Promise<void>;
-  roomExists(roomCode: string): Promise<boolean>;
-  getRoomState(roomCode: string): Promise<RoomState>;
-  updateRoomState(roomCode: string, state: Partial<RoomState>): Promise<void>;
+  updateRoom(roomCode: string, data: Partial<Room>): Promise<Room>;
 }

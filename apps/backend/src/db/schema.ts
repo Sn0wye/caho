@@ -1,40 +1,153 @@
 import { createId } from '@paralleldrive/cuid2';
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { relations, sql } from 'drizzle-orm';
+import {
+  boolean,
+  integer,
+  pgTable,
+  primaryKey,
+  timestamp,
+  uniqueIndex,
+  varchar
+} from 'drizzle-orm/pg-core';
 
-export const users = sqliteTable('users', {
-  id: text('id', {
+export const users = pgTable('users', {
+  id: varchar('id', {
     length: 24
   })
     .primaryKey()
     .$defaultFn(() => createId()),
-  name: text('name', {
+  name: varchar('name', {
     length: 255
   }),
-  email: text('email', {
+  email: varchar('email', {
     length: 255
   }),
-  username: text('username', {
+  username: varchar('username', {
     length: 255
   }).notNull(),
-  password: text('password', {
+  password: varchar('password', {
     length: 255
   }).notNull(),
-  avatarUrl: text('avatar_url', {
+  avatarUrl: varchar('avatar_url', {
     length: 255
   })
 });
 
-export const userSessions = sqliteTable('user_sessions', {
-  id: text('id', {
+export const userSessions = pgTable('user_sessions', {
+  id: varchar('id', {
     length: 255
   }).primaryKey(),
-  userId: text('user_id', {
+  userId: varchar('user_id', {
     length: 24
   })
     .notNull()
     .references(() => users.id, {
+      onUpdate: 'cascade',
+      onDelete: 'cascade'
+    }),
+  expiresAt: timestamp('expires_at', {
+    withTimezone: true,
+    mode: 'date'
+  }).notNull()
+});
+
+export const rooms = pgTable(
+  'rooms',
+  {
+    id: varchar('id', {
+      length: 24
+    })
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    code: varchar('code', {
+      length: 6
+    }).notNull(),
+    maxPlayers: integer('max_players').notNull(),
+    maxPoints: integer('max_points').notNull(),
+    password: varchar('password', {
+      length: 255
+    }),
+    status: varchar('status', {
+      enum: ['LOBBY', 'IN_PROGRESS', 'FINISHED'],
+      length: 255
+    }).notNull(),
+    hostId: varchar('host_id', {
+      length: 24
+    })
+      .notNull()
+      .references(() => users.id, {
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      }),
+    isPublic: boolean('is_public').notNull(),
+    round: integer('round').notNull().default(0),
+    judgeId: varchar('judge_id', {
+      length: 24
+    }).references(() => users.id, {
       onDelete: 'cascade',
       onUpdate: 'cascade'
     }),
-  expiresAt: integer('expires_at').notNull()
-});
+    prevJudgeId: varchar('prev_judge_id', {
+      length: 24
+    }).references(() => users.id, {
+      onDelete: 'cascade',
+      onUpdate: 'cascade'
+    }),
+    pickedWhiteCards: varchar('picked_white_cards', { length: 24 })
+      .array()
+      .notNull()
+      .default(sql`ARRAY[]::text[]`),
+    pickedBlackCards: varchar('picked_black_cards', { length: 24 })
+      .array()
+      .notNull()
+      .default(sql`ARRAY[]::text[]`),
+    createdAt: timestamp('createdAt').notNull().defaultNow(),
+    updatedAt: timestamp('updatedAt').notNull().defaultNow()
+  },
+  table => ({
+    codeIdx: uniqueIndex('code_unique_idx').on(table.code)
+  })
+);
+
+export const roomPlayers = pgTable(
+  'room_players',
+  {
+    roomCode: varchar('room_code', {
+      length: 6
+    })
+      .notNull()
+      .references(() => rooms.code, {
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      }),
+    playerId: varchar('user_id', {
+      length: 24
+    })
+      .notNull()
+      .references(() => users.id, {
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      }),
+    score: integer('score').notNull(),
+    isReady: boolean('is_ready').notNull(),
+    isHost: boolean('is_host').notNull()
+  },
+  table => ({
+    pk: primaryKey({ columns: [table.roomCode, table.playerId] })
+  })
+);
+
+export const roomRelations = relations(rooms, ({ many }) => ({
+  players: many(roomPlayers)
+}));
+
+export const roomPlayersRelations = relations(roomPlayers, ({ one }) => ({
+  player: one(users, {
+    fields: [roomPlayers.playerId],
+    references: [users.id]
+  }),
+  room: one(rooms, {
+    fields: [roomPlayers.roomCode],
+    references: [rooms.code]
+  })
+}));

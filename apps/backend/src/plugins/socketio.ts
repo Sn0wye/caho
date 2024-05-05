@@ -2,10 +2,8 @@ import { type Player, type Room, type RoomState } from '@caho/schemas';
 import { type Session, type User } from 'lucia';
 import { Server, type ServerOptions } from 'socket.io';
 import { type App } from '@/app';
-import { getSessionFromToken } from '@/auth/lucia';
-import basePack, { type BlackCard, type WhiteCard } from '@/cards/base-pack';
+import { basePack, type BlackCard, type WhiteCard } from '@/cards/base-pack';
 import { HTTPError } from '@/errors/HTTPError';
-import { RedisRoomRepository } from '@/repositories/room';
 import { CardService } from '@/services/CardService';
 import { type IRoomService } from '@/services/IRoomService';
 import { RoomService } from '@/services/RoomService';
@@ -74,7 +72,7 @@ export const fastifySocketIO = async (
       }
     });
 
-    const roomService = new RoomService(new RedisRoomRepository(app.redis));
+    const roomService = new RoomService(new PostgresRoomRepository());
     const cardService = new CardService(basePack);
 
     socket.on('ping', () => {

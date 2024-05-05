@@ -1,26 +1,24 @@
-import { type Redis } from 'ioredis';
+import { eq } from 'drizzle-orm';
 import {
   type BlackCard,
   type CardPack,
   type WhiteCard
 } from '@/cards/base-pack';
+import { db } from '@/db';
+import { rooms } from '@/db/schema';
 
 export class CardService {
-  private readonly redis: Redis;
   private readonly roomCode: string;
   private readonly cardPacks: CardPack[];
+  private readonly db: typeof db;
 
-  constructor(
-    redis: Redis,
-    roomCode: string,
-    cardPacks: CardPack | CardPack[]
-  ) {
+  constructor(roomCode: string, cardPacks: CardPack | CardPack[]) {
     if (!Array.isArray(cardPacks)) {
       cardPacks = [cardPacks];
     }
     this.cardPacks = cardPacks;
     this.roomCode = roomCode;
-    this.redis = redis;
+    this.db = db;
   }
 
   private async getRandomCards<T extends WhiteCard | BlackCard>(
@@ -28,18 +26,55 @@ export class CardService {
     cardType: 'white' | 'black',
     count: number
   ): Promise<T[]> {
-    const pickedCardsKey = `${this.roomCode}:${cardType}:pickedCards`;
-    const availableCards = cards.filter(async card => {
-      const isPicked = await this.redis.sismember(pickedCardsKey, card.text);
-      return isPicked === 0;
+    const { pickedWhiteCards, pickedBlackCards } = (
+      await this.db
+        .select({
+          pickedWhiteCards: rooms.pickedWhiteCards,
+          pickedBlackCards: rooms.pickedBlackCards
+        })
+        .from(rooms)
+        .where(eq(rooms.code, this.roomCode))
+        .limit(1)
+        .execute()
+    )[0];
+
+    const availableCards = cards.filter(card => {
+      if (cardType === 'white') {
+        return !pickedWhiteCards.includes(card.id);
+      }
+      return !pickedBlackCards.includes(card.id);
     });
+
     const selectedCards: T[] = [];
 
     while (selectedCards.length < count && availableCards.length > 0) {
       const randomIndex = Math.floor(Math.random() * availableCards.length);
       const selectedCard = availableCards.splice(randomIndex, 1)[0];
-      await this.redis.sadd(pickedCardsKey, selectedCard.id);
       selectedCards.push(selectedCard);
+    }
+
+    if (cardType === 'white') {
+      await this.db
+        .update(rooms)
+        .set({
+          pickedWhiteCards: [
+            ...pickedWhiteCards,
+            ...selectedCards.map(card => card.id)
+          ]
+        })
+        .where(eq(rooms.code, this.roomCode))
+        .execute();
+    } else if (cardType === 'black') {
+      await this.db
+        .update(rooms)
+        .set({
+          pickedBlackCards: [
+            ...pickedBlackCards,
+            ...selectedCards.map(card => card.id)
+          ]
+        })
+        .where(eq(rooms.code, this.roomCode))
+        .execute();
     }
 
     return selectedCards;
@@ -56,8 +91,10 @@ export class CardService {
   }
 
   public async resetDeck(): Promise<void> {
-    const whiteCardsKey = `${this.roomCode}:white:pickedCards`;
-    const blackCardsKey = `${this.roomCode}:black:pickedCards`;
-    await this.redis.del(whiteCardsKey, blackCardsKey);
+    await this.db
+      .update(rooms)
+      .set({ pickedWhiteCards: [], pickedBlackCards: [] })
+      .where(eq(rooms.code, this.roomCode))
+      .execute();
   }
 }

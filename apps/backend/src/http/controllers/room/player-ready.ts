@@ -1,11 +1,10 @@
 import { z } from 'zod';
 import { type App } from '@/app';
-import { pubsub } from '@/lib/pub-sub';
-import { RedisRoomRepository } from '@/repositories/room';
+import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
 
 export const playerReadyController = async (app: App) => {
-  const roomService = new RoomService(new RedisRoomRepository(app.redis));
+  const roomService = new RoomService(new PostgresRoomRepository());
 
   app.post(
     '/:roomCode/ready',
@@ -34,7 +33,7 @@ export const playerReadyController = async (app: App) => {
         });
         player.isReady = !player.isReady;
 
-        pubsub.publish(roomCode, {
+        await app.pubsub.publish(roomCode, {
           event: 'player-update',
           payload: player
         });

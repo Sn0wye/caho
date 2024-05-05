@@ -5,10 +5,9 @@ export default defineConfig({
   out: './migrations',
   schema: './src/db/schema.ts',
   breakpoints: true,
-  driver: 'turso',
+  driver: 'pg',
   verbose: true,
   dbCredentials: {
-    url: env.DATABASE_URL,
-    authToken: env.DATABASE_AUTH_TOKEN
+    connectionString: env.DATABASE_URL
   }
 });

@@ -19,7 +19,10 @@ export const roomSchema = z.object({
     .string()
     .or(z.null())
     .transform(v => (v === '' || v === undefined ? null : v)),
-  isPublic: z.string().transform(v => v === 'true')
+  isPublic: z.string().transform(v => v === 'true'),
+  prevJudgeId: z.string().min(1).or(z.null()).default(null),
+  judgeId: z.string().min(1).or(z.null()).default(null),
+  round: z.number().int().min(0).positive().default(0)
 });
 
 export const roomStateSchema = z.object({
@@ -28,7 +31,11 @@ export const roomStateSchema = z.object({
   prevJudgeId: z.string().min(1).or(z.null()).default(null)
 });
 
+export const sanitizedRoomSchema = roomSchema.omit({ password: true });
+
 export type Room = z.infer<typeof roomSchema>;
+
+export type SanitizedRoom = z.infer<typeof sanitizedRoomSchema>;
 
 export type RoomStatus = Room['status'];
 

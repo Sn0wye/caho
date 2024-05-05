@@ -1,7 +1,14 @@
-import { migrate } from 'drizzle-orm/libsql/migrator';
+import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { db } from '.';
 
-migrate(db, { migrationsFolder: 'migrations' }).then(() => {
-  console.log('All migrations ran successfull');
+async function main() {
+  await migrate(db, { migrationsFolder: 'migrations' });
+
+  console.log('✅ All migrations ran successfully!');
   process.exit(0);
+}
+
+main().catch(err => {
+  console.error(err);
+  process.exit(1);
 });

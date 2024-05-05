@@ -1,11 +1,11 @@
 import { endRoom } from '@caho/contracts';
 import { type App } from '@/app';
 import { ROOM_ERRORS } from '@/errors/room';
-import { RedisRoomRepository } from '@/repositories/room';
+import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
 
 export const endRoomController = async (app: App) => {
-  const roomService = new RoomService(new RedisRoomRepository(app.redis));
+  const roomService = new RoomService(new PostgresRoomRepository());
 
   app.post('/end', async (req, res) => {
     const { user } = req;
