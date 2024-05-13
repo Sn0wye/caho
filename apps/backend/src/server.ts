@@ -2,8 +2,6 @@ import { app } from './app';
 import { env } from './env';
 
 async function run() {
-  await app.ready();
-
   const url = await app.listen({
     host: '0.0.0.0',
     port: env.PORT
