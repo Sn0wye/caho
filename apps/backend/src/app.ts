@@ -18,7 +18,6 @@ import {
   validatorCompiler,
   type ZodTypeProvider
 } from 'fastify-type-provider-zod';
-import { type Redis } from 'ioredis';
 import { redis } from '@/db/redis';
 import { env } from '@/env';
 import { db } from './db';
@@ -32,13 +31,21 @@ import { authPlugin } from './plugins/auth';
 // import { csrfPlugin } from './plugins/csrf';
 // import { fastifySocketIO } from './plugins/socketio';
 
+export type App = FastifyInstance<
+  RawServerDefault,
+  RawRequestDefaultExpression<RawServerDefault>,
+  RawReplyDefaultExpression<RawServerDefault>,
+  FastifyBaseLogger,
+  ZodTypeProvider
+>;
+
 export const app = fastify({
   logger: {
     transport: {
       target: '@fastify/one-line-logger'
     }
   }
-}).withTypeProvider<TypeProvider>();
+}).withTypeProvider<ZodTypeProvider>();
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
@@ -59,39 +66,19 @@ app.register(fastifySwaggerUi, {
   routePrefix: '/docs'
 });
 
-export type App = FastifyInstance<
-  RawServerDefault,
-  RawRequestDefaultExpression<RawServerDefault>,
-  RawReplyDefaultExpression<RawServerDefault>,
-  FastifyBaseLogger,
-  ZodTypeProvider
->;
-
-export type TypeProvider = ZodTypeProvider;
-
 // decorators
 app.decorate('db', db);
 app.decorate('redis', redis);
 app.decorate('pubsub', new Pubsub(redis));
 
-declare module 'fastify' {
-  interface FastifyInstance {
-    db: typeof db;
-    redis: Redis;
-    pubsub: Pubsub;
-  }
-}
-
-const corsOpts = {
+// plugins
+app.register(fastifyCors, {
   origin:
     env.NODE_ENV === 'production'
-      ? 'https://caho.vercel.app'
-      : ['http://localhost:3000', 'http://localhost:3001'],
+      ? ['https://caho.vercel.app']
+      : ['http://localhost:3000'],
   credentials: true
-};
-
-// plugins
-app.register(fastifyCors, corsOpts);
+});
 app.register(fastifyWebsocket);
 app.register(fastifySensible);
 app.register(fastifyCookie, {

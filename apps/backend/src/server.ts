@@ -7,7 +7,7 @@ async function run() {
     port: env.PORT
   });
 
-  console.log(`Server is running on ${url}`);
+  console.log(`🚀 Server is running on ${url}`);
 }
 
 run();
