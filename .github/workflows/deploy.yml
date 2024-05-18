@@ -6,6 +6,7 @@ on:
     paths:
       - apps/backend/**
       - packages/**
+      - '/*'
 jobs:
   deploy:
     name: Deploy
