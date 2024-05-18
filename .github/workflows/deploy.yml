@@ -54,4 +54,4 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd ~/caho/
-            pm2 restart projection
+            pm2 restart caho
