@@ -2,7 +2,6 @@
   "$schema": "https://turborepo.org/schema.json",
   "globalDependencies": ["**/.env", "tsconfig.json"],
   "pipeline": {
-    "db:seed": {},
     "db:migrate": {},
     "db:generate": {},
     "start": {
