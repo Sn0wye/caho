@@ -1,6 +1,6 @@
 import { startRoom } from '@caho/contracts';
 import { getRandomJudge } from '@/utils/getRandomJudge';
-import { type App } from '@/app';
+import type { App } from '@/app';
 import { basePack } from '@/cards/base-pack';
 import { ROOM_ERRORS } from '@/errors/room';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';

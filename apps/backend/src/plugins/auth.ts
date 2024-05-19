@@ -1,6 +1,6 @@
 import { fastifyPlugin } from 'fastify-plugin';
-import { type Session, type User } from 'lucia';
-import { type App } from '@/app';
+import type { Session, User } from 'lucia';
+import type { App } from '@/app';
 import { auth } from '@/auth/lucia';
 
 export const authPlugin = fastifyPlugin(
@@ -15,7 +15,7 @@ export const authPlugin = fastifyPlugin(
       }
 
       const { session, user } = await auth.validateSession(sessionId);
-      if (session && session.fresh) {
+      if (session?.fresh) {
         const cookie = auth.createSessionCookie(session.id);
         res.setCookie(cookie.name, cookie.value, cookie.attributes);
       }

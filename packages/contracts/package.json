@@ -9,8 +9,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint src --ext ts,tsx",
-    "lint:fix": "eslint src --ext ts,tsx --fix",
+    "lint": "biome lint src",
+    "lint:fix": "biome lint src --apply",
     "typecheck": "tsc --noEmit",
     "clean": "git clean -xdf node_modules"
   },

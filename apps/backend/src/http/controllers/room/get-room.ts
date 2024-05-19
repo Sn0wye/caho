@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { type App } from '@/app';
+import type { App } from '@/app';
 import { HTTPError } from '@/errors/HTTPError';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';

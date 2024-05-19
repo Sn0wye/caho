@@ -1,6 +1,6 @@
 import 'fastify';
-import { type Redis } from 'ioredis';
-import { type Pubsub } from '@/lib/pub-sub';
+import type { Redis } from 'ioredis';
+import type { Pubsub } from '@/lib/pub-sub';
 
 declare module 'fastify' {
   interface FastifyInstance {

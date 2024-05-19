@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { cardSchema } from './card';
 
 export const playerSchema = z.object({
   id: z.string().min(1),

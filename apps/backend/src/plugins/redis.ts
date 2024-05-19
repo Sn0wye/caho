@@ -1,6 +1,6 @@
-import { type Player } from '@caho/schemas';
-import { type Redis } from 'ioredis';
-import { type User } from 'lucia';
+import type { Player } from '@caho/schemas';
+import type { Redis } from 'ioredis';
+import type { User } from 'lucia';
 import { RedisRoomRepository } from '@/repositories/room/RedisRoomRepository';
 import { RoomService } from '@/services/RoomService';
 

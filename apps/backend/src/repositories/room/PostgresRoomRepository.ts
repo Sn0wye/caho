@@ -1,4 +1,4 @@
-import { type Player, type Ranking, type Room } from '@caho/schemas';
+import type { Player, Ranking, Room } from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
 import { and, eq, sql } from 'drizzle-orm';
 import { generateCode } from '@/utils/generateCode';
@@ -6,10 +6,10 @@ import { db } from '@/db';
 import { roomPlayers, rooms } from '@/db/schema';
 import { HTTPError } from '@/errors/HTTPError';
 import { ROOM_ERRORS } from '@/errors/room';
-import { type CreateRoomInput } from '@/schemas/create-room';
-import { type JoinRoomInput } from '@/schemas/join-room';
-import { type LeaveRoomInput } from '@/schemas/leave-room';
-import { type IRoomRepository } from './RoomRepository.interface';
+import type { CreateRoomInput } from '@/schemas/create-room';
+import type { JoinRoomInput } from '@/schemas/join-room';
+import type { LeaveRoomInput } from '@/schemas/leave-room';
+import type { IRoomRepository } from './RoomRepository.interface';
 
 export class PostgresRoomRepository implements IRoomRepository {
   private db: typeof db;
@@ -191,13 +191,13 @@ export class PostgresRoomRepository implements IRoomRepository {
     } catch (error) {
       if (error instanceof HTTPError) {
         throw error;
-      } else {
-        console.error('Unexpected error in joinRoom:', error);
-        throw new HTTPError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Erro ao entrar na sala.'
-        });
       }
+
+      console.error('Unexpected error in joinRoom:', error);
+      throw new HTTPError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Erro ao entrar na sala.'
+      });
     }
   }
 

@@ -1,6 +1,6 @@
 import { joinRoom } from '@caho/contracts';
-import { type Player } from '@caho/schemas';
-import { type App } from '@/app';
+import type { Player } from '@caho/schemas';
+import type { App } from '@/app';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
 

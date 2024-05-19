@@ -1,5 +1,5 @@
 import { userSchema } from '@caho/schemas';
-import { type z } from 'zod';
+import type { z } from 'zod';
 
 export const getProfileResponse = userSchema.omit({ password: true });
 

@@ -1,4 +1,4 @@
-import { type Player } from '@caho/schemas';
+import type { Player } from '@caho/schemas';
 
 export const getRandomJudge = (
   prevJudgeId: string | null,

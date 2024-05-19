@@ -13,10 +13,11 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "lint": "eslint src --ext ts,tsx",
-    "lint:fix": "eslint src --ext ts,tsx --fix",
+    "lint": "biome lint src",
+    "lint:fix": "biome lint src --apply",
     "typecheck": "tsc --noEmit",
-    "clean": "git clean -xdf node_modules"
+    "clean": "git clean -xdf node_modules",
+    "NOTE": "You can apply both linter, formatter and import ordering by using https://biomejs.dev/reference/cli/#biome-check"
   },
   "dependencies": {
     "@caho/contracts": "workspace:*",
@@ -52,7 +53,6 @@
     "zod": "3.22.2"
   },
   "devDependencies": {
-    "@sn0wye/eslint-config": "latest",
     "@swc/cli": "^0.1.65",
     "@swc/core": "^1.4.0",
     "@types/ioredis-mock": "^8.2.5",
@@ -61,7 +61,6 @@
     "@types/ws": "^8.5.10",
     "dotenv-cli": "^7.3.0",
     "drizzle-kit": "^0.21.2",
-    "eslint": "^8.56.0",
     "tsup": "^8.0.2",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3",

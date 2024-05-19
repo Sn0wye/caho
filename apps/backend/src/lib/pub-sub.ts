@@ -1,5 +1,5 @@
 import { blackCard, playerSchema, roomSchema, whiteCard } from '@caho/schemas';
-import { type Redis } from 'ioredis';
+import type { Redis } from 'ioredis';
 import { z } from 'zod';
 
 type RoomEvent = z.infer<typeof roomEvent>;

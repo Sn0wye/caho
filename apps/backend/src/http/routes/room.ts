@@ -1,4 +1,4 @@
-import { type App } from '@/app';
+import type { App } from '@/app';
 import { createRoomController } from '../controllers/room/create-room';
 import { endRoomController } from '../controllers/room/end-room';
 import { getRoomController } from '../controllers/room/get-room';

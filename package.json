@@ -20,7 +20,8 @@
     "eslint": "8.47.0",
     "tsup": "^7.2.0",
     "turbo": "^1.12.4",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "@biomejs/biome": "1.7.3"
   },
   "workspaces": [
     "apps/*",

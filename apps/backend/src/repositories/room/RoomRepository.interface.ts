@@ -1,7 +1,7 @@
-import { type Player, type Ranking, type Room } from '@caho/schemas';
-import { type CreateRoomInput } from '@/schemas/create-room';
-import { type JoinRoomInput } from '@/schemas/join-room';
-import { type LeaveRoomInput } from '@/schemas/leave-room';
+import type { Player, Ranking, Room } from '@caho/schemas';
+import type { CreateRoomInput } from '@/schemas/create-room';
+import type { JoinRoomInput } from '@/schemas/join-room';
+import type { LeaveRoomInput } from '@/schemas/leave-room';
 
 export interface IRoomRepository {
   getRoom(roomCode: string): Promise<Room>;

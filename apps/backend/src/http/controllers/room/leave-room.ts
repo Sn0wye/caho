@@ -1,5 +1,5 @@
 import { leaveRoom } from '@caho/contracts';
-import { type App } from '@/app';
+import type { App } from '@/app';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
 

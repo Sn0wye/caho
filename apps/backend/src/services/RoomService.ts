@@ -1,9 +1,9 @@
-import { type Player, type Ranking, type Room } from '@caho/schemas';
-import { type IRoomRepository } from '@/repositories/room';
-import { type CreateRoomInput } from '@/schemas/create-room';
-import { type JoinRoomInput } from '@/schemas/join-room';
-import { type LeaveRoomInput } from '@/schemas/leave-room';
-import { type IRoomService } from './IRoomService';
+import type { Player, Ranking, Room } from '@caho/schemas';
+import type { IRoomRepository } from '@/repositories/room';
+import type { CreateRoomInput } from '@/schemas/create-room';
+import type { JoinRoomInput } from '@/schemas/join-room';
+import type { LeaveRoomInput } from '@/schemas/leave-room';
+import type { IRoomService } from './IRoomService';
 
 export class RoomService implements IRoomService {
   constructor(private readonly roomRepository: IRoomRepository) {}

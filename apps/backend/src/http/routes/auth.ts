@@ -1,4 +1,4 @@
-import { type App } from '@/app';
+import type { App } from '@/app';
 import { getProfileController } from '../controllers/auth/get-profile';
 import { signInController } from '../controllers/auth/sign-in';
 import { signOutController } from '../controllers/auth/sign-out';

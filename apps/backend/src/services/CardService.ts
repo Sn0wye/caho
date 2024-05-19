@@ -1,8 +1,8 @@
 import { eq } from 'drizzle-orm';
-import {
-  type BlackCard,
-  type CardPack,
-  type WhiteCard
+import type {
+  BlackCard,
+  CardPack,
+  WhiteCard
 } from '@/cards/base-pack';
 import { db } from '@/db';
 import { rooms } from '@/db/schema';
@@ -14,6 +14,7 @@ export class CardService {
 
   constructor(roomCode: string, cardPacks: CardPack | CardPack[]) {
     if (!Array.isArray(cardPacks)) {
+      // biome-ignore lint/style/noParameterAssign: this.cardPacks should be an array
       cardPacks = [cardPacks];
     }
     this.cardPacks = cardPacks;
@@ -80,12 +81,12 @@ export class CardService {
     return selectedCards;
   }
 
-  public async getNewWhiteCards(count: number = 1): Promise<WhiteCard[]> {
+  public async getNewWhiteCards(count = 1): Promise<WhiteCard[]> {
     const allWhiteCards = this.cardPacks.flatMap(pack => pack.cards.white);
     return this.getRandomCards(allWhiteCards, 'white', count);
   }
 
-  public async getNewBlackCards(count: number = 1): Promise<BlackCard[]> {
+  public async getNewBlackCards(count = 1): Promise<BlackCard[]> {
     const allBlackCards = this.cardPacks.flatMap(pack => pack.cards.black);
     return this.getRandomCards(allBlackCards, 'black', count);
   }
