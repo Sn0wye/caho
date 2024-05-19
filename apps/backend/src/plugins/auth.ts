@@ -1,44 +1,43 @@
-import type { App } from '@/app';
 import { auth } from '@/auth/lucia';
+import { UnauthorizedError } from '@/errors';
+import type { FastifyInstance } from 'fastify';
 import { fastifyPlugin } from 'fastify-plugin';
 import type { Session, User } from 'lucia';
 
 export const authPlugin = fastifyPlugin(
-  async (app: App) => {
+  async (app: FastifyInstance) => {
     app.addHook('preHandler', async (req, res) => {
       const sessionId = auth.readSessionCookie(req.headers.cookie ?? '');
+      let user: User | null = null;
+      let session: Session | null = null;
 
-      if (!sessionId) {
-        req.user = null;
-        req.session = null;
-        return;
+      if (sessionId) {
+        const validatedSession = await auth.validateSession(sessionId);
+        if (validatedSession?.session?.fresh) {
+          const cookie = auth.createSessionCookie(validatedSession.session.id);
+          res.setCookie(cookie.name, cookie.value, cookie.attributes);
+        }
+
+        user = validatedSession.user;
+        session = validatedSession.session;
       }
 
-      const { session, user } = await auth.validateSession(sessionId);
-      if (session?.fresh) {
-        const cookie = auth.createSessionCookie(session.id);
-        res.setCookie(cookie.name, cookie.value, cookie.attributes);
-      }
+      req.getUser = () => {
+        if (!user) {
+          throw new UnauthorizedError();
+        }
+        return user;
+      };
 
-      if (!session) {
-        const cookie = auth.createBlankSessionCookie();
-        res.setCookie(cookie.name, cookie.value, cookie.attributes);
-      }
+      req.getSession = () => {
+        if (!session) {
+          throw new UnauthorizedError();
+        }
+        return session;
+      };
 
-      req.user = user;
-      req.session = session;
       return;
     });
   },
-  {
-    name: 'auth',
-    fastify: '4.x'
-  }
+  { name: 'auth', fastify: '4.x' }
 );
-
-declare module 'fastify' {
-  interface FastifyRequest {
-    user: User | null;
-    session: Session | null;
-  }
-}

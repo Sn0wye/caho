@@ -11,6 +11,8 @@ export const signUpController = async (app: App) => {
     '/sign-up',
     {
       schema: {
+        tags: ['Auth'],
+        summary: 'Sign up with username & password',
         body: signUpRequest,
         response: {
           200: signUpResponse,

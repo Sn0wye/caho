@@ -1,4 +1,5 @@
 import type { App } from '@/app';
+import { ensureAuth } from '@/plugins/ensure-auth';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
 import { z } from 'zod';
@@ -6,7 +7,7 @@ import { z } from 'zod';
 export const getRoomController = async (app: App) => {
   const roomService = new RoomService(new PostgresRoomRepository());
 
-  app.get(
+  app.register(ensureAuth).get(
     '/:roomCode',
     {
       schema: {
@@ -15,11 +16,7 @@ export const getRoomController = async (app: App) => {
         })
       }
     },
-    async (req, res) => {
-      if (!req.user || !req.session) {
-        return res.unauthorized();
-      }
-
+    async req => {
       const { roomCode } = req.params;
       const { password, ...sanitizedRoom } =
         await roomService.getRoom(roomCode);

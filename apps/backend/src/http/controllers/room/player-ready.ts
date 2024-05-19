@@ -1,4 +1,5 @@
 import type { App } from '@/app';
+import { ensureAuth } from '@/plugins/ensure-auth';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
 import { z } from 'zod';
@@ -6,7 +7,7 @@ import { z } from 'zod';
 export const playerReadyController = async (app: App) => {
   const roomService = new RoomService(new PostgresRoomRepository());
 
-  app.post(
+  app.register(ensureAuth).post(
     '/:roomCode/ready',
     {
       schema: {
@@ -15,16 +16,13 @@ export const playerReadyController = async (app: App) => {
         })
       }
     },
-    async (req, res) => {
-      if (!req.session || !req.user) {
-        return res.unauthorized();
-      }
-
+    async req => {
+      const userId = req.getUser().id;
       const { roomCode } = req.params;
 
-      const player = await roomService.getPlayerFromRoom(roomCode, req.user.id);
+      const player = await roomService.getPlayerFromRoom(roomCode, userId);
 
-      await roomService.updatePlayerInRoom(roomCode, req.user.id, {
+      await roomService.updatePlayerInRoom(roomCode, userId, {
         isReady: !player.isReady
       });
       player.isReady = !player.isReady;

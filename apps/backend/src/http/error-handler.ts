@@ -40,7 +40,5 @@ export const fastifyErrorHandler: FastifyInstance['errorHandler'] = (
     res.internalServerError(error.message);
   }
 
-  console.error(error);
-
   res.internalServerError(error.message);
 };

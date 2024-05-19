@@ -26,7 +26,6 @@ import { pingRoute } from './http/routes/ping';
 import { roomRoutes } from './http/routes/room';
 import { wsRoutes } from './http/routes/ws';
 import { Pubsub } from './lib/pub-sub';
-import { authPlugin } from './plugins/auth';
 import { fastifyErrorHandler } from './http/error-handler';
 
 // import { csrfPlugin } from './plugins/csrf';
@@ -56,9 +55,17 @@ app.register(fastifySwagger, {
     info: {
       title: 'CAHO API',
       description: 'Caho game API',
-      version: '0.1.0'
+      version: '1.0.0'
     },
-    servers: []
+    components: {
+      securitySchemes: {
+        cookieAuth: {
+          type: 'apiKey',
+          in: 'cookie',
+          name: 'auth_session'
+        }
+      }
+    }
   },
   transform: jsonSchemaTransform
 });
@@ -92,7 +99,6 @@ app.register(fastifyCookie, {
 // app.register(csrfPlugin, {
 //   enabled: env.NODE_ENV === 'production'
 // });
-app.register(authPlugin);
 
 // routes
 app.register(authRoutes, {

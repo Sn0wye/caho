@@ -1,4 +1,5 @@
 import type { App } from '@/app';
+import { ensureAuth } from '@/plugins/ensure-auth';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
 import { leaveRoom } from '@caho/contracts';
@@ -6,12 +7,8 @@ import { leaveRoom } from '@caho/contracts';
 export const leaveRoomController = async (app: App) => {
   const roomService = new RoomService(new PostgresRoomRepository());
 
-  app.post('/leave', async (req, res) => {
-    const { user } = req;
-
-    if (!user) {
-      return res.unauthorized();
-    }
+  app.register(ensureAuth).post('/leave', async (req, res) => {
+    const user = req.getUser();
 
     const { roomCode } = leaveRoom.parse(req.body);
     await roomService.leaveRoom({

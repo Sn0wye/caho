@@ -7,6 +7,8 @@ export const signOutController = async (app: App) => {
     '/sign-out',
     {
       schema: {
+        tags: ['Auth'],
+        summary: 'Sign out',
         response: {
           204: z.never()
         }

@@ -10,6 +10,8 @@ export const signInController = async (app: App) => {
     '/sign-in',
     {
       schema: {
+        tags: ['Auth'],
+        summary: 'Sign in with username & password',
         body: signInRequest,
         response: {
           200: signInResponse,

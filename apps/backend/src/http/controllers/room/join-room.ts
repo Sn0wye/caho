@@ -1,4 +1,5 @@
 import type { App } from '@/app';
+import { ensureAuth } from '@/plugins/ensure-auth';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
 import { joinRoom } from '@caho/contracts';
@@ -7,19 +8,15 @@ import type { Player } from '@caho/schemas';
 export const joinRoomController = async (app: App) => {
   const roomService = new RoomService(new PostgresRoomRepository());
 
-  app.post(
+  app.register(ensureAuth).post(
     '/join',
     {
       schema: {
         body: joinRoom
       }
     },
-    async (req, res) => {
-      if (!req.session || !req.user) {
-        return res.unauthorized();
-      }
-
-      const user = req.user;
+    async req => {
+      const user = req.getUser();
       const { roomCode, password } = req.body;
 
       const player: Player = {
