@@ -11,8 +11,8 @@
     "dev": "tsup --watch",
     "clean": "git clean -xdf node_modules",
     "typecheck": "tsc --noEmit",
-    "check": "biome check src",
-    "check:fix": "biome check src --apply"
+    "check": "biome check .",
+    "check:fix": "biome check . --apply"
   },
   "dependencies": {
     "zod": "3.22.2",

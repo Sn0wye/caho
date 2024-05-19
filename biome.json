@@ -10,12 +10,30 @@
       "correctness": {
         "noUnusedImports": "error"
       }
-    }
+    },
+    "ignore": [
+      "node_modules",
+      "dist",
+      "build",
+      "out",
+      "coverage",
+      "tmp",
+      "**/*.json"
+    ]
   },
   "formatter": {
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineEnding": "lf"
+    "lineEnding": "lf",
+    "ignore": [
+      "node_modules",
+      "dist",
+      "build",
+      "out",
+      "coverage",
+      "tmp",
+      "**/*.json"
+    ]
   },
   "javascript": {
     "formatter": {

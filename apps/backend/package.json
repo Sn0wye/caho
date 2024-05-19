@@ -15,8 +15,8 @@
     "db:studio": "drizzle-kit studio",
     "typecheck": "tsc --noEmit",
     "clean": "git clean -xdf node_modules",
-    "check": "biome check src",
-    "check:fix": "biome check src --apply"
+    "check": "biome check .",
+    "check:fix": "biome check . --apply"
   },
   "dependencies": {
     "@caho/contracts": "workspace:*",
