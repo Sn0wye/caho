@@ -13,20 +13,15 @@ export const endRoomController = async (app: App) => {
       return res.unauthorized();
     }
 
-    try {
-      const { roomCode } = endRoom.parse(req.body);
-      const { hostId } = await roomService.getRoom(roomCode);
-      const isAdmin = user.id === hostId;
+    const { roomCode } = endRoom.parse(req.body);
+    const { hostId } = await roomService.getRoom(roomCode);
+    const isAdmin = user.id === hostId;
 
-      if (!isAdmin) {
-        return res.badRequest(ROOM_ERRORS.IS_NOT_ROOM_HOST);
-      }
-
-      const room = await roomService.endRoom(roomCode);
-      return room;
-    } catch (e) {
-      res.status(400);
-      return e;
+    if (!isAdmin) {
+      return res.badRequest(ROOM_ERRORS.IS_NOT_ROOM_HOST);
     }
+
+    const room = await roomService.endRoom(roomCode);
+    return room;
   });
 };

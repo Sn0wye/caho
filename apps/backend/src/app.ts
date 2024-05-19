@@ -27,6 +27,7 @@ import { roomRoutes } from './http/routes/room';
 import { wsRoutes } from './http/routes/ws';
 import { Pubsub } from './lib/pub-sub';
 import { authPlugin } from './plugins/auth';
+import { fastifyErrorHandler } from './http/error-handler';
 
 // import { csrfPlugin } from './plugins/csrf';
 // import { fastifySocketIO } from './plugins/socketio';
@@ -61,6 +62,8 @@ app.register(fastifySwagger, {
   },
   transform: jsonSchemaTransform
 });
+
+app.setErrorHandler(fastifyErrorHandler);
 
 app.register(fastifySwaggerUi, {
   routePrefix: '/docs'

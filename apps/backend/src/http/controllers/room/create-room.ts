@@ -14,34 +14,29 @@ export const createRoomController = async (app: App) => {
       return res.unauthorized();
     }
 
-    try {
-      const validatedBody = createRoom.parse(req.body);
+    const validatedBody = createRoom.parse(req.body);
 
-      const host: Player = {
-        id: user.id,
-        username: user.username,
-        avatarUrl: user.avatarUrl,
-        isHost: true,
-        score: 0,
-        isReady: false,
-        isJudge: false
-      };
+    const host: Player = {
+      id: user.id,
+      username: user.username,
+      avatarUrl: user.avatarUrl,
+      isHost: true,
+      score: 0,
+      isReady: false,
+      isJudge: false
+    };
 
-      const room = await roomService.createRoom({
-        ...validatedBody,
-        hostId: host.id
-      });
+    const room = await roomService.createRoom({
+      ...validatedBody,
+      hostId: host.id
+    });
 
-      await roomService.addPlayerToRoom({
-        roomCode: room.code,
-        player: host
-      });
+    await roomService.addPlayerToRoom({
+      roomCode: room.code,
+      player: host
+    });
 
-      res.status(201);
-      return room;
-    } catch (e) {
-      res.status(400);
-      return e;
-    }
+    res.status(201);
+    return room;
   });
 };

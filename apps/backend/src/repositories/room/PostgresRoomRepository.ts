@@ -1,6 +1,5 @@
 import { db } from '@/db';
 import { roomPlayers, rooms } from '@/db/schema';
-import { HTTPError } from '@/errors/HTTPError';
 import { ROOM_ERRORS } from '@/errors/room';
 import type { CreateRoomInput } from '@/schemas/create-room';
 import type { JoinRoomInput } from '@/schemas/join-room';
@@ -10,6 +9,12 @@ import type { Player, Ranking, Room } from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
 import { and, eq, sql } from 'drizzle-orm';
 import type { IRoomRepository } from './RoomRepository.interface';
+import {
+  BadRequestError,
+  InternalServerError,
+  NotFoundError,
+  ApplicationError
+} from '@/errors';
 
 export class PostgresRoomRepository implements IRoomRepository {
   private db: typeof db;
@@ -25,23 +30,16 @@ export class PostgresRoomRepository implements IRoomRepository {
       });
 
       if (!room) {
-        throw new HTTPError({
-          code: 'NOT_FOUND',
-          message: ROOM_ERRORS.ROOM_NOT_FOUND
-        });
+        throw new NotFoundError(ROOM_ERRORS.ROOM_NOT_FOUND);
       }
 
       return room;
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error instanceof NotFoundError) {
         throw error;
       }
 
-      console.error(error);
-      throw new HTTPError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Erro ao buscar sala.'
-      });
+      throw new InternalServerError('Erro ao buscar sala.');
     }
   }
 
@@ -66,11 +64,7 @@ export class PostgresRoomRepository implements IRoomRepository {
 
       return room;
     } catch (e) {
-      console.error(e);
-      throw new HTTPError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Erro ao criar sala.'
-      });
+      throw new InternalServerError('Erro ao criar sala.');
     }
   }
 
@@ -88,20 +82,14 @@ export class PostgresRoomRepository implements IRoomRepository {
   async startRoom(roomCode: string): Promise<void> {
     const exists = await this.roomExists(roomCode);
     if (!exists) {
-      throw new HTTPError({
-        code: 'NOT_FOUND',
-        message: ROOM_ERRORS.ROOM_NOT_FOUND
-      });
+      throw new NotFoundError(ROOM_ERRORS.ROOM_NOT_FOUND);
     }
 
     const players = await this.getRoomPlayers(roomCode);
     const playersReady = players.every(p => p.isReady);
 
     if (!playersReady) {
-      throw new HTTPError({
-        code: 'BAD_REQUEST',
-        message: 'Oops, nem todos os jogadores estão prontos.'
-      });
+      throw new BadRequestError(ROOM_ERRORS.NOT_ALL_PLAYERS_READY);
     }
 
     try {
@@ -109,10 +97,7 @@ export class PostgresRoomRepository implements IRoomRepository {
         status: 'IN_PROGRESS'
       });
     } catch {
-      throw new HTTPError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Erro ao iniciar sala.'
-      });
+      throw new InternalServerError('Erro ao iniciar sala.');
     }
   }
 
@@ -141,11 +126,7 @@ export class PostgresRoomRepository implements IRoomRepository {
 
       return ranking;
     } catch (error) {
-      console.error(error);
-      throw new HTTPError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Erro ao finalizar sala.'
-      });
+      throw new InternalServerError('Erro ao finalizar sala.');
     }
   }
 
@@ -156,10 +137,7 @@ export class PostgresRoomRepository implements IRoomRepository {
       const room = await this.getRoom(roomCode);
 
       if (!room) {
-        throw new HTTPError({
-          code: 'NOT_FOUND',
-          message: ROOM_ERRORS.ROOM_NOT_FOUND
-        });
+        throw new NotFoundError(ROOM_ERRORS.ROOM_NOT_FOUND);
       }
 
       player.isHost = room.hostId === player.id;
@@ -167,37 +145,24 @@ export class PostgresRoomRepository implements IRoomRepository {
 
       const playerAlreadyInRoom = players.some(p => p.id === player.id);
       if (playerAlreadyInRoom) {
-        throw new HTTPError({
-          code: 'BAD_REQUEST',
-          message: ROOM_ERRORS.PLAYER_ALREADY_IN_ROOM
-        });
+        throw new BadRequestError(ROOM_ERRORS.PLAYER_ALREADY_IN_ROOM);
       }
 
       if (players.length >= room.maxPlayers) {
-        throw new HTTPError({
-          code: 'BAD_REQUEST',
-          message: ROOM_ERRORS.ROOM_IS_FULL
-        });
+        throw new BadRequestError(ROOM_ERRORS.ROOM_IS_FULL);
       }
 
       if (!room.isPublic && room.password !== password) {
-        throw new HTTPError({
-          code: 'BAD_REQUEST',
-          message: ROOM_ERRORS.WRONG_PASSWORD
-        });
+        throw new BadRequestError(ROOM_ERRORS.WRONG_PASSWORD);
       }
 
       await this.addPlayerToRoom({ player, roomCode });
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error instanceof ApplicationError) {
         throw error;
       }
 
-      console.error('Unexpected error in joinRoom:', error);
-      throw new HTTPError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Erro ao entrar na sala.'
-      });
+      throw new InternalServerError('Erro ao entrar na sala.');
     }
   }
 
@@ -216,11 +181,7 @@ export class PostgresRoomRepository implements IRoomRepository {
         )
         .execute();
     } catch (error) {
-      console.error('Error in leaveRoom:', error);
-      throw new HTTPError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Erro ao sair da sala.'
-      });
+      throw new InternalServerError('Erro ao sair da sala.');
     }
   }
 
@@ -228,10 +189,7 @@ export class PostgresRoomRepository implements IRoomRepository {
     const exists = await this.roomExists(roomCode);
 
     if (!exists) {
-      throw new HTTPError({
-        code: 'NOT_FOUND',
-        message: ROOM_ERRORS.ROOM_NOT_FOUND
-      });
+      throw new NotFoundError(ROOM_ERRORS.ROOM_NOT_FOUND);
     }
 
     try {
@@ -255,10 +213,7 @@ export class PostgresRoomRepository implements IRoomRepository {
 
       return mapped;
     } catch {
-      throw new HTTPError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Erro ao buscar jogadores da sala.'
-      });
+      throw new InternalServerError('Erro ao buscar jogadores da sala.');
     }
   }
 
@@ -281,11 +236,7 @@ export class PostgresRoomRepository implements IRoomRepository {
         isReady: player.isReady
       });
     } catch (e) {
-      console.log(e);
-      throw new HTTPError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Erro ao adicionar jogador na sala.'
-      });
+      throw new InternalServerError('Erro ao adicionar jogador na sala.');
     }
   }
 
@@ -294,10 +245,7 @@ export class PostgresRoomRepository implements IRoomRepository {
     const player = players.find(p => p.id === playerId);
 
     if (!player) {
-      throw new HTTPError({
-        code: 'NOT_FOUND',
-        message: 'Jogador não encontrado.'
-      });
+      throw new NotFoundError(ROOM_ERRORS.PLAYER_NOT_FOUND);
     }
 
     return player;
@@ -321,11 +269,7 @@ export class PostgresRoomRepository implements IRoomRepository {
         )
         .execute();
     } catch (error) {
-      console.error(error);
-      throw new HTTPError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Erro ao alterar status do jogador.'
-      });
+      throw new InternalServerError('Erro ao atualizar jogador na sala.');
     }
   }
 
@@ -350,11 +294,9 @@ export class PostgresRoomRepository implements IRoomRepository {
         )
         .execute();
     } catch (error) {
-      console.error(error);
-      throw new HTTPError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Erro ao incrementar pontuação do jogador.'
-      });
+      throw new InternalServerError(
+        'Erro ao incrementar pontuação do jogador.'
+      );
     }
   }
 
@@ -370,18 +312,19 @@ export class PostgresRoomRepository implements IRoomRepository {
 
       return room;
     } catch {
-      throw new HTTPError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Erro ao atualizar estado da sala.'
-      });
+      throw new InternalServerError('Erro ao atualizar sala.');
     }
   }
 
   async roomExists(roomCode: string): Promise<boolean> {
-    const exists = await this.db.query.rooms.findFirst({
-      where: (rooms, { eq }) => eq(rooms.code, roomCode)
-    });
+    try {
+      const exists = await this.db.query.rooms.findFirst({
+        where: (rooms, { eq }) => eq(rooms.code, roomCode)
+      });
 
-    return !!exists;
+      return !!exists;
+    } catch (error) {
+      throw new InternalServerError('Erro ao verificar existência da sala.');
+    }
   }
 }

@@ -22,33 +22,28 @@ export const joinRoomController = async (app: App) => {
       const user = req.user;
       const { roomCode, password } = req.body;
 
-      try {
-        const player: Player = {
-          id: user.id,
-          isHost: false,
-          score: 0,
-          username: user.username,
-          avatarUrl: user.avatarUrl,
-          isReady: false,
-          isJudge: false
-        };
+      const player: Player = {
+        id: user.id,
+        isHost: false,
+        score: 0,
+        username: user.username,
+        avatarUrl: user.avatarUrl,
+        isReady: false,
+        isJudge: false
+      };
 
-        const room = await roomService.joinRoom({
-          roomCode,
-          password,
-          player
-        });
+      const room = await roomService.joinRoom({
+        roomCode,
+        password,
+        player
+      });
 
-        app.pubsub.publish(roomCode, {
-          event: 'player-joined',
-          payload: player
-        });
+      app.pubsub.publish(roomCode, {
+        event: 'player-joined',
+        payload: player
+      });
 
-        return room;
-      } catch (e) {
-        res.status(400);
-        return e;
-      }
+      return room;
     }
   );
 };

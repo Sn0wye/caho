@@ -22,25 +22,17 @@ export const playerReadyController = async (app: App) => {
 
       const { roomCode } = req.params;
 
-      try {
-        const player = await roomService.getPlayerFromRoom(
-          roomCode,
-          req.user.id
-        );
+      const player = await roomService.getPlayerFromRoom(roomCode, req.user.id);
 
-        await roomService.updatePlayerInRoom(roomCode, req.user.id, {
-          isReady: !player.isReady
-        });
-        player.isReady = !player.isReady;
+      await roomService.updatePlayerInRoom(roomCode, req.user.id, {
+        isReady: !player.isReady
+      });
+      player.isReady = !player.isReady;
 
-        await app.pubsub.publish(roomCode, {
-          event: 'player-update',
-          payload: player
-        });
-      } catch (e) {
-        console.error(e);
-        return e;
-      }
+      await app.pubsub.publish(roomCode, {
+        event: 'player-update',
+        payload: player
+      });
     }
   );
 };

@@ -13,16 +13,11 @@ export const leaveRoomController = async (app: App) => {
       return res.unauthorized();
     }
 
-    try {
-      const { roomCode } = leaveRoom.parse(req.body);
-      await roomService.leaveRoom({
-        roomCode,
-        playerId: user.id
-      });
-      return res.status(204);
-    } catch (e) {
-      res.status(400);
-      return e;
-    }
+    const { roomCode } = leaveRoom.parse(req.body);
+    await roomService.leaveRoom({
+      roomCode,
+      playerId: user.id
+    });
+    return res.status(204);
   });
 };

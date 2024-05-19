@@ -1,16 +1,22 @@
-import type { App } from '@/app';
+import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 
-export const pingRoute = async (app: App) => {
+export const pingRoute = async (app: FastifyInstance) => {
   app.get(
     '/ping',
     {
       schema: {
         response: {
-          200: z.string()
+          200: z.object({
+            message: z.string()
+          })
         }
       }
     },
-    () => 'pong'
+    (_req, res) => {
+      return res.send({
+        message: 'pong'
+      });
+    }
   );
 };
