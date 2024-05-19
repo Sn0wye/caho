@@ -36,7 +36,7 @@ jobs:
             cd ~/caho
             pnpm i --frozen-lockfile
 
-      - name: Build application in VPS
+      - name: Build application on VPS
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -47,7 +47,7 @@ jobs:
             rm -rf dist/
             pnpm build
 
-      - name: Restart application in VPS
+      - name: Restart application on VPS
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
