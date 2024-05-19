@@ -8,18 +8,24 @@ import { endRoom } from '@caho/contracts';
 export const endRoomController = async (app: App) => {
   const roomService = new RoomService(new PostgresRoomRepository());
 
-  app.register(ensureAuth).post('/end', async (req, res) => {
-    const user = req.getUser();
+  app.register(ensureAuth).post(
+    '/end',
+    {
+      schema: { security: [{ cookieAuth: [] }] }
+    },
+    async (req, res) => {
+      const user = req.getUser();
 
-    const { roomCode } = endRoom.parse(req.body);
-    const { hostId } = await roomService.getRoom(roomCode);
-    const isAdmin = user.id === hostId;
+      const { roomCode } = endRoom.parse(req.body);
+      const { hostId } = await roomService.getRoom(roomCode);
+      const isAdmin = user.id === hostId;
 
-    if (!isAdmin) {
-      return res.badRequest(ROOM_ERRORS.IS_NOT_ROOM_HOST);
+      if (!isAdmin) {
+        return res.badRequest(ROOM_ERRORS.IS_NOT_ROOM_HOST);
+      }
+
+      const room = await roomService.endRoom(roomCode);
+      return room;
     }
-
-    const room = await roomService.endRoom(roomCode);
-    return room;
-  });
+  );
 };

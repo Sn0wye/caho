@@ -13,7 +13,8 @@ export const playerReadyController = async (app: App) => {
       schema: {
         params: z.object({
           roomCode: z.string().min(6).max(6)
-        })
+        }),
+        security: [{ cookieAuth: [] }]
       }
     },
     async req => {

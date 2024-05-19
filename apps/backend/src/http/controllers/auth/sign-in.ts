@@ -20,10 +20,6 @@ export const signInController = async (app: App) => {
       }
     },
     async (req, res) => {
-      if (req.session && req.user) {
-        return req.user;
-      }
-
       const { username, password } = req.body;
 
       try {

@@ -9,6 +9,7 @@ export const getProfileController = async (app: FastifyInstance) => {
       schema: {
         tags: ['Auth'],
         summary: 'Get logged user profile',
+        security: [{ cookieAuth: [] }],
         response: {
           200: getProfileResponse,
           401: errorSchema

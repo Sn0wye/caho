@@ -12,7 +12,8 @@ export const joinRoomController = async (app: App) => {
     '/join',
     {
       schema: {
-        body: joinRoom
+        body: joinRoom,
+        security: [{ cookieAuth: [] }]
       }
     },
     async req => {

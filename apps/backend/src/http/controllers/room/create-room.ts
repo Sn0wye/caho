@@ -8,32 +8,38 @@ import type { Player } from '@caho/schemas';
 export const createRoomController = async (app: App) => {
   const roomService = new RoomService(new PostgresRoomRepository());
 
-  app.register(ensureAuth).post('/create', async (req, res) => {
-    const user = req.getUser();
+  app.register(ensureAuth).post(
+    '/create',
+    {
+      schema: { security: [{ cookieAuth: [] }] }
+    },
+    async (req, res) => {
+      const user = req.getUser();
 
-    const validatedBody = createRoom.parse(req.body);
+      const validatedBody = createRoom.parse(req.body);
 
-    const host: Player = {
-      id: user.id,
-      username: user.username,
-      avatarUrl: user.avatarUrl,
-      isHost: true,
-      score: 0,
-      isReady: false,
-      isJudge: false
-    };
+      const host: Player = {
+        id: user.id,
+        username: user.username,
+        avatarUrl: user.avatarUrl,
+        isHost: true,
+        score: 0,
+        isReady: false,
+        isJudge: false
+      };
 
-    const room = await roomService.createRoom({
-      ...validatedBody,
-      hostId: host.id
-    });
+      const room = await roomService.createRoom({
+        ...validatedBody,
+        hostId: host.id
+      });
 
-    await roomService.addPlayerToRoom({
-      roomCode: room.code,
-      player: host
-    });
+      await roomService.addPlayerToRoom({
+        roomCode: room.code,
+        player: host
+      });
 
-    res.status(201);
-    return room;
-  });
+      res.status(201);
+      return room;
+    }
+  );
 };

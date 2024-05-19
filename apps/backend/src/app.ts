@@ -26,6 +26,7 @@ import { pingRoute } from './http/routes/ping';
 import { roomRoutes } from './http/routes/room';
 import { wsRoutes } from './http/routes/ws';
 import { Pubsub } from './lib/pub-sub';
+import { authPlugin } from './plugins/auth';
 import { fastifyErrorHandler } from './http/error-handler';
 
 // import { csrfPlugin } from './plugins/csrf';
@@ -99,6 +100,7 @@ app.register(fastifyCookie, {
 // app.register(csrfPlugin, {
 //   enabled: env.NODE_ENV === 'production'
 // });
+app.register(authPlugin);
 
 // routes
 app.register(authRoutes, {

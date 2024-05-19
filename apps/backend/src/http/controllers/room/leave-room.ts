@@ -7,14 +7,20 @@ import { leaveRoom } from '@caho/contracts';
 export const leaveRoomController = async (app: App) => {
   const roomService = new RoomService(new PostgresRoomRepository());
 
-  app.register(ensureAuth).post('/leave', async (req, res) => {
-    const user = req.getUser();
+  app.register(ensureAuth).post(
+    '/leave',
+    {
+      schema: { security: [{ cookieAuth: [] }] }
+    },
+    async (req, res) => {
+      const user = req.getUser();
 
-    const { roomCode } = leaveRoom.parse(req.body);
-    await roomService.leaveRoom({
-      roomCode,
-      playerId: user.id
-    });
-    return res.status(204);
-  });
+      const { roomCode } = leaveRoom.parse(req.body);
+      await roomService.leaveRoom({
+        roomCode,
+        playerId: user.id
+      });
+      return res.status(204);
+    }
+  );
 };
