@@ -6,19 +6,19 @@ import {
   UnprocessableEntityError
 } from '@/errors';
 import type { FastifyInstance } from 'fastify';
+import { ZodError } from 'zod';
 
 export const fastifyErrorHandler: FastifyInstance['errorHandler'] = (
   error,
   _req,
   res
 ) => {
-  // if (error instanceof ZodError) {
-
-  //   reply.status(400).send({
-  //     message: 'Validation error',
-  //     errors: error.flatten().fieldErrors
-  //   });
-  // }
+  if (error instanceof ZodError) {
+    res.status(400).send({
+      message: 'Validation error',
+      errors: error.flatten().fieldErrors
+    });
+  }
 
   if (error instanceof BadRequestError) {
     res.badRequest(error.message);
