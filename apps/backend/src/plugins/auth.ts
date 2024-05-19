@@ -1,7 +1,7 @@
-import { fastifyPlugin } from 'fastify-plugin';
-import type { Session, User } from 'lucia';
 import type { App } from '@/app';
 import { auth } from '@/auth/lucia';
+import { fastifyPlugin } from 'fastify-plugin';
+import type { Session, User } from 'lucia';
 
 export const authPlugin = fastifyPlugin(
   async (app: App) => {

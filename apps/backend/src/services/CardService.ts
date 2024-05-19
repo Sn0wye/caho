@@ -1,11 +1,7 @@
-import { eq } from 'drizzle-orm';
-import type {
-  BlackCard,
-  CardPack,
-  WhiteCard
-} from '@/cards/base-pack';
+import type { BlackCard, CardPack, WhiteCard } from '@/cards/base-pack';
 import { db } from '@/db';
 import { rooms } from '@/db/schema';
+import { eq } from 'drizzle-orm';
 
 export class CardService {
   private readonly roomCode: string;

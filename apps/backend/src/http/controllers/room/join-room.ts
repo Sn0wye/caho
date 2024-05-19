@@ -1,8 +1,8 @@
-import { joinRoom } from '@caho/contracts';
-import type { Player } from '@caho/schemas';
 import type { App } from '@/app';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
+import { joinRoom } from '@caho/contracts';
+import type { Player } from '@caho/schemas';
 
 export const joinRoomController = async (app: App) => {
   const roomService = new RoomService(new PostgresRoomRepository());

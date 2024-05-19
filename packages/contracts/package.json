@@ -9,10 +9,10 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "biome lint src",
-    "lint:fix": "biome lint src --apply",
+    "clean": "git clean -xdf node_modules",
     "typecheck": "tsc --noEmit",
-    "clean": "git clean -xdf node_modules"
+    "check": "biome check src",
+    "check:fix": "biome check src --apply"
   },
   "dependencies": {
     "zod": "3.22.2",

@@ -7,8 +7,8 @@
     "dev": "turbo run dev",
     "dev:fe": "turbo run dev --filter=frontend...",
     "dev:be": "turbo run dev --filter=backend...",
-    "lint": "SKIP_ENV_VALIDATION=1 turbo run lint",
-    "format": "prettier --cache --write --plugin-search-dir=. **/*.{cjs,mjs,ts,tsx}",
+    "check": "turbo run check",
+    "check:fix": "turbo run check:fix",
     "clean": "git clean -xdf node_modules",
     "clean:workspaces": "turbo run clean",
     "typecheck": "turbo run typecheck"

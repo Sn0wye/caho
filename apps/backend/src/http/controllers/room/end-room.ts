@@ -1,8 +1,8 @@
-import { endRoom } from '@caho/contracts';
 import type { App } from '@/app';
 import { ROOM_ERRORS } from '@/errors/room';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
+import { endRoom } from '@caho/contracts';
 
 export const endRoomController = async (app: App) => {
   const roomService = new RoomService(new PostgresRoomRepository());

@@ -1,10 +1,10 @@
-import { signUpRequest, signUpResponse } from '@caho/contracts';
-import { errorSchema } from '@caho/schemas';
-import { hash } from '@/utils/password';
 import type { App } from '@/app';
 import { auth } from '@/auth/lucia';
 import { db } from '@/db';
 import { users } from '@/db/schema';
+import { hash } from '@/utils/password';
+import { signUpRequest, signUpResponse } from '@caho/contracts';
+import { errorSchema } from '@caho/schemas';
 
 export const signUpController = async (app: App) => {
   app.post(

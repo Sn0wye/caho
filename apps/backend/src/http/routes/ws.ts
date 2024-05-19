@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import type { App } from '@/app';
+import { z } from 'zod';
 
 export const wsRoutes = async (app: App) => {
   app.get(

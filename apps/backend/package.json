@@ -13,11 +13,10 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "lint": "biome lint src",
-    "lint:fix": "biome lint src --apply",
     "typecheck": "tsc --noEmit",
     "clean": "git clean -xdf node_modules",
-    "NOTE": "You can apply both linter, formatter and import ordering by using https://biomejs.dev/reference/cli/#biome-check"
+    "check": "biome check src",
+    "check:fix": "biome check src --apply"
   },
   "dependencies": {
     "@caho/contracts": "workspace:*",

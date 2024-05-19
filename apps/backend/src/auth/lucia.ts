@@ -1,9 +1,9 @@
+import { db } from '@/db';
+import { userSessions, users } from '@/db/schema';
+import { env } from '@/env';
 // import { github, google } from '@lucia-auth/oauth/providers';
 import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { Lucia, TimeSpan } from 'lucia';
-import { db } from '@/db';
-import { users, userSessions } from '@/db/schema';
-import { env } from '@/env';
 
 declare module 'lucia' {
   interface Register {

@@ -1,3 +1,5 @@
+import { redis } from '@/db/redis';
+import { env } from '@/env';
 import { fastifyCookie } from '@fastify/cookie';
 import { fastifyCors } from '@fastify/cors';
 import { fastifySensible } from '@fastify/sensible';
@@ -5,21 +7,19 @@ import { fastifySwagger } from '@fastify/swagger';
 import { fastifySwaggerUi } from '@fastify/swagger-ui';
 import { fastifyWebsocket } from '@fastify/websocket';
 import {
-  fastify,
   type FastifyBaseLogger,
   type FastifyInstance,
   type RawReplyDefaultExpression,
   type RawRequestDefaultExpression,
-  type RawServerDefault
+  type RawServerDefault,
+  fastify
 } from 'fastify';
 import {
+  type ZodTypeProvider,
   jsonSchemaTransform,
   serializerCompiler,
-  validatorCompiler,
-  type ZodTypeProvider
+  validatorCompiler
 } from 'fastify-type-provider-zod';
-import { redis } from '@/db/redis';
-import { env } from '@/env';
 import { db } from './db';
 import { authRoutes } from './http/routes/auth';
 import { pingRoute } from './http/routes/ping';

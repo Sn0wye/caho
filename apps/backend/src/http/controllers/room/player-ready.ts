@@ -1,7 +1,7 @@
-import { z } from 'zod';
 import type { App } from '@/app';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
+import { z } from 'zod';
 
 export const playerReadyController = async (app: App) => {
   const roomService = new RoomService(new PostgresRoomRepository());

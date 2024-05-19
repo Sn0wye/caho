@@ -1,11 +1,11 @@
-import { startRoom } from '@caho/contracts';
-import { getRandomJudge } from '@/utils/getRandomJudge';
 import type { App } from '@/app';
 import { basePack } from '@/cards/base-pack';
 import { ROOM_ERRORS } from '@/errors/room';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { CardService } from '@/services/CardService';
 import { RoomService } from '@/services/RoomService';
+import { getRandomJudge } from '@/utils/getRandomJudge';
+import { startRoom } from '@caho/contracts';
 
 export const startRoomController = async (app: App) => {
   const roomService = new RoomService(new PostgresRoomRepository());

@@ -1,9 +1,9 @@
-import { signInRequest, signInResponse } from '@caho/contracts';
-import { errorSchema } from '@caho/schemas';
-import { verify } from '@/utils/password';
 import type { App } from '@/app';
 import { auth } from '@/auth/lucia';
 import { db } from '@/db';
+import { verify } from '@/utils/password';
+import { signInRequest, signInResponse } from '@caho/contracts';
+import { errorSchema } from '@caho/schemas';
 
 export const signInController = async (app: App) => {
   app.post(

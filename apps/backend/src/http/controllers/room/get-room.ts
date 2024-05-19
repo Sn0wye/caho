@@ -1,8 +1,8 @@
-import { z } from 'zod';
 import type { App } from '@/app';
 import { HTTPError } from '@/errors/HTTPError';
 import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { RoomService } from '@/services/RoomService';
+import { z } from 'zod';
 
 export const getRoomController = async (app: App) => {
   const roomService = new RoomService(new PostgresRoomRepository());
@@ -23,9 +23,8 @@ export const getRoomController = async (app: App) => {
 
       const { roomCode } = req.params;
       try {
-        const { password, ...sanitizedRoom } = await roomService.getRoom(
-          roomCode
-        );
+        const { password, ...sanitizedRoom } =
+          await roomService.getRoom(roomCode);
         return sanitizedRoom;
       } catch (e) {
         if (e instanceof HTTPError) {

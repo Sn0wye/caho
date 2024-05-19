@@ -1,6 +1,6 @@
-import { z } from 'zod';
 import type { App } from '@/app';
 import { auth } from '@/auth/lucia';
+import { z } from 'zod';
 
 export const signOutController = async (app: App) => {
   app.post(

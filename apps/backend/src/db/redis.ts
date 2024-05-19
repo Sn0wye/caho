@@ -1,5 +1,5 @@
-import Redis from 'ioredis';
 import { env } from '@/env';
+import Redis from 'ioredis';
 
 declare global {
   var redis: Redis;

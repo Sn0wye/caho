@@ -1,6 +1,6 @@
+import type { App } from '@/app';
 import { fastifyPlugin } from 'fastify-plugin';
 import { verifyRequestOrigin } from 'lucia';
-import type { App } from '@/app';
 
 type Options = {
   enabled: boolean;
