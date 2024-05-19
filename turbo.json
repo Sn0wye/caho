@@ -16,8 +16,12 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist"]
     },
-    "check": {},
-    "check:fix": {},
+    "check": {
+      "cache": false
+    },
+    "check:fix": {
+      "cache": false
+    },
     "typecheck": {
       "cache": false
     },
