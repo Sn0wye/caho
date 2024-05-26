@@ -65,24 +65,15 @@ importers:
       '@fastify/swagger-ui':
         specifier: ^3.0.0
         version: 3.0.0
-      '@fastify/type-provider-typebox':
-        specifier: ^3.6.0
-        version: 3.6.0(@sinclair/typebox@0.31.28)
       '@fastify/websocket':
         specifier: ^9.0.0
         version: 9.0.0
       '@lucia-auth/adapter-drizzle':
         specifier: ^1.0.4
         version: 1.0.4(lucia@3.0.1)
-      '@lucia-auth/oauth':
-        specifier: ^3.5.3
-        version: 3.5.3(lucia@3.0.1)
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
-      '@sinclair/typebox':
-        specifier: ^0.31.28
-        version: 0.31.28
       '@t3-oss/env-core':
         specifier: ^0.6.1
         version: 0.6.1(typescript@5.3.3)(zod@3.22.2)
@@ -915,11 +906,6 @@ packages:
   '@fastify/swagger@8.14.0':
     resolution: {integrity: sha512-sGiznEb3rl6pKGGUZ+JmfI7ct5cwbTQGo+IjewaTvtzfrshnryu4dZwEsjw0YHABpBA+kCz3kpRaHB7qpa67jg==}
 
-  '@fastify/type-provider-typebox@3.6.0':
-    resolution: {integrity: sha512-HTeOLvirfGg0u1KGao3iXn5rZpYNqlrOmyDnXSXAbWVPa+mDQTTBNs/x5uZzOB6vFAqr0Xcf7x1lxOamNSYKjw==}
-    peerDependencies:
-      '@sinclair/typebox': '>=0.26 <=0.32'
-
   '@fastify/websocket@9.0.0':
     resolution: {integrity: sha512-rpHDtDdTaAQ1GuN6VzOZaUEmegXR3HhSA2QAL2e8GgiNGo/cTyy+chwbu7OjDIWnq3HZisitln/0N8Xdn0Fc+w==}
 
@@ -1010,11 +996,6 @@ packages:
     resolution: {integrity: sha512-eF0DyebhgG8SLBpEG0BiDLm9DLCCYJj3EFN4TvU/oaJ7expEuY5nPZj4mvUpxX8I9DYwC7ROhMWC9WyjY1pQ9Q==}
     peerDependencies:
       lucia: 3.x
-
-  '@lucia-auth/oauth@3.5.3':
-    resolution: {integrity: sha512-3blBldenf2zXsSJTZUwzB+NxI+0KJljfMHT0WR7hyLNwi4Ijss7F2cQqk2xW1lGH3lzdmsV93ZsY9Yv8ekBRUw==}
-    peerDependencies:
-      lucia: ^2.0.0
 
   '@lukeed/ms@2.0.2':
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
@@ -2014,9 +1995,6 @@ packages:
 
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
-
-  '@sinclair/typebox@0.31.28':
-    resolution: {integrity: sha512-/s55Jujywdw/Jpan+vsy6JZs1z2ZTGxTmbZTPiuSL2wz9mfzA2gN1zzaqmvfi4pq+uOt7Du85fkiwv5ymW84aQ==}
 
   '@sn0wye/eslint-config@3.0.1':
     resolution: {integrity: sha512-EmNOFLrws/Q3VFQ6p2uLuBAflpf7RplOB/k+en+HIaykhyZJXYLGx5tFLFBo8Exqf742xNu7jo8q6qFGCuRMvg==}
@@ -5721,10 +5699,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@fastify/type-provider-typebox@3.6.0(@sinclair/typebox@0.31.28)':
-    dependencies:
-      '@sinclair/typebox': 0.31.28
-
   '@fastify/websocket@9.0.0':
     dependencies:
       duplexify: 4.1.3
@@ -5828,10 +5802,6 @@ snapshots:
       use-sync-external-store: 1.2.0(react@18.2.0)
 
   '@lucia-auth/adapter-drizzle@1.0.4(lucia@3.0.1)':
-    dependencies:
-      lucia: 3.0.1
-
-  '@lucia-auth/oauth@3.5.3(lucia@3.0.1)':
     dependencies:
       lucia: 3.0.1
 
@@ -6736,8 +6706,6 @@ snapshots:
   '@rushstack/eslint-patch@1.5.1': {}
 
   '@sinclair/typebox@0.27.8': {}
-
-  '@sinclair/typebox@0.31.28': {}
 
   '@sn0wye/eslint-config@3.0.1(eslint@8.47.0)(typescript@5.2.2)':
     dependencies:
