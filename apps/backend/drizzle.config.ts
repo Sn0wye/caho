@@ -5,7 +5,7 @@ export default defineConfig({
   out: './migrations',
   schema: './src/db/schema.ts',
   migrations: {
-    schema: './src/db/schema.ts',
+    schema: 'public',
     table: 'migrations'
   },
   breakpoints: true,

@@ -1,7 +1,6 @@
 import { db } from '@/db';
 import { userSessions, users } from '@/db/schema';
 import { env } from '@/env';
-// import { github, google } from '@lucia-auth/oauth/providers';
 import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { Lucia, TimeSpan } from 'lucia';
 
@@ -20,6 +19,8 @@ type DatabaseUserAttributes = {
   email: string | null;
   username: string;
   avatarUrl: string | null;
+  provider_id: string | null;
+  provider_user_id: string | null;
 };
 
 const adapter = new DrizzlePostgreSQLAdapter(db, userSessions, users);
@@ -32,58 +33,31 @@ export const auth = new Lucia(adapter, {
       // path: '/'
     }
   },
-  getUserAttributes: databaseUser => {
+  getUserAttributes: attributes => {
     return {
-      id: databaseUser.id,
-      name: databaseUser.name,
-      username: databaseUser.username,
-      email: databaseUser.email,
-      avatarUrl: databaseUser.avatarUrl
+      id: attributes.id,
+      name: attributes.name,
+      username: attributes.username,
+      email: attributes.email,
+      avatarUrl: attributes.avatarUrl,
+      providerId: attributes.provider_id,
+      providerUserId: attributes.provider_user_id
     };
   },
   sessionExpiresIn: new TimeSpan(30, 'd')
 });
 
-// TODO: review & update this to v3
-// export const githubAuth = github(auth, {
-//   clientId: env.GITHUB_CLIENT_ID,
-//   clientSecret: env.GITHUB_CLIENT_SECRET
-// });
+import { GitHub, Google } from 'arctic';
 
-// TODO: review & update this to v3
-// export const googleAuth = google(auth, {
-//   clientId: env.GOOGLE_CLIENT_ID,
-//   clientSecret: env.GOOGLE_CLIENT_SECRET,
-//   redirectUri: 'http://localhost:3000/auth/google/callback'
-// });
+export const githubAuth = new GitHub(
+  env.GITHUB_CLIENT_ID,
+  env.GITHUB_CLIENT_SECRET
+);
+
+export const googleAuth = new Google(
+  env.GOOGLE_CLIENT_ID,
+  env.GOOGLE_CLIENT_SECRET,
+  env.GOOGLE_REDIRECT_CALLBACK
+);
 
 export type Auth = typeof auth;
-
-// export const getSessionFromToken = async (
-//   token?: string
-// ): Promise<
-//   | {
-//       user: User;
-//       session: Session;
-//     }
-//   | {
-//       user: null;
-//       session: null;
-//     }
-// > => {
-//   // const cookie = req.cookies['auth_session'];
-//   if (!token) {
-//     return {
-//       user: null,
-//       session: null
-//     };
-//   }
-//   const sessionAndUser = await auth.validateSession(token);
-//   if (!sessionAndUser) {
-//     return {
-//       user: null,
-//       session: null
-//     };
-//   }
-//   return sessionAndUser;
-// };

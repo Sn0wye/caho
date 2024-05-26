@@ -7,8 +7,11 @@ import {
   primaryKey,
   timestamp,
   uniqueIndex,
-  varchar
+  varchar,
+  pgEnum
 } from 'drizzle-orm/pg-core';
+
+export const providerEnum = pgEnum('provider_id', ['github', 'google']);
 
 export const users = pgTable('users', {
   id: varchar('id', {
@@ -32,6 +35,25 @@ export const users = pgTable('users', {
     length: 255
   })
 });
+
+export const oauthAccounts = pgTable(
+  'oauth_accounts',
+  {
+    providerId: providerEnum('provider_id'),
+    providerUserId: varchar('provider_user_id').unique(),
+    userId: varchar('user_id', {
+      length: 24
+    })
+      .notNull()
+      .references(() => users.id, {
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      })
+  },
+  table => ({
+    pk: primaryKey({ columns: [table.providerId, table.providerUserId] })
+  })
+);
 
 export const userSessions = pgTable('user_sessions', {
   id: varchar('id', {
@@ -61,7 +83,9 @@ export const rooms = pgTable(
       .$defaultFn(() => createId()),
     code: varchar('code', {
       length: 6
-    }).notNull(),
+    })
+      .unique()
+      .notNull(),
     maxPlayers: integer('max_players').notNull(),
     maxPoints: integer('max_points').notNull(),
     password: varchar('password', {
