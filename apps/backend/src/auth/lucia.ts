@@ -57,7 +57,7 @@ export const githubAuth = new GitHub(
 export const googleAuth = new Google(
   env.GOOGLE_CLIENT_ID,
   env.GOOGLE_CLIENT_SECRET,
-  env.GOOGLE_REDIRECT_CALLBACK
+  env.GOOGLE_REDIRECT_URL
 );
 
 export type Auth = typeof auth;
