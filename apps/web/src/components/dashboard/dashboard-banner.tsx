@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Noise } from '../illustrations/noise';
 import { RoomsForms } from '../illustrations/rooms-forms';
 import { Button } from '../ui/button';
@@ -8,7 +9,7 @@ interface DashboardBannerProps {
 
 export function DashboardBanner({ firstName }: DashboardBannerProps) {
   return (
-    <div className="relative -z-10 w-full overflow-clip rounded-md bg-gradient-to-r from-zinc-100 via-zinc-100 to-slate-400 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-700">
+    <div className="relative z-10 w-full overflow-clip rounded-md bg-gradient-to-r from-zinc-100 via-zinc-100 to-slate-400 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-700">
       <Noise className="rounded-md" />
 
       <div className="flex flex-1 flex-col-reverse items-center justify-between gap-12 p-8 md:flex-row md:items-start md:gap-8">
@@ -26,10 +27,12 @@ export function DashboardBanner({ firstName }: DashboardBannerProps) {
             </span>
           </header>
 
-          <div className="flex items-center gap-4">
-            <Button size="lg">Criar uma nova sala</Button>
-            <Button size="lg" variant="ghost">
-              Outras opções
+          <div className="flex items-center gap-4 z-10">
+            <Button asChild size="lg">
+              <Link href="/dashboard/create-room">Criar uma nova sala</Link>
+            </Button>
+            <Button asChild size="lg" variant="ghost">
+              <Link href="#">Outras opções</Link>
             </Button>
           </div>
         </section>

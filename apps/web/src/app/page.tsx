@@ -3,6 +3,7 @@ import { AlertTopBar } from '@/components/alert-top-bar';
 import { Navbar } from '@/components/navbar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default async function HomePage() {
   return (
@@ -26,8 +27,8 @@ export default async function HomePage() {
             </span>
           </div>
 
-          <Button size="lg" className="mt-4 w-fit">
-            Começar
+          <Button asChild size="lg" className="mt-4 w-fit">
+            <Link href="/dashboard">Começar</Link>
           </Button>
         </section>
       </main>

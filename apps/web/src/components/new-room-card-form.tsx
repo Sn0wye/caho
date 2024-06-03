@@ -2,14 +2,14 @@
 
 import { useRouter } from 'next/navigation';
 import { createRoom, type CreateRoom } from '@caho/contracts';
-import { type Player, type Room, type User } from '@caho/schemas';
+import type { Player, Room, User } from '@caho/schemas';
 // import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SelectTrigger } from '@radix-ui/react-select';
 import { useMutation } from '@tanstack/react-query';
-import { Eye, EyeOff, Loader2, Lock, Trophy, Users } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Lock, Trophy } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { type z } from 'zod';
+import type { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -23,10 +23,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { api } from '@/utils/api';
-import { NEW_ROOM_FORM } from '@/constants/room';
 import { Select, SelectContent, SelectItem, SelectValue } from './ui/select';
 import { Separator } from './ui/separator';
 import { toast } from './ui/use-toast';
+import Link from 'next/link';
 
 const formSchema = createRoom;
 
@@ -106,7 +106,7 @@ export const NewRoomCardForm = () => {
           onSubmit={form.handleSubmit(onSubmit, e => console.log(e))}
           className="space-y-10"
         >
-          <FormField
+          {/* <FormField
             control={form.control}
             name="maxPlayers"
             render={({ field }) => (
@@ -129,7 +129,7 @@ export const NewRoomCardForm = () => {
                   defaultValue={String(field.value)}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-[280px]">
                       <SelectValue placeholder="Qual o tamanho do coração?" />
                     </SelectTrigger>
                   </FormControl>
@@ -150,6 +150,36 @@ export const NewRoomCardForm = () => {
                   </SelectContent>
                 </Select>
 
+                <FormMessage />
+              </FormItem>
+            )}
+          /> */}
+
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a verified email to display" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="m@example.com">m@example.com</SelectItem>
+                    <SelectItem value="m@google.com">m@google.com</SelectItem>
+                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  You can manage email addresses in your{' '}
+                  <Link href="/examples/forms">email settings</Link>.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -178,7 +208,7 @@ export const NewRoomCardForm = () => {
                     {...field}
                     value={String(field.value)}
                     onChange={e => {
-                      if (isNaN(Number(e.target.value))) return;
+                      if (Number.isNaN(Number(e.target.value))) return;
 
                       return field.onChange(Number(e.target.value));
                     }}

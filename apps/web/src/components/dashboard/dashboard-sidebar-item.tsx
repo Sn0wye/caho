@@ -1,6 +1,6 @@
 'use client';
 
-import { type ComponentProps, type ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/utils/cn';
@@ -44,7 +44,7 @@ export function DashboardSidebarItem(props: DashboardSidebarItemProps) {
           </Button>
         </div>
       </TooltipTrigger>
-      <TooltipContent side="right" sideOffset={8}>
+      <TooltipContent hidden={isActive} side="right" sideOffset={8}>
         <span>{props.label}</span>
       </TooltipContent>
     </Tooltip>

@@ -168,12 +168,6 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.1.1
         version: 3.3.1(react-hook-form@7.46.2(react@18.2.0))
-      '@liveblocks/client':
-        specifier: ^1.2.1
-        version: 1.4.0
-      '@liveblocks/react':
-        specifier: ^1.2.1
-        version: 1.4.0(react@18.2.0)
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
@@ -980,17 +974,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.19':
     resolution: {integrity: sha512-kf37QtfW+Hwx/buWGMPcR60iF9ziHa6r/CZJIHbmcm4+0qrXiVdxegAH0F6yddEVQ7zdkjcGCgCzUu+BcbhQxw==}
-
-  '@liveblocks/client@1.4.0':
-    resolution: {integrity: sha512-YoEUSK2TODtZ1fq0t2zIwtwPkQuLItdQtPoo6FFes6fXTPzDVtGf4CzzraTLBTS/i0SvzTNnUEqK4txDEXKHVQ==}
-
-  '@liveblocks/core@1.4.0':
-    resolution: {integrity: sha512-LIgLLFyf4r9dyafGUmt+Dh3uGADwIlEIWVS4t0pbv7N4AGO6hXQ99igf7AczblhRoQlbCgVj4WGHhyqKMdXh6A==}
-
-  '@liveblocks/react@1.4.0':
-    resolution: {integrity: sha512-IJxmGxdXttwNIzBDWiJrm5Ygl/mK8XaibeiaobT3cUAqZwabyolWwsJEP7BjllRjt+m2ojAoz+bXEdrhdNxDaQ==}
-    peerDependencies:
-      react: ^16.14.0 || ^17 || ^18
 
   '@lucia-auth/adapter-drizzle@1.0.4':
     resolution: {integrity: sha512-eF0DyebhgG8SLBpEG0BiDLm9DLCCYJj3EFN4TvU/oaJ7expEuY5nPZj4mvUpxX8I9DYwC7ROhMWC9WyjY1pQ9Q==}
@@ -5786,20 +5769,6 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
-
-  '@liveblocks/client@1.4.0':
-    dependencies:
-      '@liveblocks/core': 1.4.0
-
-  '@liveblocks/core@1.4.0': {}
-
-  '@liveblocks/react@1.4.0(react@18.2.0)':
-    dependencies:
-      '@liveblocks/client': 1.4.0
-      '@liveblocks/core': 1.4.0
-      nanoid: 3.3.6
-      react: 18.2.0
-      use-sync-external-store: 1.2.0(react@18.2.0)
 
   '@lucia-auth/adapter-drizzle@1.0.4(lucia@3.0.1)':
     dependencies:

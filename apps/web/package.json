@@ -15,8 +15,6 @@
     "@caho/contracts": "workspace:*",
     "@caho/schemas": "workspace:*",
     "@hookform/resolvers": "^3.1.1",
-    "@liveblocks/client": "^1.2.1",
-    "@liveblocks/react": "^1.2.1",
     "@paralleldrive/cuid2": "^2.2.2",
     "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-avatar": "^1.0.3",

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { type Error } from '@caho/schemas';
+import type { ErrorSchema } from '@caho/schemas';
 import { toast } from '@/components/ui/use-toast';
 
 type MutateOpts<Error> = {
@@ -7,9 +7,10 @@ type MutateOpts<Error> = {
   onSettled?: () => void;
 };
 
-export function useAction<TData = unknown, TError extends Error = Error>(
-  action: (data: TData) => Promise<void | TError>
-) {
+export function useAction<
+  TData = unknown,
+  TError extends ErrorSchema = ErrorSchema
+>(action: (data: TData) => Promise<TError | void>) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState<TError | null>(null);

@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { BetaAlert } from '@/components/beta-alert';
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar';
 

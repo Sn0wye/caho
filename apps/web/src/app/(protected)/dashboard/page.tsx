@@ -9,11 +9,12 @@ import { getUser } from '@/auth';
 
 export default async function DashboardPage() {
   const user = await getUser();
-  const firstName = user?.name?.split(' ')[0];
+  const name = user?.name?.split(' ')[0] ?? user?.username;
+
+  console.log('user', user);
 
   if (!user) {
-    // TODO: change this to '/login' when the login page is ready
-    redirect('/new-login');
+    redirect('/login');
   }
 
   return (
@@ -24,7 +25,7 @@ export default async function DashboardPage() {
         icon={<Home size={24} />}
       />
       <Separator className="w-full" />
-      <DashboardBanner firstName={firstName || 'DESCONHECIDO'} />
+      <DashboardBanner firstName={name || 'DESCONHECIDO'} />
 
       <section className="mt-4 grid grid-cols-1 gap-8 md:grid-cols-3">
         <DashboardOptionCard
