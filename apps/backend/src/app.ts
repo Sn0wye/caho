@@ -21,13 +21,13 @@ import {
   validatorCompiler
 } from 'fastify-type-provider-zod';
 import { db } from './db';
+import { fastifyErrorHandler } from './http/error-handler';
 import { authRoutes } from './http/routes/auth';
 import { pingRoute } from './http/routes/ping';
 import { roomRoutes } from './http/routes/room';
 import { wsRoutes } from './http/routes/ws';
 import { Pubsub } from './lib/pub-sub';
 import { authPlugin } from './plugins/auth';
-import { fastifyErrorHandler } from './http/error-handler';
 
 // import { csrfPlugin } from './plugins/csrf';
 // import { fastifySocketIO } from './plugins/socketio';

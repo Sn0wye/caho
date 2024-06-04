@@ -1,12 +1,12 @@
-import { OAuth2RequestError, generateState } from 'arctic';
-import { auth, githubAuth } from '@/auth/lucia';
-import { z } from 'zod';
 import type { App } from '@/app';
-import { BadRequestError, InternalServerError } from '@/errors';
+import { auth, githubAuth } from '@/auth/lucia';
 import { db } from '@/db';
 import { oauthAccounts, users } from '@/db/schema';
-import { createId } from '@paralleldrive/cuid2';
 import { env } from '@/env';
+import { BadRequestError, InternalServerError } from '@/errors';
+import { createId } from '@paralleldrive/cuid2';
+import { OAuth2RequestError, generateState } from 'arctic';
+import { z } from 'zod';
 
 export const signInWithGithub = async (app: App) => {
   app.get('/github', async (req, res) => {

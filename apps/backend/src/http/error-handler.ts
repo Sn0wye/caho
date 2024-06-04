@@ -1,8 +1,8 @@
 import {
   BadRequestError,
-  UnauthorizedError,
   InternalServerError,
   NotFoundError,
+  UnauthorizedError,
   UnprocessableEntityError
 } from '@/errors';
 import type { FastifyInstance } from 'fastify';

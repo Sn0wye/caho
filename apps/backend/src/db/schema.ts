@@ -3,12 +3,12 @@ import { relations, sql } from 'drizzle-orm';
 import {
   boolean,
   integer,
+  pgEnum,
   pgTable,
   primaryKey,
   timestamp,
   uniqueIndex,
-  varchar,
-  pgEnum
+  varchar
 } from 'drizzle-orm/pg-core';
 
 export const providerEnum = pgEnum('provider_id', ['github', 'google']);
