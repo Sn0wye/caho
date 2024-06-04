@@ -1,5 +1,6 @@
+'use client';
+
 import Link from 'next/link';
-import { getUser } from '@/auth';
 import { Avatar, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import {
@@ -9,17 +10,18 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '../ui/dropdown-menu';
+import type { User } from '@caho/schemas';
+import { signOut } from '@/actions/sign-out';
+import { useActionState } from 'react';
 
-// TODO: sign out logic
-export async function DashboardUserNav() {
-  const user = await getUser();
+type Props = {
+  user: User;
+};
 
-  if (!user) {
-    throw new Error('Not authenticated.');
-  }
+export function DashboardUserNav({ user }: Props) {
+  const [_, handleSignOut] = useActionState(signOut, null);
 
   return (
     <DropdownMenu>
@@ -62,9 +64,11 @@ export async function DashboardUserNav() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         {/* <SignOutButton> */}
-        <DropdownMenuItem>
-          Sair
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+        <DropdownMenuItem asChild>
+          <button type="button" formAction={handleSignOut}>
+            Sair
+          </button>
+          {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
         </DropdownMenuItem>
         {/* </SignOutButton> */}
       </DropdownMenuContent>

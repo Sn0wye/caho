@@ -2,15 +2,20 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import type { ErrorSchema, User } from '@caho/schemas';
+import type { ErrorSchema } from '@caho/schemas';
 import { AxiosError } from 'axios';
 import { parse } from 'cookie';
 import { api } from '@/utils/api';
-import type { LoginDTO } from './login.dto';
+import type { SignInRequest, SignInResponse } from '@caho/contracts';
 
-export const login = async (payload: LoginDTO): Promise<ErrorSchema | void> => {
+export const login = async (
+  payload: SignInRequest
+): Promise<SignInResponse | ErrorSchema> => {
   try {
-    const { headers } = await api.post<User>('/auth/sign-in', payload);
+    const { headers } = await api.post<SignInResponse>(
+      '/auth/sign-in',
+      payload
+    );
 
     if (headers['set-cookie']) {
       const cookie = parse(headers['set-cookie'][0]) as {
@@ -31,8 +36,6 @@ export const login = async (payload: LoginDTO): Promise<ErrorSchema | void> => {
     if (e instanceof AxiosError) {
       return e.response?.data as ErrorSchema;
     }
-
-    console.error(e);
   }
 
   redirect('/');
