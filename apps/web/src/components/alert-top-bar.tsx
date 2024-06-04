@@ -46,10 +46,15 @@ export function AlertTopBar({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          exit={{ height: 0, speed: 150 }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.3 }}
           className={cn(alertTopBarVariants({ variant }))}
         >
-          <div className="flex w-full grow flex-col gap-6 lg:flex-row lg:items-center lg:justify-center lg:gap-2">
+          <motion.div
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+            className="flex w-full grow flex-col gap-6 lg:flex-row lg:items-center lg:justify-center lg:gap-2"
+          >
             <div className="flex items-center justify-between">
               {icon}
 
@@ -71,7 +76,7 @@ export function AlertTopBar({
                 </Link>
               )}
             </span>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
@@ -85,6 +90,7 @@ function DiscloseButton({
 }) {
   return (
     <button
+      type="button"
       className="flex items-center justify-center p-2 lg:absolute lg:right-2 lg:top-1/2 lg:-translate-y-1/2"
       onClick={() => setIsOpen(false)}
     >
