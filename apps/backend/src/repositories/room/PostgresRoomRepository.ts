@@ -233,7 +233,9 @@ export class PostgresRoomRepository implements IRoomRepository {
         roomCode,
         playerId: player.id,
         isHost: player.isHost,
-        isReady: player.isReady
+        isReady: player.isReady,
+        isJudge: player.isJudge,
+        cardIds: []
       });
     } catch (e) {
       throw new InternalServerError('Erro ao adicionar jogador na sala.');

@@ -1,5 +1,5 @@
 {
-  "id": "960bf723-ec19-43d3-b769-c7923d47e148",
+  "id": "6a5efcc2-511c-4fb7-877b-9af9e8e41e20",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "6",
   "dialect": "postgresql",
@@ -96,6 +96,19 @@
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_judge": {
+          "name": "is_judge",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "card_ids": {
+          "name": "card_ids",
+          "type": "varchar(24)[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
         }
       },
       "indexes": {},

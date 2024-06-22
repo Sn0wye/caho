@@ -7,7 +7,8 @@ export const playerSchema = z.object({
   isHost: z.coerce.boolean(),
   isReady: z.coerce.boolean().default(false),
   isJudge: z.coerce.boolean().default(false),
-  score: z.number().int().default(0)
+  score: z.number().int().default(0),
+  cardIds: z.array(z.string()).default([])
 });
 
 export type Player = z.infer<typeof playerSchema>;

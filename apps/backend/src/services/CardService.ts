@@ -82,9 +82,19 @@ export class CardService {
     return this.getRandomCards(allWhiteCards, 'white', count);
   }
 
+  public async getWhiteCardById(id: string): Promise<WhiteCard | undefined> {
+    const allWhiteCards = this.cardPacks.flatMap(pack => pack.cards.white);
+    return allWhiteCards.find(card => card.id === id);
+  }
+
   public async getNewBlackCards(count = 1): Promise<BlackCard[]> {
     const allBlackCards = this.cardPacks.flatMap(pack => pack.cards.black);
     return this.getRandomCards(allBlackCards, 'black', count);
+  }
+
+  public async getBlackCardById(id: string): Promise<BlackCard | undefined> {
+    const allBlackCards = this.cardPacks.flatMap(pack => pack.cards.black);
+    return allBlackCards.find(card => card.id === id);
   }
 
   public async resetDeck(): Promise<void> {

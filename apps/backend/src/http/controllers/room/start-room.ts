@@ -61,6 +61,10 @@ export const startRoomController = async (app: App) => {
           event: 'cards-drawn',
           payload: whiteCards
         });
+
+        await roomService.updatePlayerInRoom(roomCode, player.id, {
+          cardIds: whiteCards.map(card => card.id)
+        });
       }
 
       res.status(204);

@@ -154,7 +154,12 @@ export const roomPlayers = pgTable(
       }),
     score: integer('score').notNull(),
     isReady: boolean('is_ready').notNull(),
-    isHost: boolean('is_host').notNull()
+    isHost: boolean('is_host').notNull(),
+    isJudge: boolean('is_judge').notNull(),
+    cardIds: varchar('card_ids', { length: 24 })
+      .array()
+      .notNull()
+      .default(sql`ARRAY[]::text[]`)
   },
   table => ({
     pk: primaryKey({ columns: [table.roomCode, table.playerId] })

@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS "room_players" (
 	"score" integer NOT NULL,
 	"is_ready" boolean NOT NULL,
 	"is_host" boolean NOT NULL,
+	"is_judge" boolean NOT NULL,
+	"card_ids" varchar(24)[] DEFAULT ARRAY[]::text[] NOT NULL,
 	CONSTRAINT "room_players_room_code_user_id_pk" PRIMARY KEY("room_code","user_id")
 );
 --> statement-breakpoint
