@@ -20,7 +20,7 @@
     "@typescript-eslint/parser": "^6.5.0",
     "eslint": "8.47.0",
     "tsup": "^7.2.0",
-    "turbo": "^1.13.3",
+    "turbo": "^2.0.1",
     "typescript": "5.2.2"
   },
   "workspaces": [
@@ -29,5 +29,6 @@
   ],
   "engines": {
     "node": ">=20.12"
-  }
+  },
+  "packageManager": "pnpm@9.1.0"
 }
