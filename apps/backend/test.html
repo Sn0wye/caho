@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSocket Logger</title>
+  </head>
+  <body style="font-family: sans-serif">
+    <h1>WebSocket Logger</h1>
+    <div id="log"></div>
+
+    <script>
+      const player1Pid = 'e0vxcnc9q43ikyio9weyu0i1';
+      const player2Pid = 'c9r6y4c2fyqe55q9cpy9bzyt';
+      const roomId = 'LCN926';
+
+      const player1WsUrls = [
+        `ws://localhost:8080/ws/${player1Pid}`,
+        `ws://localhost:8080/ws/room/${roomId}`
+      ];
+
+      const player2WsUrls = [
+        `ws://localhost:8080/ws/${player2Pid}`,
+        `ws://localhost:8080/ws/room/${roomId}`
+      ];
+
+      const logDiv = document.getElementById('log');
+
+      function setupWebSocket(url, playerId) {
+        const ws = new WebSocket(url);
+
+        ws.onopen = () => {
+          console.log(
+            `WebSocket connection opened for player ${playerId} at ${url}`
+          );
+          const message = document.createElement('p');
+          message.textContent = `WebSocket connection opened for player ${playerId} at ${url}`;
+          logDiv.appendChild(message);
+        };
+
+        ws.onmessage = event => {
+          console.log(
+            `Message received for player ${playerId} at ${url}:`,
+            event.data
+          );
+          const message = document.createElement('p');
+          message.textContent = `Message received for player ${playerId} at ${url}: ${event.data}`;
+          logDiv.appendChild(message);
+        };
+
+        ws.onerror = error => {
+          console.error(
+            `WebSocket error for player ${playerId} at ${url}:`,
+            error
+          );
+          const message = document.createElement('p');
+          message.textContent = `WebSocket error for player ${playerId} at ${url}: ${error.message}`;
+          logDiv.appendChild(message);
+        };
+
+        ws.onclose = () => {
+          console.log(
+            `WebSocket connection closed for player ${playerId} at ${url}`
+          );
+          const message = document.createElement('p');
+          message.textContent = `WebSocket connection closed for player ${playerId} at ${url}`;
+          logDiv.appendChild(message);
+        };
+      }
+
+      player1WsUrls.forEach(url => setupWebSocket(url, player1Pid));
+      player2WsUrls.forEach(url => setupWebSocket(url, player2Pid));
+    </script>
+  </body>
+</html>
