@@ -25,8 +25,12 @@
     @apply bg-transparent;
   }
 
+  html.dark ::-webkit-scrollbar-thumb {
+    @apply bg-zinc-900;
+  }
+
   ::-webkit-scrollbar-thumb {
-    @apply bg-zinc-500;
+    @apply bg-zinc-300;
   }
 
   /* TODO Remove keyframes and move to @apply */
