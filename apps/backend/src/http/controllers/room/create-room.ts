@@ -22,10 +22,11 @@ export const createRoomController = async (app: App) => {
         id: user.id,
         username: user.username,
         avatarUrl: user.avatarUrl,
-        isHost: true,
         score: 0,
         isReady: false,
-        isJudge: false
+        isHost: true,
+        isJudge: false,
+        cardIds: []
       };
 
       const room = await roomService.createRoom({

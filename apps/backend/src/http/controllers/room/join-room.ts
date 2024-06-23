@@ -22,12 +22,13 @@ export const joinRoomController = async (app: App) => {
 
       const player: Player = {
         id: user.id,
-        isHost: false,
         score: 0,
         username: user.username,
         avatarUrl: user.avatarUrl,
         isReady: false,
-        isJudge: false
+        isHost: false,
+        isJudge: false,
+        cardIds: []
       };
 
       const room = await roomService.joinRoom({
