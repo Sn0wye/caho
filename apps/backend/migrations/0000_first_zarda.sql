@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS "rooms" (
 	"prev_judge_id" varchar(24),
 	"picked_white_cards" varchar(24)[] DEFAULT ARRAY[]::text[] NOT NULL,
 	"picked_black_cards" varchar(24)[] DEFAULT ARRAY[]::text[] NOT NULL,
-	"createdAt" timestamp DEFAULT now() NOT NULL,
-	"updatedAt" timestamp DEFAULT now() NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "rooms_code_unique" UNIQUE("code")
 );
 --> statement-breakpoint
