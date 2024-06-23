@@ -1,13 +1,13 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createRoom, type CreateRoom } from '@caho/contracts';
-import type { Player, Room, User } from '@caho/schemas';
-// import { useUser } from '@clerk/nextjs';
+import type { Room } from '@caho/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SelectTrigger } from '@radix-ui/react-select';
 import { useMutation } from '@tanstack/react-query';
-import { Eye, EyeOff, Loader2, Lock, Trophy } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Lock, Trophy, Users } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -23,10 +23,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { api } from '@/utils/api';
+import { useAuth } from '@/auth/client';
+import { NEW_ROOM_FORM } from '@/constants/room';
 import { Select, SelectContent, SelectItem, SelectValue } from './ui/select';
 import { Separator } from './ui/separator';
 import { toast } from './ui/use-toast';
-import Link from 'next/link';
 
 const formSchema = createRoom;
 
@@ -47,44 +48,36 @@ export const NewRoomCardForm = () => {
     defaultValues: {
       password: '',
       maxPlayers: 2,
+      maxPoints: 10,
       isPublic: false
     }
   });
-  // const { user } = useUser();
-  const user = {} as User;
+
+  const { user } = useAuth();
   const router = useRouter();
 
   const onSubmit = async (values: FormSchema) => {
     if (!user) return;
 
-    const player: Player = {
-      avatarUrl: user.avatarUrl,
-      id: user.id,
-      isHost: true,
-      score: 0,
-      username: user.username || 'Anônimo'
-    };
-
-    const payload = {
-      ...values,
-      players: [player],
-      hostId: user.id
-    };
-
-    console.log(payload);
-
-    mutate(payload, {
-      onSuccess: room => {
-        router.push(`/room/${room.code}`);
+    mutate(
+      {
+        isPublic: values.isPublic,
+        maxPlayers: values.maxPlayers,
+        maxPoints: values.maxPoints,
+        password: values.password
       },
-      onError: () => {
-        //TODO: type error
-        toast({
-          description: 'Erro!',
-          variant: 'destructive'
-        });
+      {
+        onSuccess: room => {
+          router.push(`/room/${room.code}`);
+        },
+        onError: () => {
+          toast({
+            description: 'Erro!',
+            variant: 'destructive'
+          });
+        }
       }
-    });
+    );
   };
 
   const isPublic = form.watch('isPublic');
@@ -106,7 +99,7 @@ export const NewRoomCardForm = () => {
           onSubmit={form.handleSubmit(onSubmit, e => console.log(e))}
           className="space-y-10"
         >
-          {/* <FormField
+          <FormField
             control={form.control}
             name="maxPlayers"
             render={({ field }) => (
@@ -153,7 +146,7 @@ export const NewRoomCardForm = () => {
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
 
           <FormField
             control={form.control}

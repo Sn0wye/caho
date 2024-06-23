@@ -5,7 +5,7 @@ import {
 } from '@/components/dashboard/dashboard-breadcrumbs';
 import { DashboardPageHeader } from '@/components/dashboard/dashboard-page-header';
 // import { SettingsProfileForm } from '@/components/dashboard/settings/settings-profile-form';
-import { getUser } from '@/auth';
+import { getUser } from '@/auth/server';
 
 const breadcrumbs: BreadcrumbType[] = [
   {

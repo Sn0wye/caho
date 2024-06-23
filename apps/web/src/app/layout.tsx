@@ -6,7 +6,7 @@ import type { Metadata } from 'next';
 import { JetBrains_Mono } from 'next/font/google';
 import { GeistSans } from 'geist/font/sans';
 import { cn } from '@/utils/cn';
-import { AuthServerProvider } from '@/auth';
+import { AuthServerProvider } from '@/auth/server';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {

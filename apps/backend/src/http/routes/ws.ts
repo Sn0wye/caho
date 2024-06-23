@@ -13,6 +13,10 @@ export const wsRoutes = async (app: App) => {
       }
     },
     (conn, req) => {
+      conn.socket.on('ping', () => {
+        conn.socket.pong();
+      });
+
       app.pubsub.subscribe(req.params.roomCode, message => {
         console.log('message', message);
         conn.socket.send(JSON.stringify(message));
@@ -31,6 +35,10 @@ export const wsRoutes = async (app: App) => {
       }
     },
     (conn, req) => {
+      conn.socket.on('ping', () => {
+        conn.socket.pong();
+      });
+
       app.pubsub.subscribe(req.params.userId, message => {
         conn.socket.send(JSON.stringify(message));
       });

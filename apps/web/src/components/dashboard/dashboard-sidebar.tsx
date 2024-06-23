@@ -1,17 +1,20 @@
+import { redirect } from 'next/navigation';
 import { Home, Plus, Settings } from 'lucide-react';
+import { getUser } from '@/auth/server';
 import { LogoIcon } from '../brand/logo-icon';
 import { Separator } from '../ui/separator';
 import { DashboardSidebarItem } from './dashboard-sidebar-item';
 import { DashboardUserNav } from './dashboard-user-nav';
-import { getUser } from '@/auth';
 
-type DashboardSidebarProps = {};
-
-export async function DashboardSidebar({}: DashboardSidebarProps) {
+export async function DashboardSidebar() {
   const user = await getUser();
 
+  if (!user) {
+    return redirect('/login');
+  }
+
   return (
-    <aside className="sticky z-20 top-0 flex h-screen flex-col items-center justify-between border-r border-zinc-100  bg-zinc-50 py-6 dark:border-zinc-900/75 dark:bg-zinc-950">
+    <aside className="sticky top-0 z-20 flex h-screen flex-col items-center justify-between border-r border-zinc-100  bg-zinc-50 py-6 dark:border-zinc-900/75 dark:bg-zinc-950">
       <header className="flex w-full flex-col items-center gap-6">
         <LogoIcon size="md" />
         <Separator className="w-2/3" />

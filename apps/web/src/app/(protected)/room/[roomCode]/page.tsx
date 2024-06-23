@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
-import { type Player, type Room as RoomType } from '@caho/schemas';
-import { api } from '@/utils/api';
-import { getUser } from '@/auth';
+import type { Player, Room as RoomType } from '@caho/schemas';
+import { api } from '@/utils/server/api';
+import { getUser } from '@/auth/server';
 import { Game } from './game';
 
 type GamePageProps = {
@@ -29,8 +29,19 @@ export default async function GamePage({ params }: GamePageProps) {
   }
 
   const user = await getUser();
-  const roomPlayers = await getRoomPlayers(params.roomCode);
 
+  if (!user) {
+    redirect('/login');
+  }
+
+  const roomPlayers = await getRoomPlayers(params.roomCode);
+  const currentPlayer = roomPlayers.find(player => player.id === user.id);
+
+  if (!currentPlayer) {
+    throw new Error('Current player not found');
+  }
+
+  // TODO: review this logic
   const userIsInRoom = roomPlayers.some(player => player.id === user?.id);
 
   if (!userIsInRoom) {
@@ -38,5 +49,7 @@ export default async function GamePage({ params }: GamePageProps) {
     redirect('/dashboard');
   }
 
-  return <Game {...room} />;
+  return (
+    <Game room={room} players={roomPlayers} currentPlayer={currentPlayer} />
+  );
 }

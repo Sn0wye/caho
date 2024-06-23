@@ -2,11 +2,11 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import type { SignInRequest, SignInResponse } from '@caho/contracts';
 import type { ErrorSchema } from '@caho/schemas';
 import { AxiosError } from 'axios';
 import { parse } from 'cookie';
 import { api } from '@/utils/api';
-import type { SignInRequest, SignInResponse } from '@caho/contracts';
 
 export const login = async (
   payload: SignInRequest
@@ -38,5 +38,5 @@ export const login = async (
     }
   }
 
-  redirect('/');
+  redirect('/dashboard');
 };

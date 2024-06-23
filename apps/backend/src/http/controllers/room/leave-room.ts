@@ -20,6 +20,14 @@ export const leaveRoomController = async (app: App) => {
         roomCode,
         playerId: user.id
       });
+
+      await app.pubsub.publish(roomCode, {
+        event: 'player-left',
+        payload: {
+          id: user.id
+        }
+      });
+
       return res.status(204);
     }
   );

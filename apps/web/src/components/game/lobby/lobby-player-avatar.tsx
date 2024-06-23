@@ -1,17 +1,23 @@
 import { Check } from 'lucide-react';
-import { type MockPlayer } from 'types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/utils/cn';
 
 interface LobbyPlayerAvatarProps {
-  player: MockPlayer;
-  isReady?: boolean;
+  avatarUrl: string | null;
+  name: string;
+  isReady: boolean;
 }
 
 export function LobbyPlayerAvatar({
-  player,
+  avatarUrl,
+  name,
   isReady = false
 }: LobbyPlayerAvatarProps) {
+  const initials = name
+    .split(' ')
+    .map(name => name[0])
+    .join('');
+
   return (
     <figure
       className={cn(
@@ -20,8 +26,9 @@ export function LobbyPlayerAvatar({
       )}
     >
       <Avatar>
-        <AvatarImage src={player.avatarSrc} />
-        <AvatarFallback>{player.initials}</AvatarFallback>
+        {/* //TODO: avatar placeholder */}
+        <AvatarImage src={avatarUrl ?? undefined} />
+        <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>
 
       {isReady && (

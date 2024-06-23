@@ -5,13 +5,11 @@ import { DashboardOptionCard } from '@/components/dashboard/dashboard-option-car
 import { DashboardPageHeader } from '@/components/dashboard/dashboard-page-header';
 import { DashboardPrivateRoomModal } from '@/components/dashboard/dashboard-private-room-modal';
 import { Separator } from '@/components/ui/separator';
-import { getUser } from '@/auth';
+import { getUser } from '@/auth/server';
 
 export default async function DashboardPage() {
   const user = await getUser();
   const name = user?.name?.split(' ')[0] ?? user?.username;
-
-  console.log('user', user);
 
   if (!user) {
     redirect('/login');

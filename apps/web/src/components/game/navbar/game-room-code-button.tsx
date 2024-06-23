@@ -1,25 +1,37 @@
-import { Copy, Hash } from 'lucide-react';
+'use client';
+
+import { useState } from 'react';
+import { Check, Copy, Hash } from 'lucide-react';
 
 interface GameRoomCodeButtonProps {
   roomCode: string;
 }
 
-// TODO: Add copy to clipboard functionality
-// TODO: Use framer motion to animate the copy to clipboard button
+export function CopyRoomCodeButton({ roomCode }: GameRoomCodeButtonProps) {
+  const [isCopied, setIsCopied] = useState(false);
 
-export function GameRoomCodeButton({ roomCode }: GameRoomCodeButtonProps) {
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(roomCode);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
   return (
     <div className="flex items-center gap-3">
-      <div className="group flex cursor-pointer items-center justify-center gap-1 rounded p-2 text-zinc-600 transition-colors hover:bg-zinc-200/50 hover:text-zinc-800 dark:text-zinc-500 hover:dark:bg-zinc-900/50 hover:dark:text-zinc-300">
+      <button
+        onClick={copyToClipboard}
+        type="button"
+        className="group flex cursor-pointer items-center justify-center gap-1 rounded p-2 text-zinc-600 transition-colors hover:bg-zinc-200/50 hover:text-zinc-800 dark:text-zinc-500 hover:dark:bg-zinc-900/50 hover:dark:text-zinc-300"
+      >
         <Hash size={16} className="text-zinc-500" />
         <span className="font-mono font-bold uppercase leading-none">
           {roomCode}
         </span>
 
-        <div className="ml-2 hidden items-center justify-center text-zinc-400 group-hover:flex dark:text-zinc-500">
-          <Copy size={14} />
+        <div className="invisible ml-2 items-center justify-center text-zinc-400 group-hover:visible dark:text-zinc-500">
+          {isCopied ? <Check size={14} /> : <Copy size={14} />}
         </div>
-      </div>
+      </button>
     </div>
   );
 }

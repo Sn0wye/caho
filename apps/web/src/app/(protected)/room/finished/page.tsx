@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { getUser } from '@/auth';
+import { getUser } from '@/auth/server';
 
 export default async function FinishedGamePage() {
   const user = await getUser();

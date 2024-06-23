@@ -1,10 +1,110 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import type { RoomEvent } from '@caho/contracts';
+import type { Player, Room } from '@caho/schemas';
+import { useMutation } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
-import { mockPlayers } from '@/mock/players';
+import { api } from '@/utils/api';
 import { LobbyPlayerAvatar } from './lobby-player-avatar';
 
-interface LobbyProps {}
+const isReadyMutation = async (code: string) => {
+  await api.post(`/rooms/${code}/ready`);
+};
 
-export function Lobby({}: LobbyProps) {
+type LobbyProps = {
+  room: Room;
+  initialPlayers: Player[];
+  initialCurrentPlayer: Player;
+};
+
+// 30 seconds
+const PING_INTERVAL = 30000;
+
+export function Lobby({
+  room,
+  initialPlayers,
+  initialCurrentPlayer
+}: LobbyProps) {
+  const [currentPlayer, setCurrentPlayer] =
+    useState<Player>(initialCurrentPlayer);
+  const [players, setPlayers] = useState<Player[]>(initialPlayers);
+  const { mutate } = useMutation(isReadyMutation);
+
+  const handleToggleReady = () => {
+    mutate(room.code);
+  };
+
+  useEffect(() => {
+    const ws = new WebSocket(`ws://localhost:8080/ws/room/${room.code}`);
+
+    ws.onopen = () => {
+      console.log('Connected to the WebSocket server');
+
+      // Set up an interval to send pings every 30 seconds
+      const pingInterval = setInterval(() => {
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send('ping');
+          console.log('Ping sent');
+        }
+      }, PING_INTERVAL);
+
+      ws.onclose = () => {
+        console.log('Disconnected from the WebSocket server');
+        clearInterval(pingInterval);
+      };
+
+      ws.onerror = error => {
+        console.error('WebSocket error:', error);
+        clearInterval(pingInterval);
+      };
+    };
+
+    ws.onmessage = event => {
+      const data = JSON.parse(event.data) as RoomEvent;
+
+      switch (data.event) {
+        case 'player-joined': {
+          setPlayers(prevPlayers => [...prevPlayers, data.payload]);
+          break;
+        }
+        case 'player-left': {
+          setPlayers(prevPlayers =>
+            prevPlayers.filter(player => player.id !== data.payload.id)
+          );
+          break;
+        }
+        case 'player-update': {
+          const updatedPlayer = data.payload;
+          setPlayers(prevPlayers =>
+            prevPlayers.map(player =>
+              player.id === updatedPlayer.id ? updatedPlayer : player
+            )
+          );
+
+          if (updatedPlayer.id === currentPlayer.id) {
+            setCurrentPlayer(updatedPlayer);
+          }
+
+          break;
+        }
+        default: {
+          console.log('Unhandled event:', {
+            event: data.event,
+            payload: data.payload
+          });
+          break;
+        }
+      }
+      console.log('Message received:', data);
+      // setMessages(prevMessages => [...prevMessages, event.data]);
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [room.code, currentPlayer.id]);
+
   return (
     <main className="flex h-[calc(100vh-4rem)] w-full flex-1">
       <section className="relative flex w-full flex-col items-center justify-center gap-8 p-8">
@@ -25,15 +125,22 @@ export function Lobby({}: LobbyProps) {
         </header>
 
         <div className="flex items-center space-x-4">
-          {mockPlayers.map((player, idx) => (
-            <LobbyPlayerAvatar key={idx} player={player} isReady={idx === 4} />
+          {players.map(player => (
+            <LobbyPlayerAvatar
+              key={player.id}
+              avatarUrl={player.avatarUrl}
+              name={player.username}
+              isReady={player.isReady}
+            />
           ))}
         </div>
         {/* TODO: Callback state. */}
-        <Button size="lg">Estou pronto!</Button>
+        <Button onClick={handleToggleReady} size="lg">
+          {currentPlayer.isReady ? 'Calma aí' : 'Estou pronto'}
+        </Button>
 
         {/* BLOB */}
-        <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 aspect-square w-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[320px] dark:bg-amber-500/20"></div>
+        <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 aspect-square w-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[320px] dark:bg-amber-500/20" />
       </section>
     </main>
   );

@@ -1,6 +1,9 @@
 'use client';
 
+import { useActionState } from 'react';
 import Link from 'next/link';
+import type { User } from '@caho/schemas';
+import { signOut } from '@/actions/sign-out';
 import { Avatar, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import {
@@ -12,9 +15,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '../ui/dropdown-menu';
-import type { User } from '@caho/schemas';
-import { signOut } from '@/actions/sign-out';
-import { useActionState } from 'react';
 
 type Props = {
   user: User;
