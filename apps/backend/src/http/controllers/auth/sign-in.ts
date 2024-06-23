@@ -47,7 +47,8 @@ export const signInController = async (app: App) => {
           username: user.username,
           email: user.email,
           name: user.name,
-          avatarUrl: user.avatarUrl
+          avatarUrl: user.avatarUrl,
+          token: cookie.value
         };
       } catch (e) {
         return res.unauthorized('Usuário ou senha inválidos');

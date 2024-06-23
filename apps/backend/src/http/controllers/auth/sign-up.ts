@@ -63,7 +63,10 @@ export const signUpController = async (app: App) => {
       const sessionCookie = auth.createSessionCookie(session.id);
       res.setCookie(sessionCookie.name, sessionCookie.value);
 
-      return user;
+      return {
+        ...user,
+        token: sessionCookie.value
+      };
     }
   );
 };

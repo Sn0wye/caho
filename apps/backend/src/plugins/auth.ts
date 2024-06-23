@@ -7,7 +7,9 @@ import type { Session, User } from 'lucia';
 export const authPlugin = fastifyPlugin(
   async (app: FastifyInstance) => {
     app.addHook('preHandler', async (req, res) => {
-      const sessionId = auth.readSessionCookie(req.headers.cookie ?? '');
+      const sessionId =
+        auth.readSessionCookie(req.headers.cookie ?? '') ??
+        auth.readBearerToken(req.headers.authorization ?? '');
       let user: User | null = null;
       let session: Session | null = null;
 
