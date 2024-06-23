@@ -21,12 +21,9 @@
     "eslint": "8.47.0",
     "tsup": "^7.2.0",
     "turbo": "^2.0.1",
-    "typescript": "5.2.2"
+    "typescript": "5.5.2"
   },
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": ["apps/*", "packages/*"],
   "engines": {
     "node": ">=20.12"
   },
