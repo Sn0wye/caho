@@ -7,3 +7,4 @@ export * from './sign-in';
 export * from './sign-up';
 export * from './get-profile';
 export * from './ws';
+export * from './list-public-rooms';

@@ -125,8 +125,8 @@ export const rooms = pgTable(
       .array()
       .notNull()
       .default(sql`ARRAY[]::text[]`),
-    createdAt: timestamp('createdAt').notNull().defaultNow(),
-    updatedAt: timestamp('updatedAt').notNull().defaultNow()
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow()
   },
   table => ({
     codeIdx: uniqueIndex('code_unique_idx').on(table.code)

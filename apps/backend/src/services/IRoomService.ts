@@ -1,12 +1,17 @@
 import type { CreateRoomInput } from '@/schemas/create-room';
 import type { JoinRoomInput } from '@/schemas/join-room';
 import type { LeaveRoomInput } from '@/schemas/leave-room';
-import type { Player, Ranking, Room } from '@caho/schemas';
+import type {
+  Player,
+  PublicRoomWithPlayerCount,
+  Ranking,
+  Room
+} from '@caho/schemas';
 
 export interface IRoomService {
   getRoom(roomCode: string): Promise<Room>;
   createRoom(room: CreateRoomInput): Promise<Room>;
-  listPublicRooms(): Promise<Room[]>;
+  listPublicRooms(): Promise<PublicRoomWithPlayerCount[]>;
   addPlayerToRoom(input: { roomCode: string; player: Player }): Promise<void>;
   startRoom(roomCode: string): Promise<void>;
   endRoom(roomCode: string): Promise<Ranking>;

@@ -31,6 +31,14 @@ export const roomStateSchema = z.object({
   prevJudgeId: z.string().min(1).or(z.null()).default(null)
 });
 
+export const publicRoomWithPlayerCount = z.object({
+  id: z.string(),
+  code: z.string(),
+  maxPlayers: z.number(),
+  maxPoints: z.number(),
+  playerCount: z.number()
+});
+
 export const sanitizedRoomSchema = roomSchema.omit({ password: true });
 
 export type Room = z.infer<typeof roomSchema>;
@@ -40,3 +48,7 @@ export type SanitizedRoom = z.infer<typeof sanitizedRoomSchema>;
 export type RoomStatus = Room['status'];
 
 export type RoomState = z.infer<typeof roomStateSchema>;
+
+export type PublicRoomWithPlayerCount = z.infer<
+  typeof publicRoomWithPlayerCount
+>;

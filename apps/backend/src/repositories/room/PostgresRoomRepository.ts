@@ -11,7 +11,12 @@ import type { CreateRoomInput } from '@/schemas/create-room';
 import type { JoinRoomInput } from '@/schemas/join-room';
 import type { LeaveRoomInput } from '@/schemas/leave-room';
 import { generateCode } from '@/utils/generateCode';
-import type { Player, Ranking, Room } from '@caho/schemas';
+import type {
+  Player,
+  PublicRoomWithPlayerCount,
+  Ranking,
+  Room
+} from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
 import { and, eq, sql } from 'drizzle-orm';
 import type { IRoomRepository } from './RoomRepository.interface';
@@ -68,11 +73,20 @@ export class PostgresRoomRepository implements IRoomRepository {
     }
   }
 
-  async listPublicRooms(): Promise<Room[]> {
-    const publicRooms = await this.db.query.rooms.findMany({
-      where: (rooms, { eq, and }) =>
-        and(eq(rooms.isPublic, true), eq(rooms.status, 'LOBBY'))
-    });
+  async listPublicRooms(): Promise<PublicRoomWithPlayerCount[]> {
+    const publicRooms = await this.db
+      .select({
+        id: rooms.id,
+        code: rooms.code,
+        maxPlayers: rooms.maxPlayers,
+        maxPoints: rooms.maxPoints,
+        playerCount: sql<number>`CAST (COUNT(${roomPlayers.playerId}) AS INTEGER)`
+      })
+      .from(rooms)
+      .leftJoin(roomPlayers, eq(rooms.code, roomPlayers.roomCode))
+      .where(and(eq(rooms.isPublic, true), eq(rooms.status, 'LOBBY')))
+      .groupBy(rooms.id, rooms.code, rooms.maxPlayers, rooms.maxPoints)
+      .execute();
 
     // TODO: auto expire rooms
 
