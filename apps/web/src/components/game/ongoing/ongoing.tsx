@@ -11,9 +11,10 @@ export const Ongoing = () => {
           data={{
             packId: 'snowflakes',
             pick: 2,
-            text: 'Algo bem pesado que não se pode mostrar.'
+            text: 'Frase 1.'
           }}
         />
+
         <GamePlayerDeck />
       </div>
     </main>

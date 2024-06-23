@@ -1,8 +1,8 @@
 'use client';
 
 import type { Player, Room } from '@caho/schemas';
-import { Lobby } from '@/components/game/lobby/lobby';
 import { GameNavbar } from '@/components/game/navbar/game-navbar';
+import { Ongoing } from '@/components/game/ongoing/ongoing';
 
 type GameProps = {
   room: Room;
@@ -15,14 +15,14 @@ export const Game = ({ room, players, currentPlayer }: GameProps) => {
     <div className="flex h-screen w-full flex-col items-center justify-between">
       <GameNavbar roomCode={room.code} roomStatus={room.status} />
 
-      {room.status === 'LOBBY' && (
+      {/* {room.status === 'LOBBY' && (
         <Lobby
           room={room}
           initialPlayers={players}
           initialCurrentPlayer={currentPlayer}
         />
-      )}
-      {/* {room.status === 'LOBBY' && <Ongoing />} */}
+      )} */}
+      {room.status === 'LOBBY' && <Ongoing />}
 
       {/**
        * //TODO: Game bottom bar

@@ -1,13 +1,16 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const blackCard = z.object({
   text: z.string(),
   packId: z.string(),
-  pick: z.number()
+  pick: z.number(),
 });
+export type BlackCard = z.infer<typeof blackCard>;
+
 export const whiteCard = z.object({
   text: z.string(),
-  packId: z.string()
+  packId: z.string(),
 });
+export type WhiteCard = z.infer<typeof whiteCard>;
 
 export const cardSchema = z.union([blackCard, whiteCard]);

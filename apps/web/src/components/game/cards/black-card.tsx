@@ -1,9 +1,9 @@
-import { type BlackCard } from 'types';
+import type { BlackCard as BlackCardType } from '@caho/schemas';
 import { CardFooter } from './card-footer';
 import { CardHeader } from './card-header';
 
 type BlackCardProps = {
-  data: BlackCard;
+  data: BlackCardType;
 };
 
 export function BlackCard({ data }: BlackCardProps) {

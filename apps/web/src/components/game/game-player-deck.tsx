@@ -1,6 +1,6 @@
 import { WhiteCard } from './cards/white-card';
 
-interface GamePlayerDeckProps {}
+type GamePlayerDeckProps = {};
 
 export function GamePlayerDeck({}: GamePlayerDeckProps) {
   // TODO: -space-x-10 group hover:space-x-8 stack arc */
