@@ -1,13 +1,13 @@
+import Link from 'next/link';
 import { siteConfig } from 'config/site';
 import { AlertTopBar } from '@/components/alert-top-bar';
-import { Navbar } from '@/components/navbar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { Navbar } from '@/app/(marketing)/_components/navbar';
 
 export default async function HomePage() {
   return (
-    <div className="flex h-screen w-full flex-col items-center">
+    <div className="flex flex-col items-center">
       <AlertTopBar label="Cheguei na web! Agora é para valer ein... Vai arregar?" />
 
       <main className="flex w-full max-w-5xl flex-1 flex-col gap-16">

@@ -1,4 +1,4 @@
-import { type MockPlayers } from 'types';
+import type { MockPlayers } from 'types';
 
 export const mockPlayers: MockPlayers = [
   {

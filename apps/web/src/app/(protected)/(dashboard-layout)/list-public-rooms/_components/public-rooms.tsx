@@ -6,14 +6,15 @@ import { getPublicRooms } from '../get-public-rooms';
 import { PublicGameRoomCard } from './public-game-room-card';
 
 type PublicRoomsProps = {
-  initialData: ListPublicRoomsResponse[];
+  initialData: ListPublicRoomsResponse;
 };
 
 export const PublicRooms = ({ initialData }: PublicRoomsProps) => {
   const { data } = useQuery({
     queryKey: ['public-rooms'],
     queryFn: getPublicRooms,
-    initialData
+    initialData,
+    refetchInterval: 5000
   });
 
   return (

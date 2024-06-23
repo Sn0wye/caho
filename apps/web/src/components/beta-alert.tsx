@@ -1,7 +1,9 @@
 import { siteConfig } from 'config/site';
 import { Info } from 'lucide-react';
-import { betaMessage } from '@/helpers/beta';
 import { AlertTopBar } from './alert-top-bar';
+
+const betaMessage =
+  'Sim, estamos em BETA e erros são esperados. Se você encontrar algum, por favor, reporte em nosso repositório.';
 
 export function BetaAlert() {
   return (

@@ -12,7 +12,7 @@ export default async function DashboardPage() {
   const name = user.username;
 
   return (
-    <section className="flex flex-col gap-8">
+    <section className="flex w-full max-w-6xl flex-col gap-8">
       <DashboardPageHeader
         title="Dashboard"
         subtitle="Aqui você pode criar uma nova sala, entrar em uma sala com um código ou encontrar uma sala pública."
@@ -25,7 +25,7 @@ export default async function DashboardPage() {
         <DashboardOptionCard
           title="Criar uma nova partida"
           description="Minha sala, minhas regras!"
-          href="/dashboard/create-room"
+          href="/create-room"
           bgColor="teal"
           icon={<Plus />}
         />
@@ -35,7 +35,7 @@ export default async function DashboardPage() {
         <DashboardOptionCard
           title="Encontrar uma partida pública"
           description="Algumas pessoas tem coragem de deixar uma sala pública... Tente a sorte lá!"
-          href="/dashboard/list-public-rooms"
+          href="/list-public-rooms"
           bgColor="yellow"
           icon={<Search />}
         />

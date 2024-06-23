@@ -1,4 +1,5 @@
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { AuthServerProvider } from '@/auth/server';
 import '@/styles/globals.css';
 import type { PropsWithChildren } from 'react';
 import type { Metadata } from 'next';
@@ -6,21 +7,12 @@ import type { Metadata } from 'next';
 import { JetBrains_Mono } from 'next/font/google';
 import { GeistSans } from 'geist/font/sans';
 import { cn } from '@/utils/cn';
-import { AuthServerProvider } from '@/auth/server';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {
   title: 'Cartas contra a humanidade online!',
   description: 'O jogo para pessoas horríveis.'
 };
-
-// const fontSans = Roboto({
-//   weight: ['400', '500', '700', '900'],
-//   subsets: ['latin'],
-//   display: 'swap',
-//   style: 'normal',
-//   variable: '--font-sans'
-// });
 
 const fontSans = GeistSans;
 const fontMono = JetBrains_Mono({
@@ -35,7 +27,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="pt-BR" suppressHydrationWarning>
       <body
         className={cn(
-          'font-sans antialiased',
+          'min-h-screen font-sans antialiased',
           fontSans.variable,
           fontMono.variable
         )}

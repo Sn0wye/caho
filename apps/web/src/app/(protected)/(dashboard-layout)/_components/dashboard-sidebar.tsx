@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation';
-import { Home, Plus, Settings } from 'lucide-react';
+import type { User } from '@caho/schemas';
+import { Home, Plus, Search, Settings } from 'lucide-react';
 import { LogoIcon } from '@/components/brand/logo-icon';
 import { Separator } from '@/components/ui/separator';
 import { getUser } from '@/auth/server';
@@ -7,11 +7,7 @@ import { DashboardSidebarItem } from './dashboard-sidebar-item';
 import { DashboardUserNav } from './dashboard-user-nav';
 
 export async function DashboardSidebar() {
-  const user = await getUser();
-
-  if (!user) {
-    return redirect('/login');
-  }
+  const user = (await getUser()) as User;
 
   return (
     <aside className="sticky top-0 z-20 flex h-screen flex-col items-center justify-between border-r border-zinc-100  bg-zinc-50 py-6 dark:border-zinc-900/75 dark:bg-zinc-950">
@@ -30,13 +26,19 @@ export async function DashboardSidebar() {
         <DashboardSidebarItem
           icon={<Plus size={20} />}
           label="Nova sala"
-          href="/dashboard/create-room"
+          href="/create-room"
+        />
+
+        <DashboardSidebarItem
+          icon={<Search size={20} />}
+          label="Partidas públicas"
+          href="/list-public-rooms"
         />
 
         <DashboardSidebarItem
           icon={<Settings size={20} />}
           label="Configurações"
-          href="/dashboard/settings"
+          href="/settings"
         />
       </nav>
 

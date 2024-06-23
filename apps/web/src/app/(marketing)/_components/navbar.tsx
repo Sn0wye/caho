@@ -1,13 +1,10 @@
 import Link from 'next/link';
-// import { SignedIn, SignedOut } from '@clerk/nextjs';
-import { LogoText } from './brand/logo-text';
-import { ThemeSwitcher } from './theme-switcher';
-import { Button } from './ui/button';
-
-interface NavbarProps {}
+import { LogoText } from '@/components/brand/logo-text';
+import { ThemeSwitcher } from '@/components/theme-switcher';
+import { Button } from '@/components/ui/button';
 
 //TODO: SignedIn and SignedOut components
-export function Navbar({}: NavbarProps) {
+export function Navbar() {
   return (
     <nav className="sticky left-0 top-0 flex w-full items-center justify-between border-b py-4 dark:border-b-zinc-900">
       <LogoText />

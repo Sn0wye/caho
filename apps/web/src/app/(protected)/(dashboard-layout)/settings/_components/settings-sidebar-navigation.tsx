@@ -6,8 +6,8 @@ import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 
 const settingsSidebarLinks = [
-  { href: '/dashboard/settings', title: 'Perfil' },
-  { href: '/dashboard/settings/themes', title: 'Aparência' }
+  { href: '/settings', title: 'Perfil' },
+  { href: '/settings/themes', title: 'Aparência' }
 ];
 
 export function SettingsSidebarNavigation() {

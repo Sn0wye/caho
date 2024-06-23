@@ -10,14 +10,7 @@ interface ProvidersProps {
 }
 
 export const Providers = ({ children }: ProvidersProps) => {
-  // const [isMounted, setIsMounted] = useState(false);
   const [queryClient] = useState(() => new QueryClient());
-
-  // useEffect(() => {
-  //   setIsMounted(true);
-  // }, []);
-
-  // if (!isMounted) return <>{children}</>;
 
   return (
     <QueryClientProvider client={queryClient}>

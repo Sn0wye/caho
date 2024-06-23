@@ -4,13 +4,14 @@ import { Hash } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
-type PublicGameRoomCardProps = ListPublicRoomsResponse;
+type PublicGameRoomCardProps = ListPublicRoomsResponse[number];
 
 function PublicGameRoomCard({
   code,
   maxPlayers,
   maxPoints,
-  playerCount
+  playerCount,
+  hostUsername
 }: PublicGameRoomCardProps) {
   return (
     <Link href={`/room/${code}`}>
@@ -36,6 +37,7 @@ function PublicGameRoomCard({
             label="pontos para acabar"
             value={maxPoints}
           />
+          <PublicGameRoomCardData label="host" value={hostUsername} />
         </CardContent>
       </Card>
     </Link>
