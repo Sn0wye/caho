@@ -27,14 +27,9 @@ export function DashboardBanner({ firstName }: DashboardBannerProps) {
             </span>
           </header>
 
-          <div className="flex items-center gap-4 z-10">
-            <Button asChild size="lg">
-              <Link href="/dashboard/create-room">Criar uma nova sala</Link>
-            </Button>
-            <Button asChild size="lg" variant="ghost">
-              <Link href="#">Outras opções</Link>
-            </Button>
-          </div>
+          <Button asChild size="lg" className="w-fit">
+            <Link href="/dashboard/create-room">Criar uma nova sala</Link>
+          </Button>
         </section>
 
         <figure className="-mt-32 w-1/2 md:-mt-24 md:h-60 md:w-auto lg:-mt-40 lg:h-80">
