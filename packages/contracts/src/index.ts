@@ -8,3 +8,4 @@ export * from './sign-up';
 export * from './get-profile';
 export * from './ws';
 export * from './list-public-rooms';
+export * from './update-profile';

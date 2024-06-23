@@ -5,6 +5,7 @@ import { signInWithGithub } from '../controllers/auth/sign-in-with-github';
 import { signInWithGoogle } from '../controllers/auth/sign-in-with-google';
 import { signOutController } from '../controllers/auth/sign-out';
 import { signUpController } from '../controllers/auth/sign-up';
+import { updateProfileController } from '../controllers/auth/update-profile';
 
 export const authRoutes = async (app: App) => {
   app.register(signUpController);
@@ -12,5 +13,6 @@ export const authRoutes = async (app: App) => {
   app.register(signInWithGithub);
   app.register(signInWithGoogle);
   app.register(getProfileController);
+  app.register(updateProfileController);
   app.register(signOutController);
 };
