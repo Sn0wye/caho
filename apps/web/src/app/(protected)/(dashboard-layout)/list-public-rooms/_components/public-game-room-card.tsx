@@ -1,16 +1,16 @@
 import Link from 'next/link';
-import type { Room } from '@caho/schemas';
+import type { ListPublicRoomsResponse } from '@caho/contracts';
 import { Hash } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
-type PublicGameRoomCardProps = Room;
+type PublicGameRoomCardProps = ListPublicRoomsResponse;
 
 function PublicGameRoomCard({
   code,
   maxPlayers,
   maxPoints,
-  hostId
+  playerCount
 }: PublicGameRoomCardProps) {
   return (
     <Link href={`/room/${code}`}>
@@ -30,19 +30,13 @@ function PublicGameRoomCard({
         <CardContent className="flex flex-col gap-2">
           <PublicGameRoomCardData
             label="jogadores"
-            value={`40 / ${maxPlayers}`}
+            value={`${playerCount}/ ${maxPlayers}`}
           />
           <PublicGameRoomCardData
             label="pontos para acabar"
             value={maxPoints}
           />
-          <PublicGameRoomCardData label="host" value={hostId} />
         </CardContent>
-
-        {/* <CardFooter className="flex items-center justify-between text-sm dark:text-zinc-500">
-          <span className="font-medium">Atualizado por último:</span>
-          <span className="text-xs">{lastUpdate}</span>
-        </CardFooter> */}
       </Card>
     </Link>
   );

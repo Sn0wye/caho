@@ -1,12 +1,12 @@
 'use client';
 
-import type { Room } from '@caho/schemas';
+import type { ListPublicRoomsResponse } from '@caho/contracts';
 import { useQuery } from '@tanstack/react-query';
-import { getPublicRooms } from '../getPublicRooms';
+import { getPublicRooms } from '../get-public-rooms';
 import { PublicGameRoomCard } from './public-game-room-card';
 
 type PublicRoomsProps = {
-  initialData: Room[];
+  initialData: ListPublicRoomsResponse[];
 };
 
 export const PublicRooms = ({ initialData }: PublicRoomsProps) => {
