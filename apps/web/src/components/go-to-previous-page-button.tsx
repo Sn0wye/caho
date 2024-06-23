@@ -3,9 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 
-interface GoToPreviousPageButtonProps {}
-
-export function GoToPreviousPageButton({}: GoToPreviousPageButtonProps) {
+export function GoToPreviousPageButton() {
   const router = useRouter();
 
   function handlePreviousPage() {

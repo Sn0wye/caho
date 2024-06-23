@@ -3,9 +3,7 @@ import { Info } from 'lucide-react';
 import { betaMessage } from '@/helpers/beta';
 import { AlertTopBar } from './alert-top-bar';
 
-interface BetaAlertProps {}
-
-export function BetaAlert({}: BetaAlertProps) {
+export function BetaAlert() {
   return (
     <AlertTopBar
       label={betaMessage}

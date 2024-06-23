@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react';
-import { type Metadata } from 'next';
+import type { ReactNode } from 'react';
+import type { Metadata } from 'next';
 import { LogoText } from '@/components/brand/logo-text';
 
 type AuthLayoutProps = {
