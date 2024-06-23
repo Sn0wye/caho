@@ -1,6 +1,6 @@
 'use client';
 
-import { type Room } from '@caho/schemas';
+import type { Room } from '@caho/schemas';
 import { useQuery } from '@tanstack/react-query';
 import { PublicGameRoomCard } from '@/components/public-game-room-card';
 import { getPublicRooms } from './getPublicRooms';
