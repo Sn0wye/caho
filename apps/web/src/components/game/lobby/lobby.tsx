@@ -1,109 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import type { RoomEvent } from '@caho/contracts';
-import type { Player, Room } from '@caho/schemas';
 import { useMutation } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { api } from '@/utils/api';
+import { useGame } from '@/hooks/game';
 import { LobbyPlayerAvatar } from './lobby-player-avatar';
 
 const isReadyMutation = async (code: string) => {
   await api.post(`/rooms/${code}/ready`);
 };
 
-type LobbyProps = {
-  room: Room;
-  initialPlayers: Player[];
-  initialCurrentPlayer: Player;
-};
-
-// 30 seconds
-const PING_INTERVAL = 30000;
-
-export function Lobby({
-  room,
-  initialPlayers,
-  initialCurrentPlayer
-}: LobbyProps) {
-  const [currentPlayer, setCurrentPlayer] =
-    useState<Player>(initialCurrentPlayer);
-  const [players, setPlayers] = useState<Player[]>(initialPlayers);
+export function Lobby() {
+  const { currentPlayer, players, room } = useGame();
   const { mutate } = useMutation(isReadyMutation);
 
-  const handleToggleReady = () => {
+  function handleToggleReady() {
     mutate(room.code);
-  };
-
-  useEffect(() => {
-    const ws = new WebSocket(`ws://localhost:8080/ws/room/${room.code}`);
-
-    ws.onopen = () => {
-      console.log('Connected to the WebSocket server');
-
-      // Set up an interval to send pings every 30 seconds
-      const pingInterval = setInterval(() => {
-        if (ws.readyState === WebSocket.OPEN) {
-          ws.send('ping');
-          console.log('Ping sent');
-        }
-      }, PING_INTERVAL);
-
-      ws.onclose = () => {
-        console.log('Disconnected from the WebSocket server');
-        clearInterval(pingInterval);
-      };
-
-      ws.onerror = error => {
-        console.error('WebSocket error:', error);
-        clearInterval(pingInterval);
-      };
-    };
-
-    ws.onmessage = event => {
-      const data = JSON.parse(event.data) as RoomEvent;
-
-      switch (data.event) {
-        case 'player-joined': {
-          setPlayers(prevPlayers => [...prevPlayers, data.payload]);
-          break;
-        }
-        case 'player-left': {
-          setPlayers(prevPlayers =>
-            prevPlayers.filter(player => player.id !== data.payload.id)
-          );
-          break;
-        }
-        case 'player-update': {
-          const updatedPlayer = data.payload;
-          setPlayers(prevPlayers =>
-            prevPlayers.map(player =>
-              player.id === updatedPlayer.id ? updatedPlayer : player
-            )
-          );
-
-          if (updatedPlayer.id === currentPlayer.id) {
-            setCurrentPlayer(updatedPlayer);
-          }
-
-          break;
-        }
-        default: {
-          console.log('Unhandled event:', {
-            event: data.event,
-            payload: data.payload
-          });
-          break;
-        }
-      }
-      console.log('Message received:', data);
-      // setMessages(prevMessages => [...prevMessages, event.data]);
-    };
-
-    return () => {
-      ws.close();
-    };
-  }, [room.code, currentPlayer.id]);
+  }
 
   return (
     <main className="flex h-[calc(100vh-4rem)] w-full flex-1">

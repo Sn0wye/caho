@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import type { Player, Room as RoomType } from '@caho/schemas';
 import { api } from '@/utils/server/api';
 import { getUser } from '@/auth/server';
+import { GameContextProvider } from '@/hooks/game';
 import { Game } from './game';
 
 type GamePageProps = {
@@ -50,6 +51,12 @@ export default async function GamePage({ params }: GamePageProps) {
   }
 
   return (
-    <Game room={room} players={roomPlayers} currentPlayer={currentPlayer} />
+    <GameContextProvider
+      initialRoom={room}
+      initialPlayers={roomPlayers}
+      initialCurrentPlayer={currentPlayer}
+    >
+      <Game room={room} />
+    </GameContextProvider>
   );
 }
