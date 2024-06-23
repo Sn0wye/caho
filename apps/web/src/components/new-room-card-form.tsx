@@ -1,11 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createRoom, type CreateRoom } from '@caho/contracts';
 import type { Room } from '@caho/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SelectTrigger } from '@radix-ui/react-select';
 import { useMutation } from '@tanstack/react-query';
 import { Eye, EyeOff, Loader2, Lock, Trophy, Users } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -25,7 +23,13 @@ import { Switch } from '@/components/ui/switch';
 import { api } from '@/utils/api';
 import { useAuth } from '@/auth/client';
 import { NEW_ROOM_FORM } from '@/constants/room';
-import { Select, SelectContent, SelectItem, SelectValue } from './ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from './ui/select';
 import { Separator } from './ui/separator';
 import { toast } from './ui/use-toast';
 
@@ -85,7 +89,7 @@ export const NewRoomCardForm = () => {
   return (
     <section className="flex flex-col gap-10">
       <div className="space-y-0.5">
-        <h1 className="text-xl font-semibold text-zinc-800 dark:text-zinc-200">
+        <h1 className="text-2xl font-semibold text-zinc-800 dark:text-zinc-200">
           Configurações da sala
         </h1>
         <span className="text-sm text-zinc-500">
@@ -122,7 +126,7 @@ export const NewRoomCardForm = () => {
                   defaultValue={String(field.value)}
                 >
                   <FormControl>
-                    <SelectTrigger className="w-[280px]">
+                    <SelectTrigger>
                       <SelectValue placeholder="Qual o tamanho do coração?" />
                     </SelectTrigger>
                   </FormControl>
@@ -143,36 +147,6 @@ export const NewRoomCardForm = () => {
                   </SelectContent>
                 </Select>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a verified email to display" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="m@example.com">m@example.com</SelectItem>
-                    <SelectItem value="m@google.com">m@google.com</SelectItem>
-                    <SelectItem value="m@support.com">m@support.com</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  You can manage email addresses in your{' '}
-                  <Link href="/examples/forms">email settings</Link>.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -290,13 +264,15 @@ export const NewRoomCardForm = () => {
            * VALIDATING: Validando...
            * VALID: FINALMENTE! BORA?!
            */}
-          <Button type="submit">
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              'Criar sala!'
-            )}
-          </Button>
+          <footer className="flex items-center justify-end">
+            <Button type="submit">
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                'Criar sala!'
+              )}
+            </Button>
+          </footer>
         </form>
       </Form>
     </section>

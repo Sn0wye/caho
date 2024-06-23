@@ -19,7 +19,7 @@ const breadcrumbs: BreadcrumbType[] = [
 
 export default async function CreateRoomPage() {
   return (
-    <section className="flex w-full max-w-5xl flex-col gap-16">
+    <section className="flex w-full max-w-3xl flex-col gap-16">
       <div className="flex flex-col gap-6">
         <DashboardBreadcrumbs breadcrumbs={breadcrumbs} />
 
