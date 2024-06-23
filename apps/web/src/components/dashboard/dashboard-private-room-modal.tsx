@@ -1,11 +1,11 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
 import { Lock } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Noise } from '../illustrations/noise';
-import { RoomCodeInput } from '../room-code-input';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -24,14 +24,13 @@ import {
   FormLabel,
   FormMessage
 } from '../ui/form';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '../ui/input-otp';
 import { DashboardOptionCard } from './dashboard-option-card';
 
 const formSchema = z.object({
-  roomCode: z
-    .string()
-    .min(6)
-    .max(6)
-    .regex(/^[\d\w]+$/)
+  roomCode: z.string().min(6, {
+    message: 'O código da sala deve ter 6 dígitos.'
+  })
 });
 
 export function DashboardPrivateRoomModal() {
@@ -109,7 +108,20 @@ export function DashboardPrivateRoomModal() {
                     </div>
 
                     <FormControl>
-                      <RoomCodeInput {...field} />
+                      <InputOTP
+                        maxLength={6}
+                        {...field}
+                        pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+                      >
+                        <InputOTPGroup>
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                          <InputOTPSlot index={2} />
+                          <InputOTPSlot index={3} />
+                          <InputOTPSlot index={4} />
+                          <InputOTPSlot index={5} />
+                        </InputOTPGroup>
+                      </InputOTP>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
