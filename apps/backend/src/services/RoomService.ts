@@ -4,7 +4,7 @@ import type { JoinRoomInput } from '@/schemas/join-room';
 import type { LeaveRoomInput } from '@/schemas/leave-room';
 import type {
   Player,
-  PublicRoomWithPlayerCount,
+  PublicRoomWithPlayerCountAndHost,
   Ranking,
   Room
 } from '@caho/schemas';
@@ -21,7 +21,7 @@ export class RoomService implements IRoomService {
     return await this.roomRepository.createRoom(room);
   }
 
-  public async listPublicRooms(): Promise<PublicRoomWithPlayerCount[]> {
+  public async listPublicRooms(): Promise<PublicRoomWithPlayerCountAndHost[]> {
     return await this.roomRepository.listPublicRooms();
   }
 

@@ -1,5 +1,5 @@
 import { db } from '@/db';
-import { roomPlayers, rooms } from '@/db/schema';
+import { roomPlayers, rooms, users } from '@/db/schema';
 import {
   ApplicationError,
   BadRequestError,
@@ -13,7 +13,7 @@ import type { LeaveRoomInput } from '@/schemas/leave-room';
 import { generateCode } from '@/utils/generateCode';
 import type {
   Player,
-  PublicRoomWithPlayerCount,
+  PublicRoomWithPlayerCountAndHost,
   Ranking,
   Room
 } from '@caho/schemas';
@@ -73,17 +73,19 @@ export class PostgresRoomRepository implements IRoomRepository {
     }
   }
 
-  async listPublicRooms(): Promise<PublicRoomWithPlayerCount[]> {
+  async listPublicRooms(): Promise<PublicRoomWithPlayerCountAndHost[]> {
     const publicRooms = await this.db
       .select({
         id: rooms.id,
         code: rooms.code,
         maxPlayers: rooms.maxPlayers,
         maxPoints: rooms.maxPoints,
-        playerCount: sql<number>`CAST (COUNT(${roomPlayers.playerId}) AS INTEGER)`
+        playerCount: sql<number>`CAST (COUNT(${roomPlayers.playerId}) AS INTEGER)`,
+        hostUsername: sql<string>`(SELECT username FROM users WHERE id = ${rooms.hostId})`
       })
       .from(rooms)
       .leftJoin(roomPlayers, eq(rooms.code, roomPlayers.roomCode))
+      .leftJoin(users, eq(rooms.hostId, users.id))
       .where(and(eq(rooms.isPublic, true), eq(rooms.status, 'LOBBY')))
       .groupBy(rooms.id, rooms.code, rooms.maxPlayers, rooms.maxPoints)
       .execute();
