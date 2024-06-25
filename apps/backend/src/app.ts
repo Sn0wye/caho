@@ -1,6 +1,7 @@
 import { redis } from '@/db/redis';
 import { env } from '@/env';
 import { fastifyCookie } from '@fastify/cookie';
+import { fastifyCors } from '@fastify/cors';
 import { fastifySensible } from '@fastify/sensible';
 import { fastifySwagger } from '@fastify/swagger';
 import { fastifySwaggerUi } from '@fastify/swagger-ui';
@@ -27,7 +28,6 @@ import { roomRoutes } from './http/routes/room';
 import { wsRoutes } from './http/routes/ws';
 import { Pubsub } from './lib/pub-sub';
 import { authPlugin } from './plugins/auth';
-import { fastifyCors } from '@fastify/cors';
 
 // import { csrfPlugin } from './plugins/csrf';
 // import { fastifySocketIO } from './plugins/socketio';

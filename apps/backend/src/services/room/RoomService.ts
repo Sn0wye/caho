@@ -1,14 +1,3 @@
-import type { IRoomRepository } from '@/repositories/room';
-import type { CreateRoomInput } from '@/schemas/create-room';
-import type { JoinRoomInput } from '@/schemas/join-room';
-import type { LeaveRoomInput } from '@/schemas/leave-room';
-import type {
-  Player,
-  PublicRoomWithPlayerCountAndHost,
-  Ranking,
-  Room
-} from '@caho/schemas';
-import type { IRoomService } from './IRoomService';
 import {
   ApplicationError,
   BadRequestError,
@@ -17,9 +6,20 @@ import {
 } from '@/errors';
 import { ROOM_ERRORS } from '@/errors/room';
 import type { IRankingRepository } from '@/repositories/ranking';
-import { generateCode } from '@/utils/generateCode';
-import { createId } from '@paralleldrive/cuid2';
+import type { IRoomRepository } from '@/repositories/room';
 import type { IRoomPlayersRepository } from '@/repositories/room-players';
+import type { CreateRoomInput } from '@/schemas/create-room';
+import type { JoinRoomInput } from '@/schemas/join-room';
+import type { LeaveRoomInput } from '@/schemas/leave-room';
+import { generateCode } from '@/utils/generateCode';
+import type {
+  Player,
+  PublicRoomWithPlayerCountAndHost,
+  Ranking,
+  Room
+} from '@caho/schemas';
+import { createId } from '@paralleldrive/cuid2';
+import type { IRoomService } from './IRoomService';
 
 export class RoomService implements IRoomService {
   constructor(
@@ -90,9 +90,8 @@ export class RoomService implements IRoomService {
       throw new NotFoundError(ROOM_ERRORS.ROOM_NOT_FOUND);
     }
 
-    const players = await this.roomPlayersRepository.getRoomPlayersByCode(
-      roomCode
-    );
+    const players =
+      await this.roomPlayersRepository.getRoomPlayersByCode(roomCode);
     const playersReady = players.every(p => p.isReady);
 
     if (!playersReady) {
@@ -114,9 +113,8 @@ export class RoomService implements IRoomService {
         status: 'FINISHED'
       });
 
-      const ranking = await this.rankingRepository.getRankingByRoomCode(
-        roomCode
-      );
+      const ranking =
+        await this.rankingRepository.getRankingByRoomCode(roomCode);
 
       return ranking;
     } catch (error) {
@@ -135,9 +133,8 @@ export class RoomService implements IRoomService {
       }
 
       player.isHost = room.hostId === player.id;
-      const players = await this.roomPlayersRepository.getRoomPlayersByCode(
-        roomCode
-      );
+      const players =
+        await this.roomPlayersRepository.getRoomPlayersByCode(roomCode);
 
       const playerAlreadyInRoom = players.some(p => p.id === player.id);
       if (playerAlreadyInRoom) {
@@ -181,9 +178,8 @@ export class RoomService implements IRoomService {
     }
 
     try {
-      const players = await this.roomPlayersRepository.getRoomPlayersByCode(
-        roomCode
-      );
+      const players =
+        await this.roomPlayersRepository.getRoomPlayersByCode(roomCode);
       return players;
     } catch {
       throw new InternalServerError('Erro ao buscar jogadores da sala.');

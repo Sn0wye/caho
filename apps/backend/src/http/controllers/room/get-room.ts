@@ -18,9 +18,8 @@ export const getRoomController = async (app: App) => {
     },
     async req => {
       const { roomCode } = req.params;
-      const { password, ...sanitizedRoom } = await roomService.getRoom(
-        roomCode
-      );
+      const { password, ...sanitizedRoom } =
+        await roomService.getRoom(roomCode);
       return sanitizedRoom;
     }
   );

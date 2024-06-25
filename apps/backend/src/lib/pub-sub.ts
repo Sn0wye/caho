@@ -1,6 +1,5 @@
-import {} from '@caho/schemas';
-import type { Redis } from 'ioredis';
 import type { PlayerEvent, RoomEvent } from '@caho/contracts';
+import type { Redis } from 'ioredis';
 
 type Event = RoomEvent | PlayerEvent;
 
