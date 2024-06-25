@@ -22,7 +22,7 @@ export interface IRoomService {
     roomCode: string,
     playerId: string,
     payload: Partial<Player>
-  ): Promise<void>;
+  ): Promise<Player>;
   getPlayerFromRoom(roomCode: string, playerId: string): Promise<Player>;
   incrementPlayerScore(input: {
     roomCode: string;

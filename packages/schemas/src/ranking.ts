@@ -3,7 +3,7 @@ import { playerSchema } from './player';
 
 export const rankingSchema = z.array(
   playerSchema.omit({
-    cards: true,
+    cardIds: true,
     isHost: true,
     isJudge: true,
     isReady: true

@@ -1,12 +1,11 @@
 import type { App } from '@/app';
 import { ensureAuth } from '@/plugins/ensure-auth';
-import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
-import { RoomService } from '@/services/RoomService';
+import { RoomServiceFactory } from '@/services/room/RoomServiceFactory';
 import { createRoom } from '@caho/contracts';
 import type { Player } from '@caho/schemas';
 
 export const createRoomController = async (app: App) => {
-  const roomService = new RoomService(new PostgresRoomRepository());
+  const roomService = RoomServiceFactory();
 
   app.register(ensureAuth).post(
     '/create',

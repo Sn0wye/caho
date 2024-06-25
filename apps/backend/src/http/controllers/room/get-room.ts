@@ -1,11 +1,10 @@
 import type { App } from '@/app';
 import { ensureAuth } from '@/plugins/ensure-auth';
-import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
-import { RoomService } from '@/services/RoomService';
+import { RoomServiceFactory } from '@/services/room/RoomServiceFactory';
 import { z } from 'zod';
 
 export const getRoomController = async (app: App) => {
-  const roomService = new RoomService(new PostgresRoomRepository());
+  const roomService = RoomServiceFactory();
 
   app.register(ensureAuth).get(
     '/:roomCode',
@@ -19,8 +18,9 @@ export const getRoomController = async (app: App) => {
     },
     async req => {
       const { roomCode } = req.params;
-      const { password, ...sanitizedRoom } =
-        await roomService.getRoom(roomCode);
+      const { password, ...sanitizedRoom } = await roomService.getRoom(
+        roomCode
+      );
       return sanitizedRoom;
     }
   );

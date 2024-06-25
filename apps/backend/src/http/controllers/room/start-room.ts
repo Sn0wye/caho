@@ -2,14 +2,13 @@ import type { App } from '@/app';
 import { basePack } from '@/cards/base-pack';
 import { ROOM_ERRORS } from '@/errors/room';
 import { ensureAuth } from '@/plugins/ensure-auth';
-import { PostgresRoomRepository } from '@/repositories/room/PostgresRoomRepository';
 import { CardService } from '@/services/CardService';
-import { RoomService } from '@/services/RoomService';
+import { RoomServiceFactory } from '@/services/room/RoomServiceFactory';
 import { getRandomJudge } from '@/utils/getRandomJudge';
 import { startRoom } from '@caho/contracts';
 
 export const startRoomController = async (app: App) => {
-  const roomService = new RoomService(new PostgresRoomRepository());
+  const roomService = RoomServiceFactory();
 
   app.register(ensureAuth).post(
     '/start',

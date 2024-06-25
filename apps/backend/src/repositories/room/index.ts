@@ -1,2 +1,3 @@
-export { PostgresRoomRepository } from './PostgresRoomRepository';
-export { type IRoomRepository } from './RoomRepository.interface';
+export * from './RoomRepository';
+export * from './IRoomRepository';
+export * from './RoomRepositoryFactory';
