@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: caho_test_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: caho_test
+    ports:
+      - '5432:5432'
+    networks:
+      - test-network
+
+  redis:
+    image: redis:latest
+    container_name: caho_test_redis
+    ports:
+      - '6379:6379'
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
