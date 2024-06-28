@@ -39,7 +39,13 @@ export class RoomRepository implements IRoomRepository {
       .innerJoin(users, eq(rooms.hostId, users.id))
       .leftJoin(roomPlayers, eq(rooms.code, roomPlayers.roomCode))
       .where(and(eq(rooms.isPublic, true), eq(rooms.status, 'LOBBY')))
-      .groupBy(rooms.id, rooms.code, rooms.maxPlayers, rooms.maxPoints)
+      .groupBy(
+        rooms.id,
+        rooms.code,
+        rooms.maxPlayers,
+        rooms.maxPoints,
+        users.username
+      )
       .execute();
 
     // TODO: auto expire rooms
