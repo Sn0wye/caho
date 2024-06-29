@@ -44,7 +44,7 @@ export function DashboardUserNav({ user }: Props) {
       >
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-2">
-            <p className="text-sm font-medium leading-none">{user.name}</p>
+            <p className="text-sm font-medium leading-none">{user.username}</p>
             <p className="text-muted-foreground text-xs leading-none">
               {user.email}
             </p>
@@ -64,7 +64,7 @@ export function DashboardUserNav({ user }: Props) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         {/* <SignOutButton> */}
-        <DropdownMenuItem asChild>
+        <DropdownMenuItem asChild className="w-full">
           <button type="button" formAction={handleSignOut}>
             Sair
           </button>

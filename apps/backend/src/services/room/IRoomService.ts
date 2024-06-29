@@ -15,7 +15,7 @@ export interface IRoomService {
   addPlayerToRoom(input: { roomCode: string; player: Player }): Promise<void>;
   startRoom(roomCode: string): Promise<void>;
   endRoom(roomCode: string): Promise<Ranking>;
-  joinRoom(input: JoinRoomInput): Promise<void>;
+  joinRoom(input: JoinRoomInput): Promise<Room>;
   leaveRoom(input: LeaveRoomInput): Promise<void>;
   getRoomPlayers(roomCode: string): Promise<Player[]>;
   updatePlayerInRoom(

@@ -91,7 +91,7 @@ function DiscloseButton({
   return (
     <button
       type="button"
-      className="flex items-center justify-center p-2 lg:absolute lg:right-2 lg:top-1/2 lg:-translate-y-1/2"
+      className="flex items-center justify-center rounded-md p-2 transition-colors hover:bg-white/10 lg:absolute lg:right-2 lg:top-1/2 lg:-translate-y-1/2"
       onClick={() => setIsOpen(false)}
     >
       <X size={16} />

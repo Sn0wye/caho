@@ -30,24 +30,68 @@ import {
   InputOTPSlot
 } from '@/components/ui/input-otp';
 import { DashboardOptionCard } from './dashboard-option-card';
+import '@caho/contracts';
+import { useRouter } from 'next/navigation';
+import type { JoinRoomRequest, JoinRoomResponse } from '@caho/contracts';
+import type { ErrorSchema } from '@caho/schemas';
+import { useMutation } from '@tanstack/react-query';
+import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/use-toast';
+import { api } from '@/utils/api';
+
+export const joinRoom = async (
+  payload: JoinRoomRequest
+): Promise<JoinRoomResponse> => {
+  try {
+    const { data } = await api.post<JoinRoomResponse>('/rooms/join', payload);
+    return data;
+  } catch (error) {
+    throw error.response.data as ErrorSchema;
+  }
+};
 
 const formSchema = z.object({
   roomCode: z.string().min(6, {
     message: 'O código da sala deve ter 6 dígitos.'
+  }),
+  password: z.string().min(1, {
+    message: 'A senha da sala é obrigatória.'
   })
 });
 
 export function DashboardPrivateRoomModal() {
+  const { push } = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      roomCode: ''
+      roomCode: '',
+      password: ''
     }
   });
 
+  const { mutate } = useMutation<
+    JoinRoomResponse,
+    ErrorSchema,
+    JoinRoomRequest
+  >(joinRoom, {
+    mutationKey: ['join-room']
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    mutate(values, {
+      onSuccess: data => {
+        push(`/room/${data.code}`);
+      },
+      onError: error => {
+        toast({
+          variant: 'destructive',
+          title: 'Erro ao entrar na sala',
+          description: error.message
+        });
+      }
+    });
+
     console.log(values);
   }
 
@@ -87,7 +131,7 @@ export function DashboardPrivateRoomModal() {
               Entrar com um código
             </DialogTitle>
             <DialogDescription>
-              Uma sala privada necessita de um código secreto, peça para o seu
+              Uma sala privada necessita de um código e senha, peça para o seu
               amigo te passar!
             </DialogDescription>
           </DialogHeader>
@@ -95,7 +139,7 @@ export function DashboardPrivateRoomModal() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full space-y-8"
+              className="w-full space-y-4"
             >
               <FormField
                 control={form.control}
@@ -126,6 +170,22 @@ export function DashboardPrivateRoomModal() {
                           <InputOTPSlot index={5} />
                         </InputOTPGroup>
                       </InputOTP>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-zinc-700 dark:text-zinc-300">
+                      Senha:
+                    </FormLabel>
+
+                    <FormControl>
+                      <Input placeholder="********" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

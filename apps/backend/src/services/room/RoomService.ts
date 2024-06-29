@@ -90,8 +90,9 @@ export class RoomService implements IRoomService {
       throw new NotFoundError(ROOM_ERRORS.ROOM_NOT_FOUND);
     }
 
-    const players =
-      await this.roomPlayersRepository.getRoomPlayersByCode(roomCode);
+    const players = await this.roomPlayersRepository.getRoomPlayersByCode(
+      roomCode
+    );
     const playersReady = players.every(p => p.isReady);
 
     if (!playersReady) {
@@ -113,8 +114,9 @@ export class RoomService implements IRoomService {
         status: 'FINISHED'
       });
 
-      const ranking =
-        await this.rankingRepository.getRankingByRoomCode(roomCode);
+      const ranking = await this.rankingRepository.getRankingByRoomCode(
+        roomCode
+      );
 
       return ranking;
     } catch (error) {
@@ -122,7 +124,7 @@ export class RoomService implements IRoomService {
     }
   }
 
-  public async joinRoom(input: JoinRoomInput): Promise<void> {
+  public async joinRoom(input: JoinRoomInput): Promise<Room> {
     const { roomCode, player, password } = input;
 
     try {
@@ -133,8 +135,9 @@ export class RoomService implements IRoomService {
       }
 
       player.isHost = room.hostId === player.id;
-      const players =
-        await this.roomPlayersRepository.getRoomPlayersByCode(roomCode);
+      const players = await this.roomPlayersRepository.getRoomPlayersByCode(
+        roomCode
+      );
 
       const playerAlreadyInRoom = players.some(p => p.id === player.id);
       if (playerAlreadyInRoom) {
@@ -150,6 +153,8 @@ export class RoomService implements IRoomService {
       }
 
       await this.addPlayerToRoom({ player, roomCode });
+
+      return room;
     } catch (error) {
       if (error instanceof ApplicationError) {
         throw error;
@@ -178,8 +183,9 @@ export class RoomService implements IRoomService {
     }
 
     try {
-      const players =
-        await this.roomPlayersRepository.getRoomPlayersByCode(roomCode);
+      const players = await this.roomPlayersRepository.getRoomPlayersByCode(
+        roomCode
+      );
       return players;
     } catch {
       throw new InternalServerError('Erro ao buscar jogadores da sala.');

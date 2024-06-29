@@ -9,8 +9,9 @@ type MutateOpts<Error> = {
 
 export function useAction<
   TData = unknown,
+  TResponse = unknown,
   TError extends ErrorSchema = ErrorSchema
->(action: (data: TData) => Promise<TError | void>) {
+>(action: (data: TData) => Promise<TError | TResponse>) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState<TError | null>(null);
@@ -19,7 +20,7 @@ export function useAction<
     setIsLoading(true);
     setIsError(false);
 
-    const error = await action(data);
+    const response = await action(data);
 
     if (error) {
       setIsError(true);

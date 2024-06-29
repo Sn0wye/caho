@@ -2,6 +2,7 @@
 
 import type { ComponentProps } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -14,10 +15,9 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useAction } from '@/hooks';
+import { env } from '@/env.mjs';
 import { login } from './login.action';
 import { loginSchema, type LoginDTO } from './login.dto';
-import { env } from '@/env.mjs';
 
 export default function Page() {
   const form = useForm<LoginDTO>({
@@ -28,10 +28,11 @@ export default function Page() {
     }
   });
 
-  const { mutate, isLoading } = useAction(login);
+  const { mutate, isLoading } = useMutation(login);
 
   const onSubmit = async (data: LoginDTO) => {
-    await mutate(data);
+    // TODO: add callbacks
+    mutate(data);
   };
 
   return (
@@ -55,13 +56,13 @@ export default function Page() {
           </a> */}
           <a
             href={`${env.NEXT_PUBLIC_BACKEND_URL}/auth/github`}
-            className="w-full focus-visible:ring-ring flex h-10 items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
+            className="focus-visible:ring-ring flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
           >
             <GithubIcon className="contrast-0 grayscale" />
           </a>
           <a
             href={`${env.NEXT_PUBLIC_BACKEND_URL}/auth/google`}
-            className="w-full focus-visible:ring-ring flex h-10 items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
+            className="focus-visible:ring-ring flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
           >
             <GoogleIcon className="contrast-0 grayscale" />
           </a>

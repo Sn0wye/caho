@@ -1,7 +1,7 @@
 import type { App } from '@/app';
 import { ensureAuth } from '@/plugins/ensure-auth';
 import { RoomServiceFactory } from '@/services/room/RoomServiceFactory';
-import { joinRoom } from '@caho/contracts';
+import { joinRoomRequest } from '@caho/contracts';
 import type { Player } from '@caho/schemas';
 
 export const joinRoomController = async (app: App) => {
@@ -11,7 +11,7 @@ export const joinRoomController = async (app: App) => {
     '/join',
     {
       schema: {
-        body: joinRoom,
+        body: joinRoomRequest,
         security: [{ cookieAuth: [] }]
       }
     },
