@@ -56,7 +56,7 @@ export default async function GamePage({ params }: GamePageProps) {
       initialPlayers={roomPlayers}
       initialCurrentPlayer={currentPlayer}
     >
-      <Game room={room} />
+      <Game />
     </GameContextProvider>
   );
 }

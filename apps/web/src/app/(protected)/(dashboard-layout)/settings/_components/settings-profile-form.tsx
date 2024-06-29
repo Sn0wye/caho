@@ -94,7 +94,11 @@ export function SettingsProfileForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Doe" {...field} />
+                  <Input
+                    placeholder="johndoe@example.com"
+                    {...field}
+                    value={field.value ?? ''}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -108,7 +112,11 @@ export function SettingsProfileForm() {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="Doe" {...field} />
+                  <Input
+                    placeholder="johndoe"
+                    {...field}
+                    value={field.value ?? ''}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
