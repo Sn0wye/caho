@@ -91,8 +91,6 @@ export function DashboardPrivateRoomModal() {
         });
       }
     });
-
-    console.log(values);
   }
 
   return (

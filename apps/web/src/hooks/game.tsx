@@ -1,8 +1,8 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import type { RoomEvent } from '@caho/contracts';
-import type { Player, Room } from '@caho/schemas';
+import type { PlayerEvent, RoomEvent } from '@caho/contracts';
+import type { BlackCard, Player, Room, WhiteCard } from '@caho/schemas';
 import { env } from '@/env.mjs';
 
 // 30 seconds
@@ -12,7 +12,11 @@ type GameContextType = {
   currentPlayer: Player;
   players: Player[];
   room: Room;
+  currentBlackCard: BlackCard | null;
+  currentWhiteCards: WhiteCard[];
 };
+
+type WebsocketEvent = PlayerEvent | RoomEvent;
 
 const GameContext = createContext<GameContextType>({} as GameContextType);
 
@@ -33,36 +37,22 @@ export const GameContextProvider = ({
   const [currentPlayer, setCurrentPlayer] =
     useState<Player>(initialCurrentPlayer);
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
+  const [currentBlackCard, setCurrentBlackCard] = useState<BlackCard | null>(
+    null
+  );
+  const [currentWhiteCards, setCurrentWhiteCards] = useState<WhiteCard[]>([]);
 
   useEffect(() => {
-    const ws = new WebSocket(
+    const roomWs = new WebSocket(
       `${env.NEXT_PUBLIC_WEBSOCKET_URL}/room/${initialRoom.code}`
     );
 
-    ws.onopen = () => {
-      console.log('[WS]: Connected to the WebSocket server');
+    const playerWs = new WebSocket(
+      `${env.NEXT_PUBLIC_WEBSOCKET_URL}/${currentPlayer.id}`
+    );
 
-      // Set up an interval to send pings every 30 seconds
-      const pingInterval = setInterval(() => {
-        if (ws.readyState === WebSocket.OPEN) {
-          ws.send('ping');
-          console.log('[WS]: Ping sent');
-        }
-      }, PING_INTERVAL);
-
-      ws.onclose = () => {
-        console.log('[WS]: Disconnected from the WebSocket server');
-        clearInterval(pingInterval);
-      };
-
-      ws.onerror = error => {
-        console.error('WebSocket error:', error);
-        clearInterval(pingInterval);
-      };
-    };
-
-    ws.onmessage = event => {
-      const data = JSON.parse(event.data) as RoomEvent;
+    const handleWebSocketMessage = (event: MessageEvent) => {
+      const data = JSON.parse(event.data) as WebsocketEvent;
 
       switch (data.event) {
         case 'player-joined': {
@@ -95,6 +85,14 @@ export const GameContextProvider = ({
 
           break;
         }
+        case 'black-card-drawn': {
+          setCurrentBlackCard(data.payload);
+          break;
+        }
+        case 'cards-drawn': {
+          setCurrentWhiteCards(data.payload);
+          break;
+        }
         default: {
           console.log('[WS]: Unhandled event:', {
             event: data.event,
@@ -106,8 +104,38 @@ export const GameContextProvider = ({
       console.log('[WS]: Message received:', data);
     };
 
+    const setupWebSocket = (ws: WebSocket) => {
+      ws.onopen = () => {
+        console.log(`[WS]: Connected to the WebSocket server ${ws.url}`);
+
+        // Set up an interval to send pings every 30 seconds
+        const pingInterval = setInterval(() => {
+          if (ws.readyState === WebSocket.OPEN) {
+            ws.send('ping');
+            console.log('[WS]: Ping sent');
+          }
+        }, PING_INTERVAL);
+
+        ws.onclose = () => {
+          console.log(`[WS]: Disconnected from the WebSocket server ${ws.url}`);
+          clearInterval(pingInterval);
+        };
+
+        ws.onerror = error => {
+          console.error('WebSocket error:', error);
+          clearInterval(pingInterval);
+        };
+      };
+
+      ws.onmessage = handleWebSocketMessage;
+    };
+
+    setupWebSocket(roomWs);
+    setupWebSocket(playerWs);
+
     return () => {
-      ws.close();
+      roomWs.close();
+      playerWs.close();
     };
   }, [initialRoom.code, currentPlayer.id]);
 
@@ -116,6 +144,8 @@ export const GameContextProvider = ({
       value={{
         room,
         currentPlayer,
+        currentBlackCard,
+        currentWhiteCards,
         players
       }}
     >
