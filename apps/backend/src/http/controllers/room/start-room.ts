@@ -48,10 +48,10 @@ export const startRoomController = async (app: App) => {
         player => player.id !== judgeId
       );
 
-      const blackCards = await cardService.getNewBlackCards(1);
+      const blackCard = await cardService.getNewBlackCard();
       await app.pubsub.publish(roomCode, {
         event: 'black-card-drawn',
-        payload: blackCards[0]
+        payload: blackCard
       });
 
       for (const player of playersWithoutJudge) {

@@ -22,13 +22,12 @@ export const roomSchema = z.object({
   isPublic: z.string().transform(v => v === 'true'),
   prevJudgeId: z.string().min(1).or(z.null()).default(null),
   judgeId: z.string().min(1).or(z.null()).default(null),
-  round: z.number().int().min(0).positive().default(0)
-});
-
-export const roomStateSchema = z.object({
-  round: z.number().min(0).nonnegative().default(0),
-  judgeId: z.string().min(1).or(z.null()).default(null),
-  prevJudgeId: z.string().min(1).or(z.null()).default(null)
+  round: z.number().int().min(0).positive().default(0),
+  pickedWhiteCards: z.array(z.string()).default([]),
+  pickedBlackCards: z.array(z.string()).default([]),
+  currentBlackCardId: z.string().or(z.null()).default(null),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date()
 });
 
 export const publicRoomWithPlayerCountAndHost = z.object({
@@ -47,8 +46,6 @@ export type Room = z.infer<typeof roomSchema>;
 export type SanitizedRoom = z.infer<typeof sanitizedRoomSchema>;
 
 export type RoomStatus = Room['status'];
-
-export type RoomState = z.infer<typeof roomStateSchema>;
 
 export type PublicRoomWithPlayerCountAndHost = z.infer<
   typeof publicRoomWithPlayerCountAndHost

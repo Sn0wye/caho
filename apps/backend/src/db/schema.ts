@@ -117,6 +117,7 @@ export const rooms = pgTable(
       onDelete: 'cascade',
       onUpdate: 'cascade'
     }),
+    currentBlackCardId: varchar('current_black_card_id', { length: 24 }),
     pickedWhiteCards: varchar('picked_white_cards', { length: 24 })
       .array()
       .notNull()

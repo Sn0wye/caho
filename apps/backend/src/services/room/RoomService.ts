@@ -8,9 +8,6 @@ import { ROOM_ERRORS } from '@/errors/room';
 import type { IRankingRepository } from '@/repositories/ranking';
 import type { IRoomRepository } from '@/repositories/room';
 import type { IRoomPlayersRepository } from '@/repositories/room-players';
-import type { CreateRoomInput } from '@/schemas/create-room';
-import type { JoinRoomInput } from '@/schemas/join-room';
-import type { LeaveRoomInput } from '@/schemas/leave-room';
 import { generateCode } from '@/utils/generateCode';
 import type {
   Player,
@@ -20,6 +17,9 @@ import type {
 } from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
 import type { IRoomService } from './IRoomService';
+import type { CreateRoomDTO } from '@/dto/CreateRoom';
+import type { JoinRoomDTO } from '@/dto/JoinRoom';
+import type { LeaveRoomDTO } from '@/dto/LeaveRoom';
 
 export class RoomService implements IRoomService {
   constructor(
@@ -38,16 +38,25 @@ export class RoomService implements IRoomService {
     return room;
   }
 
-  public async createRoom(data: CreateRoomInput): Promise<Room> {
+  public async createRoom(data: CreateRoomDTO): Promise<Room> {
     try {
       const room = await this.roomRepository.create({
-        ...data,
         id: createId(),
         status: 'LOBBY',
         code: generateCode(),
+        hostId: data.hostId,
+        isPublic: data.isPublic,
+        maxPlayers: data.maxPlayers,
+        maxPoints: data.maxPoints,
+        password: data.password,
         round: 0,
         judgeId: null,
-        prevJudgeId: null
+        prevJudgeId: null,
+        currentBlackCardId: null,
+        pickedBlackCards: [],
+        pickedWhiteCards: [],
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
 
       return room;
@@ -124,7 +133,7 @@ export class RoomService implements IRoomService {
     }
   }
 
-  public async joinRoom(input: JoinRoomInput): Promise<Room> {
+  public async joinRoom(input: JoinRoomDTO): Promise<Room> {
     const { roomCode, player, password } = input;
 
     try {
@@ -164,7 +173,7 @@ export class RoomService implements IRoomService {
     }
   }
 
-  public async leaveRoom(input: LeaveRoomInput): Promise<void> {
+  public async leaveRoom(input: LeaveRoomDTO): Promise<void> {
     const { roomCode, playerId } = input;
 
     try {
@@ -190,6 +199,16 @@ export class RoomService implements IRoomService {
     } catch {
       throw new InternalServerError('Erro ao buscar jogadores da sala.');
     }
+  }
+
+  public async getRoomBlackCardId(roomCode: string): Promise<string | null> {
+    const room = await this.roomRepository.getRoomByCode(roomCode);
+
+    if (!room) {
+      throw new NotFoundError(ROOM_ERRORS.ROOM_NOT_FOUND);
+    }
+
+    return room.currentBlackCardId;
   }
 
   public async updatePlayerInRoom(

@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS "rooms" (
 	"round" integer DEFAULT 0 NOT NULL,
 	"judge_id" varchar(24),
 	"prev_judge_id" varchar(24),
+	"current_black_card_id" varchar(24),
 	"picked_white_cards" varchar(24)[] DEFAULT ARRAY[]::text[] NOT NULL,
 	"picked_black_cards" varchar(24)[] DEFAULT ARRAY[]::text[] NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,

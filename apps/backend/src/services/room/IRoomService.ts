@@ -1,6 +1,6 @@
-import type { CreateRoomInput } from '@/schemas/create-room';
-import type { JoinRoomInput } from '@/schemas/join-room';
-import type { LeaveRoomInput } from '@/schemas/leave-room';
+import type { CreateRoomDTO } from '@/dto/CreateRoom';
+import type { JoinRoomDTO } from '@/dto/JoinRoom';
+import type { LeaveRoomDTO } from '@/dto/LeaveRoom';
 import type {
   Player,
   PublicRoomWithPlayerCountAndHost,
@@ -10,14 +10,15 @@ import type {
 
 export interface IRoomService {
   getRoom(roomCode: string): Promise<Room>;
-  createRoom(room: CreateRoomInput): Promise<Room>;
+  createRoom(room: CreateRoomDTO): Promise<Room>;
   listPublicRooms(): Promise<PublicRoomWithPlayerCountAndHost[]>;
   addPlayerToRoom(input: { roomCode: string; player: Player }): Promise<void>;
   startRoom(roomCode: string): Promise<void>;
   endRoom(roomCode: string): Promise<Ranking>;
-  joinRoom(input: JoinRoomInput): Promise<Room>;
-  leaveRoom(input: LeaveRoomInput): Promise<void>;
+  joinRoom(input: JoinRoomDTO): Promise<Room>;
+  leaveRoom(input: LeaveRoomDTO): Promise<void>;
   getRoomPlayers(roomCode: string): Promise<Player[]>;
+  getRoomBlackCardId(roomCode: string): Promise<string | null>;
   updatePlayerInRoom(
     roomCode: string,
     playerId: string,

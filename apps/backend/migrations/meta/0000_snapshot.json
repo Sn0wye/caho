@@ -1,5 +1,5 @@
 {
-  "id": "3bd970bf-da89-4dc4-8a24-7feae9005d44",
+  "id": "fc3a9f32-5a45-4584-8cb8-10ed2e16b908",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "6",
   "dialect": "postgresql",
@@ -218,6 +218,12 @@
         },
         "prev_judge_id": {
           "name": "prev_judge_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "current_black_card_id": {
+          "name": "current_black_card_id",
           "type": "varchar(24)",
           "primaryKey": false,
           "notNull": false
