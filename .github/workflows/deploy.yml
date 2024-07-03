@@ -43,6 +43,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            cd ~/caho
             pnpm build --filter=@caho/backend
 
       - name: Restart application on VPS
