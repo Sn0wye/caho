@@ -1,6 +1,7 @@
+import { env } from '@/env';
 import { Argon2id } from 'oslo/password';
 
-const secret = Buffer.from('e0ad73dc-4c6e-47f6-84dd-e76c22872dc2');
+const secret = Buffer.from(env.PASSWORD_SECRET);
 const argon = new Argon2id({
   secret
 });

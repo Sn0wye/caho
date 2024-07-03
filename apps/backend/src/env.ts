@@ -6,6 +6,7 @@ export const env = createEnv({
     PORT: z.coerce.number().default(8080),
     NODE_ENV: z.enum(['production', 'development', 'test']),
     COOKIE_SECRET: z.string().min(1),
+    PASSWORD_SECRET: z.string().min(1),
     DATABASE_URL: z.string().min(1),
     REDIS_URL: z.string().min(1),
     GITHUB_CLIENT_ID: z.string().min(1),
