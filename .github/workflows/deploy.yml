@@ -43,9 +43,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd ~/caho/apps/backend
-            rm -rf dist/
-            pnpm build
+            pnpm build --filter=@caho/backend
 
       - name: Restart application on VPS
         uses: appleboy/ssh-action@master
@@ -54,5 +52,4 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd ~/caho/
             pm2 restart caho
