@@ -1,5 +1,5 @@
 import type { App } from '@/app';
-import { auth } from '@/auth/lucia';
+import { AuthServiceFactory } from '@/services/auth/AuthServiceFactory';
 import { z } from 'zod';
 
 export const signOutController = async (app: App) => {
@@ -16,11 +16,11 @@ export const signOutController = async (app: App) => {
     },
     async (req, res) => {
       try {
+        const authService = AuthServiceFactory();
+
         const session = req.getSession();
 
-        await auth.invalidateSession(session.id);
-        const cookie = auth.createBlankSessionCookie();
-
+        const cookie = await authService.signOut(session.id);
         res.setCookie(cookie.name, cookie.value, cookie.attributes);
 
         res.status(204);
