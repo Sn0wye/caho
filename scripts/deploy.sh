@@ -2,12 +2,10 @@
 
 set -e  # Exit immediately if a command exits with a non-zero status
 
-IMAGE_NAME="${1}"
-GITHUB_SHA="${2}"
-DOCKER_REGISTRY="${3}"
+IMAGE_REFERENCE="${1}"
 
-# Pull image from GitHub Container Registry
-docker pull "${DOCKER_REGISTRY}/${IMAGE_NAME}:${GITHUB_SHA}"
+# Pull the new Docker image from GitHub Container Registry
+docker pull "${IMAGE_REFERENCE}"
 
 # Determine new and old container names and ports
 if docker ps | grep -q "caho-api-v1"; then
@@ -23,7 +21,7 @@ fi
 # Run the new container
 docker run -d --name "${new_container}" \
   --env-file ~/caho.env \
-  -p "${new_port}:8080" "${DOCKER_REGISTRY}/${IMAGE_NAME}:${GITHUB_SHA}"
+  -p "${new_port}:8080" "${IMAGE_REFERENCE}"
 
 # Wait for the new container to start up
 sleep 10
