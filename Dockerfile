@@ -28,7 +28,7 @@ ENV TURBO_TEAM=$TURBO_TEAM
 ARG TURBO_TOKEN
 ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN pnpm run build --filter=backend
+RUN pnpm run build --filter=@caho/backend
 
 # Stage 3: Production stage
 FROM base AS runner

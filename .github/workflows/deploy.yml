@@ -1,56 +1,43 @@
-name: deploy
+name: CI/CD Pipeline
+
 on:
   push:
     branches:
       - main
-    paths:
-      - apps/backend/**
-      - packages/**
-      - '/*'
-      - '/.github/workflows/deploy.yml'
-  workflow_dispatch:
+
 jobs:
-  deploy:
-    name: Deploy
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Deploy to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: '.,!node_modules'
-          target: '~/caho'
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            cd ~/caho
-            pnpm i --frozen-lockfile
+    - name: Build Docker image
+      run: docker build -t ghcr.io/${{ github.repository_owner }}/caho-api:$GITHUB_SHA .
 
-      - name: Build application on VPS
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            cd ~/caho
-            pnpm build --filter=@caho/backend
+    - name: Tag Docker image
+      run: docker tag ghcr.io/${{ github.repository_owner }}/caho-api:$GITHUB_SHA ghcr.io/${{ github.repository_owner }}/caho-api:latest
 
-      - name: Restart application on VPS
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            pm2 restart caho
+    - name: Push Docker image to GitHub Container Registry (SHA Tag)
+      run: docker push ghcr.io/${{ github.repository_owner }}/caho-api:$GITHUB_SHA
+
+    - name: Push Docker image to GitHub Container Registry (Latest Tag)
+      run: docker push ghcr.io/${{ github.repository_owner }}/caho-api:latest
+
+    - name: SSH and Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        passphrase: ${{ secrets.SERVER_PASSPHRASE }}
+        script: |
+          ./caho/scripts/deploy.sh caho-api $GITHUB_SHA ghcr.io/${{ github.repository_owner }}
