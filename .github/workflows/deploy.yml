@@ -21,16 +21,19 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build Docker image
-      run: docker build -t ghcr.io/${{ github.repository_owner }}/caho-api:$GITHUB_SHA .
+      run: docker build -t ghcr.io/Sn0wye/caho-api:$GITHUB_SHA .
 
-    - name: Tag Docker image
-      run: docker tag ghcr.io/${{ github.repository_owner }}/caho-api:$GITHUB_SHA ghcr.io/${{ github.repository_owner }}/caho-api:latest
+    - name: Tag Docker image (SHA Tag)
+      run: docker tag ghcr.io/Sn0wye/caho-api:$GITHUB_SHA ghcr.io/Sn0wye/caho-api:$GITHUB_SHA
+
+    - name: Tag Docker image (Latest Tag)
+      run: docker tag ghcr.io/Sn0wye/caho-api:$GITHUB_SHA ghcr.io/Sn0wye/caho-api:latest
 
     - name: Push Docker image to GitHub Container Registry (SHA Tag)
-      run: docker push ghcr.io/${{ github.repository_owner }}/caho-api:$GITHUB_SHA
+      run: docker push ghcr.io/Sn0wye/caho-api:$GITHUB_SHA
 
     - name: Push Docker image to GitHub Container Registry (Latest Tag)
-      run: docker push ghcr.io/${{ github.repository_owner }}/caho-api:latest
+      run: docker push ghcr.io/Sn0wye/caho-api:latest
 
     - name: SSH and Deploy
       uses: appleboy/ssh-action@master
@@ -40,4 +43,4 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         passphrase: ${{ secrets.SERVER_PASSPHRASE }}
         script: |
-          ./caho/scripts/deploy.sh caho-api $GITHUB_SHA ghcr.io/${{ github.repository_owner }}
+          ./caho/scripts/deploy.sh caho-api $GITHUB_SHA ghcr.io/Sn0wye/caho-api
