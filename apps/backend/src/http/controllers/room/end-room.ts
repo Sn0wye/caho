@@ -10,7 +10,11 @@ export const endRoomController = async (app: App) => {
   app.register(ensureAuth).post(
     '/end',
     {
-      schema: { security: [{ cookieAuth: [] }] }
+      schema: {
+        tags: ['Rooms'],
+        description: 'End a room',
+        security: [{ cookieAuth: [], bearerAuth: [] }]
+      }
     },
     async (req, res) => {
       const user = req.getUser();

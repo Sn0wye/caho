@@ -13,7 +13,11 @@ export const startRoomController = async (app: App) => {
   app.register(ensureAuth).post(
     '/start',
     {
-      schema: { security: [{ cookieAuth: [] }] }
+      schema: {
+        tags: ['Rooms'],
+        description: 'Start a room',
+        security: [{ cookieAuth: [], bearerAuth: [] }]
+      }
     },
     async (req, res) => {
       const user = req.getUser();

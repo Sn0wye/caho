@@ -6,29 +6,40 @@ import { z } from 'zod';
 export const signInWithGoogle = async (app: App) => {
   const authService = AuthServiceFactory();
 
-  app.get('/google', async (_, res) => {
-    const { state, codeVerifier, redirectUrl } =
-      await authService.signInWithGoogle();
+  app.get(
+    '/google',
+    {
+      schema: {
+        tags: ['Auth'],
+        summary: 'Sign in with Google OAuth'
+      }
+    },
+    async (_, res) => {
+      const { state, codeVerifier, redirectUrl } =
+        await authService.signInWithGoogle();
 
-    res.setCookie('state', state, {
-      path: '/',
-      httpOnly: true,
-      maxAge: 60 * 10 // 10 min
-    });
+      res.setCookie('state', state, {
+        path: '/',
+        httpOnly: true,
+        maxAge: 60 * 10 // 10 min
+      });
 
-    res.setCookie('code_verifier', codeVerifier, {
-      path: '/',
-      httpOnly: true,
-      maxAge: 60 * 10 // 10 min
-    });
+      res.setCookie('code_verifier', codeVerifier, {
+        path: '/',
+        httpOnly: true,
+        maxAge: 60 * 10 // 10 min
+      });
 
-    return res.redirect(redirectUrl);
-  });
+      return res.redirect(redirectUrl);
+    }
+  );
 
   app.get(
     '/google/callback',
     {
       schema: {
+        tags: ['Auth'],
+        summary: 'Google OAuth Callback',
         querystring: z.object({
           code: z.string(),
           state: z.string()

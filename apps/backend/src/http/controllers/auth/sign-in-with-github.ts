@@ -6,23 +6,34 @@ import { z } from 'zod';
 export const signInWithGithub = async (app: App) => {
   const authService = AuthServiceFactory();
 
-  app.get('/github', async (_, res) => {
-    const { url, state } = await authService.signInWithGithub();
+  app.get(
+    '/github',
+    {
+      schema: {
+        tags: ['Auth'],
+        summary: 'Sign in with GitHub OAuth'
+      }
+    },
+    async (_, res) => {
+      const { url, state } = await authService.signInWithGithub();
 
-    res.setCookie('github_oauth_state', state, {
-      path: '/',
-      httpOnly: true,
-      maxAge: 60 * 10,
-      sameSite: 'lax'
-    });
+      res.setCookie('github_oauth_state', state, {
+        path: '/',
+        httpOnly: true,
+        maxAge: 60 * 10,
+        sameSite: 'lax'
+      });
 
-    return res.redirect(url.toString());
-  });
+      return res.redirect(url.toString());
+    }
+  );
 
   app.get(
     '/github/callback',
     {
       schema: {
+        tags: ['Auth'],
+        summary: 'GitHub OAuth Callback',
         querystring: z.object({
           code: z.string(),
           state: z.string()

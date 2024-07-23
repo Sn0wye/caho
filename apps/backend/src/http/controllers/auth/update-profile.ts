@@ -14,7 +14,7 @@ export const updateProfileController = async (app: App) => {
       schema: {
         tags: ['Auth'],
         summary: 'Update user profile',
-        security: [{ cookieAuth: [] }],
+        security: [{ cookieAuth: [], bearerAuth: [] }],
         body: updateProfileRequest,
         response: {
           200: updateProfileResponse,

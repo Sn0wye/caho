@@ -10,10 +10,12 @@ export const getRoomPlayersController = async (app: App) => {
     '/:roomCode/players',
     {
       schema: {
+        tags: ['Rooms'],
+        description: 'Get the players of a room',
         params: z.object({
           roomCode: z.string().min(6).max(6)
         }),
-        security: [{ cookieAuth: [] }]
+        security: [{ cookieAuth: [], bearerAuth: [] }]
       }
     },
     async (req, _res) => {

@@ -9,7 +9,11 @@ export const leaveRoomController = async (app: App) => {
   app.register(ensureAuth).post(
     '/leave',
     {
-      schema: { security: [{ cookieAuth: [] }] }
+      schema: {
+        tags: ['Rooms'],
+        description: 'Leave a room',
+        security: [{ cookieAuth: [], bearerAuth: [] }]
+      }
     },
     async (req, res) => {
       const user = req.getUser();

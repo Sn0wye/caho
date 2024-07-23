@@ -10,10 +10,12 @@ export const listPublicController = async (app: App) => {
     '/list',
     {
       schema: {
+        tags: ['Rooms'],
+        description: 'List public rooms',
         response: {
           200: listPublicRoomsResponse
         },
-        security: [{ cookieAuth: [] }]
+        security: [{ cookieAuth: [], bearerAuth: [] }]
       }
     },
     async () => {

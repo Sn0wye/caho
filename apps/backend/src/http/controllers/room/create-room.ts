@@ -10,7 +10,11 @@ export const createRoomController = async (app: App) => {
   app.register(ensureAuth).post(
     '/create',
     {
-      schema: { security: [{ cookieAuth: [] }] }
+      schema: {
+        tags: ['Rooms'],
+        description: 'Create a room',
+        security: [{ cookieAuth: [], bearerAuth: [] }]
+      }
     },
     async (req, res) => {
       const user = req.getUser();

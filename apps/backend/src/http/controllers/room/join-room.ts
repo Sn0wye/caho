@@ -11,8 +11,10 @@ export const joinRoomController = async (app: App) => {
     '/join',
     {
       schema: {
+        tags: ['Rooms'],
+        description: 'Join a room',
         body: joinRoomRequest,
-        security: [{ cookieAuth: [] }]
+        security: [{ cookieAuth: [], bearerAuth: [] }]
       }
     },
     async req => {

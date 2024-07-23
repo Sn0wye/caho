@@ -14,10 +14,12 @@ export const getRoomBlackCardController = async (app: App) => {
     '/:roomCode/black-card',
     {
       schema: {
+        tags: ['Rooms'],
+        description: 'Get the black card of a room',
         params: z.object({
           roomCode: z.string().min(6).max(6)
         }),
-        security: [{ cookieAuth: [] }]
+        security: [{ cookieAuth: [], bearerAuth: [] }]
       }
     },
     async (req, _res) => {

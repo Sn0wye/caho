@@ -7,6 +7,8 @@ export const wsRoutes = async (app: App) => {
     {
       websocket: true,
       schema: {
+        tags: ['Rooms (Websocket)'],
+        description: 'Listen for room events',
         params: z.object({
           roomCode: z.string().min(6).max(6)
         })
@@ -29,6 +31,8 @@ export const wsRoutes = async (app: App) => {
     {
       websocket: true,
       schema: {
+        tags: ['Rooms (Websocket)'],
+        description: 'Listen for user events',
         params: z.object({
           userId: z.string()
         })

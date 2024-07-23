@@ -62,8 +62,15 @@ app.register(fastifySwagger, {
       securitySchemes: {
         cookieAuth: {
           type: 'apiKey',
+          description: 'Session cookie (auto-set)',
           in: 'cookie',
           name: 'auth_session'
+        },
+        bearerAuth: {
+          type: 'http',
+          description: 'Bearer token',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
         }
       }
     }

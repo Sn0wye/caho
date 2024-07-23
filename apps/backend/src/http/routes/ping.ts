@@ -6,6 +6,8 @@ export const pingRoute = async (app: FastifyInstance) => {
     '/ping',
     {
       schema: {
+        tags: ['Health'],
+        description: 'Health check',
         response: {
           200: z.object({
             message: z.string()

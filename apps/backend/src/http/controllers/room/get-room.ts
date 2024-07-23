@@ -10,16 +10,19 @@ export const getRoomController = async (app: App) => {
     '/:roomCode',
     {
       schema: {
+        tags: ['Rooms'],
+        description: 'Get a room',
         params: z.object({
           roomCode: z.string().min(6).max(6)
         }),
-        security: [{ cookieAuth: [] }]
+        security: [{ cookieAuth: [], bearerAuth: [] }]
       }
     },
     async req => {
       const { roomCode } = req.params;
-      const { password, ...sanitizedRoom } =
-        await roomService.getRoom(roomCode);
+      const { password, ...sanitizedRoom } = await roomService.getRoom(
+        roomCode
+      );
       return sanitizedRoom;
     }
   );

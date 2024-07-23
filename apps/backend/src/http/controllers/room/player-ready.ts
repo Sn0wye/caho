@@ -10,10 +10,12 @@ export const playerReadyController = async (app: App) => {
     '/:roomCode/ready',
     {
       schema: {
+        tags: ['Rooms'],
+        description: 'Toggle player ready status',
         params: z.object({
           roomCode: z.string().min(6).max(6)
         }),
-        security: [{ cookieAuth: [] }]
+        security: [{ cookieAuth: [], bearerAuth: [] }]
       }
     },
     async req => {
