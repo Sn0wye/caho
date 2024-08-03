@@ -37,7 +37,6 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          passphrase: ${{ secrets.SERVER_PASSPHRASE }}
           script: |
             IMAGE_REFERENCE="ghcr.io/sn0wye/caho-api:${{ github.sha }}"
 

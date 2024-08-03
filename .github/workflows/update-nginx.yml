@@ -1,0 +1,33 @@
+name: Update Nginx Config
+
+on:
+  push:
+    paths:
+      - 'nginx/nginx.conf'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Copy nginx.conf to server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        source: 'nginx/nginx.conf'
+        target: '/etc/nginx/sites-available/api.caho.com.br'
+
+    - name: Restart Nginx
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: |
+          sudo systemctl restart nginx
