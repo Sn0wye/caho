@@ -1,22 +1,28 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { api } from '@/utils/api';
 import { redirect } from 'next/navigation';
+import { z } from 'zod';
+import { createServerAction } from 'zsa';
+import { api } from '@/utils/server/api';
 
-export const signOut = async () => {
-  const sessionCookie = cookies().get('auth_session');
+export const signOutAction = createServerAction()
+  .input(z.null())
+  .onSuccess(() => {
+    redirect('/');
+  })
+  .handler(async () => {
+    const sessionCookie = cookies().get('auth_session');
 
-  if (!sessionCookie) {
-    return;
-  }
-
-  await api.post('/auth/sign-out', {
-    headers: {
-      cookie: `auth_session=${sessionCookie.value}`
+    if (!sessionCookie) {
+      return;
     }
-  });
 
-  redirect('/');
-  return;
-};
+    await api.post('/auth/sign-out', {
+      headers: {
+        cookie: `auth_session=${sessionCookie.value}`
+      }
+    });
+
+    return;
+  });

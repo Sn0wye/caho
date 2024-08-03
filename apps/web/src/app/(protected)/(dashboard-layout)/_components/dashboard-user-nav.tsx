@@ -1,6 +1,5 @@
 'use client';
 
-import { useActionState } from 'react';
 import Link from 'next/link';
 import type { User } from '@caho/schemas';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
@@ -14,14 +13,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { signOut } from '@/actions/sign-out';
+import { signOutAction } from '@/actions/sign-out';
+import { useServerActionMutation } from '@/hooks/server-actions';
 
 type Props = {
   user: User;
 };
 
 export function DashboardUserNav({ user }: Props) {
-  const [_, handleSignOut] = useActionState(signOut, null);
+  const { mutate: signOut } = useServerActionMutation(signOutAction);
 
   return (
     <DropdownMenu>
@@ -65,7 +65,7 @@ export function DashboardUserNav({ user }: Props) {
         <DropdownMenuSeparator />
         {/* <SignOutButton> */}
         <DropdownMenuItem asChild className="w-full">
-          <button type="button" formAction={handleSignOut}>
+          <button type="button" onClick={() => signOut(null)}>
             Sair
           </button>
           {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}

@@ -2,21 +2,21 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { signInRequest, type SignInResponse } from '@caho/contracts';
+import { signInRequest, type SignUpResponse } from '@caho/contracts';
 import { AxiosError } from 'axios';
 import { parse } from 'cookie';
 import { createServerAction } from 'zsa';
 import { api } from '@/utils/api';
 
-export const loginAction = createServerAction()
+export const registerAction = createServerAction()
   .input(signInRequest)
   .onSuccess(() => {
     redirect('/dashboard');
   })
   .handler(async ({ input }) => {
     try {
-      const { data, headers } = await api.post<SignInResponse>(
-        '/auth/sign-in',
+      const { data, headers } = await api.post<SignUpResponse>(
+        '/auth/sign-up',
         input
       );
 

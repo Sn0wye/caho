@@ -1,8 +1,7 @@
 'use client';
 
 import type { ComponentProps } from 'react';
-import { useRouter } from 'next/navigation';
-import { signInRequest, type SignInRequest } from '@caho/contracts';
+import { signUpRequest, type SignUpRequest } from '@caho/contracts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -19,25 +18,21 @@ import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import { env } from '@/env.mjs';
 import { useServerActionMutation } from '@/hooks/server-actions';
-import { loginAction } from './login.action';
+import { registerAction } from './register.action';
 
-export default function LoginPage() {
-  const form = useForm<SignInRequest>({
-    resolver: zodResolver(signInRequest),
+export default function RegisterPage() {
+  const form = useForm<SignUpRequest>({
+    resolver: zodResolver(signUpRequest),
     defaultValues: {
       username: '',
       password: ''
     }
   });
 
-  const { push } = useRouter();
-  const { mutate, isLoading } = useServerActionMutation(loginAction);
+  const { mutate, isLoading } = useServerActionMutation(registerAction);
 
-  const onSubmit = async (data: SignInRequest) => {
+  const onSubmit = async (data: SignUpRequest) => {
     mutate(data, {
-      onSuccess: () => {
-        push('/dashboard');
-      },
       onError: ({ message }) => {
         toast({
           title: 'Erro!',
@@ -53,7 +48,7 @@ export default function LoginPage() {
       <div className="m-0 flex w-auto max-w-none flex-col gap-8 rounded-none bg-white p-0 text-zinc-950 shadow-none dark:bg-zinc-950">
         <header className="flex flex-col items-stretch gap-1">
           <h1 className="text-2xl font-medium text-zinc-900 dark:text-zinc-50">
-            Entrar
+            Registro
           </h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
             para continuar em CAHO
@@ -132,13 +127,13 @@ export default function LoginPage() {
 
         <footer className="flex gap-1 text-sm">
           <span className="text-zinc-500 dark:text-zinc-400">
-            Não possui uma conta?
+            Já tem uma conta?
           </span>
           <a
-            href="/register"
+            href="/login"
             className="text-zinc-900 hover:text-zinc-900/80 hover:underline dark:text-zinc-50 dark:hover:text-zinc-50/80"
           >
-            Registre-se
+            Faça login
           </a>
         </footer>
       </div>
