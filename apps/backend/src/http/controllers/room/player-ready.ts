@@ -30,7 +30,7 @@ export const playerReadyController = async (app: App) => {
       player.isReady = !player.isReady;
 
       await app.pubsub.publish(roomCode, {
-        event: 'player-update',
+        event: 'room.player-update',
         payload: player
       });
     }

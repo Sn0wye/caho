@@ -3,11 +3,11 @@ import { z } from 'zod';
 
 const playerEvent = z.union([
   z.object({
-    event: z.literal('cards-drawn'),
+    event: z.literal('player.cards-drawn'),
     payload: z.array(whiteCard).length(6)
   }),
   z.object({
-    event: z.literal('cards-drawn'),
+    event: z.literal('player.cards-drawn'),
     payload: z.array(whiteCard).length(6)
   })
 ]);

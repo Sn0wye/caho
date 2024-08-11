@@ -39,7 +39,7 @@ export const joinRoomController = async (app: App) => {
       });
 
       app.pubsub.publish(roomCode, {
-        event: 'player-joined',
+        event: 'room.player-joined',
         payload: player
       });
 

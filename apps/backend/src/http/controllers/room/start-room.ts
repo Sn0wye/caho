@@ -44,7 +44,7 @@ export const startRoomController = async (app: App) => {
       });
 
       await app.pubsub.publish(roomCode, {
-        event: 'room-started',
+        event: 'room.started',
         payload: room
       });
 
@@ -54,14 +54,14 @@ export const startRoomController = async (app: App) => {
 
       const blackCard = await cardService.getNewBlackCard();
       await app.pubsub.publish(roomCode, {
-        event: 'black-card-drawn',
+        event: 'room.black-card-drawn',
         payload: blackCard
       });
 
       for (const player of playersWithoutJudge) {
         const whiteCards = await cardService.getNewWhiteCards(6);
         await app.pubsub.publish(player.id, {
-          event: 'cards-drawn',
+          event: 'player.cards-drawn',
           payload: whiteCards
         });
 

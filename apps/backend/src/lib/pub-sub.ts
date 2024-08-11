@@ -17,7 +17,7 @@ export class Pubsub {
   public async subscribe(channel: string, cb: (event: Event) => void) {
     const sub = this.redis.duplicate();
 
-    sub.on('message', (_, message) => {
+    sub.on('room.message', (_, message) => {
       cb(JSON.parse(message));
     });
 

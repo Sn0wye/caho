@@ -55,17 +55,17 @@ export const GameContextProvider = ({
       const data = JSON.parse(event.data) as WebsocketEvent;
 
       switch (data.event) {
-        case 'player-joined': {
+        case 'room.player-joined': {
           setPlayers(prevPlayers => [...prevPlayers, data.payload]);
           break;
         }
-        case 'player-left': {
+        case 'room.player-left': {
           setPlayers(prevPlayers =>
             prevPlayers.filter(player => player.id !== data.payload.id)
           );
           break;
         }
-        case 'player-update': {
+        case 'room.player-update': {
           const updatedPlayer = data.payload;
           setPlayers(prevPlayers =>
             prevPlayers.map(player =>
@@ -79,17 +79,17 @@ export const GameContextProvider = ({
 
           break;
         }
-        case 'room-started': {
+        case 'room.started': {
           const updatedRoom = data.payload;
           setRoom(updatedRoom);
 
           break;
         }
-        case 'black-card-drawn': {
+        case 'room.black-card-drawn': {
           setCurrentBlackCard(data.payload);
           break;
         }
-        case 'cards-drawn': {
+        case 'player.cards-drawn': {
           setCurrentWhiteCards(data.payload);
           break;
         }

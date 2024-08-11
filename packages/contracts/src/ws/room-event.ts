@@ -3,29 +3,29 @@ import { z } from 'zod';
 
 export const roomEvent = z.union([
   z.object({
-    event: z.literal('message'),
+    event: z.literal('room.message'),
     payload: z.object({ message: z.string() })
   }),
   z.object({
-    event: z.literal('player-joined'),
+    event: z.literal('room.player-joined'),
     payload: playerSchema
   }),
   z.object({
-    event: z.literal('player-left'),
+    event: z.literal('room.player-left'),
     payload: z.object({
       id: z.string()
     })
   }),
   z.object({
-    event: z.literal('player-update'),
+    event: z.literal('room.player-update'),
     payload: playerSchema
   }),
   z.object({
-    event: z.literal('room-started'),
+    event: z.literal('room.started'),
     payload: roomSchema
   }),
   z.object({
-    event: z.literal('black-card-drawn'),
+    event: z.literal('room.black-card-drawn'),
     payload: blackCard
   })
 ]);

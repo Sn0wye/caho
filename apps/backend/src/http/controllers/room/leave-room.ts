@@ -25,7 +25,7 @@ export const leaveRoomController = async (app: App) => {
       });
 
       await app.pubsub.publish(roomCode, {
-        event: 'player-left',
+        event: 'room.player-left',
         payload: {
           id: user.id
         }
