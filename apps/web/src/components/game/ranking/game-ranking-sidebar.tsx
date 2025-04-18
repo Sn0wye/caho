@@ -5,7 +5,7 @@ import { create } from 'zustand';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/utils/cn';
-import { mockPlayers } from '@/mock/players';
+import { useGame } from '@/hooks/game';
 import { GameRankingHeader } from './game-ranking-header';
 import { GameRankingPlayer } from './game-ranking-player';
 
@@ -23,6 +23,7 @@ export const useGameRankingSidebarContext = create<GameRankingSidebarContext>(
 
 export function GameRankingSidebar() {
   const { isCollapsed } = useGameRankingSidebarContext();
+  const { players } = useGame();
 
   return (
     <ScrollArea
@@ -34,8 +35,8 @@ export function GameRankingSidebar() {
       <GameRankingHeader />
 
       <div className="mt-24 flex w-full flex-1 flex-col items-center gap-2">
-        {mockPlayers.map((player, idx) => (
-          <Fragment key={idx}>
+        {players.map(player => (
+          <Fragment key={player.id}>
             <GameRankingPlayer player={player} />
             <Separator className="last:hidden" />
           </Fragment>

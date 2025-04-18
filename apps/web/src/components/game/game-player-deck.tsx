@@ -1,32 +1,23 @@
+'use client';
+
+import { useGame } from '@/hooks/game';
 import { WhiteCard } from './cards/white-card';
 
-type GamePlayerDeckProps = {};
-
-export function GamePlayerDeck({}: GamePlayerDeckProps) {
+export function GamePlayerDeck() {
   // TODO: -space-x-10 group hover:space-x-8 stack arc */
+  const { currentWhiteCards } = useGame();
 
   return (
     <div className="flex w-full items-center justify-center space-x-4">
-      <WhiteCard
-        data={{
-          packId: 'snowflakes',
-          text: 'Carta branca 1'
-        }}
-      />
-
-      <WhiteCard
-        data={{
-          packId: 'snowflakes',
-          text: 'Carta branca 2'
-        }}
-      />
-
-      <WhiteCard
-        data={{
-          packId: 'snowflakes',
-          text: 'Carta branca 3'
-        }}
-      />
+      {currentWhiteCards.map(card => (
+        <WhiteCard
+          key={card.id}
+          data={{
+            packId: card.packId,
+            text: card.text
+          }}
+        />
+      ))}
     </div>
   );
 }

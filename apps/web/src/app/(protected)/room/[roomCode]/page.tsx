@@ -1,8 +1,8 @@
-import { redirect } from 'next/navigation';
-import type { Player, Room as RoomType } from '@caho/schemas';
-import { api } from '@/utils/server/api';
 import { getUser } from '@/auth/server';
 import { GameContextProvider } from '@/hooks/game';
+import { api } from '@/utils/server/api';
+import type { Player, Room as RoomType } from '@caho/schemas';
+import { redirect } from 'next/navigation';
 import { Game } from './game';
 
 type GamePageProps = {
@@ -22,6 +22,7 @@ const getRoomPlayers = async (roomCode: string) => {
 
   return data;
 };
+
 export default async function GamePage({ params }: GamePageProps) {
   const room = await getRoom(params.roomCode);
 
