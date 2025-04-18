@@ -1,10 +1,5 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
-import { Lock } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 import { Noise } from '@/components/illustrations/noise';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,20 +19,25 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot
 } from '@/components/ui/input-otp';
-import { DashboardOptionCard } from './dashboard-option-card';
+import { toast } from '@/components/ui/use-toast';
+import { api } from '@/utils/api';
 import '@caho/contracts';
 import { useRouter } from 'next/navigation';
 import type { JoinRoomRequest, JoinRoomResponse } from '@caho/contracts';
 import type { ErrorSchema } from '@caho/schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { Input } from '@/components/ui/input';
-import { toast } from '@/components/ui/use-toast';
-import { api } from '@/utils/api';
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
+import { Lock } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { DashboardOptionCard } from './dashboard-option-card';
 
 export const joinRoom = async (
   payload: JoinRoomRequest
@@ -51,9 +51,12 @@ export const joinRoom = async (
 };
 
 const formSchema = z.object({
-  roomCode: z.string().min(6, {
-    message: 'O código da sala deve ter 6 dígitos.'
-  }),
+  roomCode: z
+    .string()
+    .min(6, {
+      message: 'O código da sala deve ter 6 dígitos.'
+    })
+    .transform(value => value.toUpperCase()),
   password: z.string().min(1, {
     message: 'A senha da sala é obrigatória.'
   })
@@ -81,7 +84,7 @@ export function DashboardPrivateRoomModal() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutate(values, {
       onSuccess: data => {
-        push(`/room/${data.code}`);
+        push(`/room/${data.code.toUpperCase()}`);
       },
       onError: error => {
         toast({
