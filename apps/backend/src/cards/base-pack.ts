@@ -7793,7 +7793,7 @@ export const basePack: CardPack = {
         id: 'mbtqvjt89oup0v2ea75tlib9'
       },
       {
-        text: 'Se não puder estar com aquele que você ama, ame ____',
+        text: 'Se não puder estar com aquele que você ama, ame ___',
         pick: 1,
         packId: 'base-pack',
         id: 'jlhwizt6ast4sqazquszldmb'
