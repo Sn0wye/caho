@@ -1,4 +1,4 @@
-import { type CardPack } from 'types/pack';
+import type { CardPack } from 'types/pack';
 
 const basePack: CardPack = {
   id: 'base-pack',
