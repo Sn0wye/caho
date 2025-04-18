@@ -13,13 +13,15 @@ import type {
   Player,
   PublicRoomWithPlayerCountAndHost,
   Ranking,
-  Room
+  Room,
+  WhiteCard
 } from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
 import type { IRoomService } from './IRoomService';
 import type { CreateRoomDTO } from '@/dto/CreateRoom';
 import type { JoinRoomDTO } from '@/dto/JoinRoom';
 import type { LeaveRoomDTO } from '@/dto/LeaveRoom';
+import { basePack } from '@/cards/base-pack';
 
 export class RoomService implements IRoomService {
   constructor(
@@ -279,5 +281,32 @@ export class RoomService implements IRoomService {
     } catch {
       throw new InternalServerError('Erro ao atualizar sala.');
     }
+  }
+
+  public async getCurrentWhiteCards(
+    roomCode: string,
+    playerId: string
+  ): Promise<WhiteCard[]> {
+    const room = await this.roomRepository.getRoomByCode(roomCode);
+
+    if (!room) {
+      throw new NotFoundError(ROOM_ERRORS.ROOM_NOT_FOUND);
+    }
+
+    const player = await this.roomPlayersRepository.getPlayerFromRoom(
+      roomCode,
+      playerId
+    );
+
+    if (!player) {
+      throw new NotFoundError(ROOM_ERRORS.PLAYER_NOT_FOUND);
+    }
+
+    // TODO: PLEASE REMOVE THIS WHEN CARDS ARE IN THE DB
+    const currentWhiteCards = basePack.cards.white.filter(whiteCard =>
+      player.cardIds.includes(whiteCard.id)
+    );
+
+    return currentWhiteCards;
   }
 }

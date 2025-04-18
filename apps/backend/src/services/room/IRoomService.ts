@@ -5,7 +5,8 @@ import type {
   Player,
   PublicRoomWithPlayerCountAndHost,
   Ranking,
-  Room
+  Room,
+  WhiteCard
 } from '@caho/schemas';
 
 export interface IRoomService {
@@ -31,4 +32,8 @@ export interface IRoomService {
     by: number;
   }): Promise<void>;
   updateRoom(roomCode: string, data: Partial<Room>): Promise<Room>;
+  getCurrentWhiteCards(
+    roomCode: string,
+    playerId: string
+  ): Promise<WhiteCard[]>;
 }
