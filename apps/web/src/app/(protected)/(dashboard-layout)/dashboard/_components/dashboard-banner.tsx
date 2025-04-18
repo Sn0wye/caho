@@ -28,7 +28,7 @@ export function DashboardBanner({ firstName }: DashboardBannerProps) {
           </header>
 
           <Button asChild size="lg" className="w-fit">
-            <Link href="/dashboard/create-room">Criar uma nova sala</Link>
+            <Link href="/create-room">Criar uma nova sala</Link>
           </Button>
         </section>
 
