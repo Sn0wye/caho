@@ -1,8 +1,13 @@
+import { redirect } from 'next/navigation';
+import type {
+  BlackCard,
+  Player,
+  Room as RoomType,
+  WhiteCard
+} from '@caho/schemas';
+import { api } from '@/utils/server/api';
 import { getUser } from '@/auth/server';
 import { GameContextProvider } from '@/hooks/game';
-import { api } from '@/utils/server/api';
-import type { Player, Room as RoomType } from '@caho/schemas';
-import { redirect } from 'next/navigation';
 import { Game } from './game';
 
 type GamePageProps = {
@@ -19,6 +24,18 @@ const getRoom = async (roomCode: string) => {
 
 const getRoomPlayers = async (roomCode: string) => {
   const { data } = await api.get<Player[]>(`/rooms/${roomCode}/players`);
+
+  return data;
+};
+
+const getCurrentWhiteCards = async (roomCode: string) => {
+  const { data } = await api.get<WhiteCard[]>(`/rooms/${roomCode}/white-cards`);
+
+  return data;
+};
+
+const getCurrentBlackCard = async (roomCode: string) => {
+  const { data } = await api.get<BlackCard>(`/rooms/${roomCode}/black-card`);
 
   return data;
 };
@@ -51,11 +68,16 @@ export default async function GamePage({ params }: GamePageProps) {
     redirect('/dashboard');
   }
 
+  const currentWhiteCards = await getCurrentWhiteCards(params.roomCode);
+  const currentBlackCard = await getCurrentBlackCard(params.roomCode);
+
   return (
     <GameContextProvider
       initialRoom={room}
       initialPlayers={roomPlayers}
       initialCurrentPlayer={currentPlayer}
+      initialWhiteCards={currentWhiteCards}
+      initialBlackCard={currentBlackCard}
     >
       <Game />
     </GameContextProvider>

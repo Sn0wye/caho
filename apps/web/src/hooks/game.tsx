@@ -24,6 +24,8 @@ type GameContextProviderProps = {
   initialRoom: Room;
   initialCurrentPlayer: Player;
   initialPlayers: Player[];
+  initialBlackCard: BlackCard;
+  initialWhiteCards: WhiteCard[];
   children: React.ReactNode;
 };
 
@@ -31,6 +33,8 @@ export const GameContextProvider = ({
   initialRoom,
   initialCurrentPlayer,
   initialPlayers,
+  initialBlackCard,
+  initialWhiteCards,
   children
 }: GameContextProviderProps) => {
   const [room, setRoom] = useState<Room>(initialRoom);
@@ -38,9 +42,11 @@ export const GameContextProvider = ({
     useState<Player>(initialCurrentPlayer);
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [currentBlackCard, setCurrentBlackCard] = useState<BlackCard | null>(
-    null
+    initialBlackCard ?? null
   );
-  const [currentWhiteCards, setCurrentWhiteCards] = useState<WhiteCard[]>([]);
+  const [currentWhiteCards, setCurrentWhiteCards] = useState<WhiteCard[]>(
+    initialWhiteCards ?? []
+  );
 
   useEffect(() => {
     const roomWs = new WebSocket(
