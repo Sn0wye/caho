@@ -8,6 +8,7 @@ export const blackCard = z.object({
 export type BlackCard = z.infer<typeof blackCard>;
 
 export const whiteCard = z.object({
+  id: z.string(),
   text: z.string(),
   packId: z.string()
 });
