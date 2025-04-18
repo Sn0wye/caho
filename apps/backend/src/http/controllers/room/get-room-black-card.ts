@@ -1,7 +1,6 @@
 import type { App } from '@/app';
 import { basePack } from '@/cards/base-pack';
-import { BadRequestError, NotFoundError } from '@/errors';
-import { ROOM_ERRORS } from '@/errors/room';
+import { NotFoundError } from '@/errors';
 import { ensureAuth } from '@/plugins/ensure-auth';
 import { CardService } from '@/services/CardService';
 import { RoomServiceFactory } from '@/services/room/RoomServiceFactory';
@@ -23,7 +22,6 @@ export const getRoomBlackCardController = async (app: App) => {
       }
     },
     async (req, _res) => {
-      const user = req.getUser();
       const { roomCode } = req.params;
 
       const cardService = new CardService(roomCode, basePack);
@@ -32,16 +30,6 @@ export const getRoomBlackCardController = async (app: App) => {
 
       if (!blackCardId) {
         throw new NotFoundError('Carta preta não encontrada');
-      }
-
-      const player = await roomService.getPlayerFromRoom(roomCode, user.id);
-
-      const room = await roomService.getRoom(roomCode);
-
-      const isJudge = room.judgeId === player.id;
-
-      if (isJudge) {
-        throw new BadRequestError(ROOM_ERRORS.JUDGE_CANNOT_PLAY);
       }
 
       const blackCard = cardService.getBlackCardById(blackCardId);
