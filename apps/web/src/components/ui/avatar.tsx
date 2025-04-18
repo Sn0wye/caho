@@ -23,6 +23,7 @@ const avatarVariants = cva(
         teal: 'ring-2 ring-teal-500 ring-offset-4 ring-offset-zinc-50 dark:ring-offset-zinc-950',
         orange:
           'ring-2 ring-orange-400 ring-offset-4 ring-offset-zinc-50 dark:ring-offset-zinc-950',
+        tealOrange: 'ring-none',
         ghost:
           'ring-2 ring-zinc-200 dark:ring-zinc-900 ring-offset-4 ring-offset-zinc-50 dark:ring-offset-zinc-950'
       }

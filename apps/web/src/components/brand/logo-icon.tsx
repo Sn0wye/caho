@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-const logoIconVariants = cva('fill-current h-fit', {
+const logoIconVariants = cva('fill-current h-fit shrink-0', {
   variants: {
     size: {
       default: 'w-7',

@@ -16,6 +16,8 @@ const badgeVariants = cva(
         outline: 'text-zinc-950 dark:text-zinc-50',
         teal: 'border-none bg-teal-500 text-white',
         orange: 'border-none bg-orange-400 text-white',
+        tealOrange:
+          'border-none bg-[linear-gradient(to_right,#14b8a6_50%,#fb923c_50%)] text-white',
         ghost:
           'border-none bg-zinc-200 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-700'
       },

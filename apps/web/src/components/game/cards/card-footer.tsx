@@ -25,8 +25,8 @@ type CardFooterProps = VariantProps<typeof cardFooterVariants>;
 export function CardFooter({ variant, size }: CardFooterProps) {
   return (
     <footer className={cardFooterVariants({ variant, size })}>
-      <LogoIcon size={size} variant={variant || 'default'} />
-      <span>{siteConfig.nameLong}</span>
+      <LogoIcon variant={variant || 'default'} />
+      <span>{siteConfig.nameShort}</span>
     </footer>
   );
 }
