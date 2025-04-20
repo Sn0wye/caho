@@ -6,6 +6,7 @@ import type {
   PublicRoomWithPlayerCountAndHost,
   Ranking,
   Room,
+  Round,
   WhiteCard
 } from '@caho/schemas';
 
@@ -36,4 +37,11 @@ export interface IRoomService {
     roomCode: string,
     playerId: string
   ): Promise<WhiteCard[]>;
+  setPlayersAsUnready(roomCode: string): Promise<void>;
+  playCards(
+    roomCode: string,
+    playerId: string,
+    playedCards: WhiteCard[]
+  ): Promise<WhiteCard[]>;
+  createRound(data: CreateRoundDTO): Promise<Round>;
 }

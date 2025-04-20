@@ -12,6 +12,8 @@ export interface IRoomPlayersRepository {
     playerId: string,
     payload: Partial<Player>
   ): Promise<void>;
+  updatePlayers(roomCode: string, players: Player[]): Promise<Player[]>;
+  setPlayersAsUnready(roomCode: string): Promise<void>;
   incrementPlayerScore(input: {
     roomCode: string;
     playerId: string;

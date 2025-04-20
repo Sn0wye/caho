@@ -7,6 +7,8 @@ import { RoomServiceFactory } from '@/services/room/RoomServiceFactory';
 import { getRandomJudge } from '@/utils/getRandomJudge';
 import { startRoom } from '@caho/contracts';
 
+// TODO: refactor this controller, it's doing business logic
+// it should be in the service layer
 export const startRoomController = async (app: App) => {
   const roomService = RoomServiceFactory();
 
@@ -53,6 +55,11 @@ export const startRoomController = async (app: App) => {
       );
 
       const blackCard = await cardService.getNewBlackCard();
+      // card service already updates the black card in the db, this is just
+      // to make sure the room object is up to date
+      room.currentBlackCardId = blackCard.id;
+
+      // TODO: remove this event as it was replaced by the room.round-start event
       await app.pubsub.publish(roomCode, {
         event: 'room.black-card-drawn',
         payload: blackCard
@@ -69,6 +76,33 @@ export const startRoomController = async (app: App) => {
           cardIds: whiteCards.map(card => card.id)
         });
       }
+
+      // set players as not ready, because they haven't played the card for this round
+      await roomService.setPlayersAsUnready(roomCode);
+      for (const player of players) {
+        player.isReady = false;
+
+        await app.pubsub.publish(roomCode, {
+          event: 'room.player-update',
+          payload: player
+        });
+      }
+
+      const round = await roomService.createRound({
+        blackCardId: room.currentBlackCardId,
+        judgeId,
+        roomCode,
+        roundNumber: room.round,
+        roundWinnerId: null
+      });
+
+      await app.pubsub.publish(roomCode, {
+        event: 'room.round-start',
+        payload: {
+          roundNumber: round.roundNumber,
+          blackCard
+        }
+      });
 
       res.status(204);
     }

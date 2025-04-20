@@ -10,5 +10,6 @@ export const ROOM_ERRORS = {
   NOT_ALL_PLAYERS_READY: 'Oops, nem todos os jogadores estão prontos.',
   PLAYER_NOT_FOUND: 'Jogador não encontrado.',
   JUDGE_CANNOT_PLAY: 'O juiz não pode jogar.',
-  CARD_NOT_FOUND: 'Ops... Cartas não encontradas.'
+  CARD_NOT_FOUND: 'Ops... Cartas não encontradas.',
+  ROUND_NOT_FOUND: 'Ops... Rodada não encontrada.'
 };

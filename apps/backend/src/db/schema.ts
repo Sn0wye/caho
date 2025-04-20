@@ -2,6 +2,7 @@ import { createId } from '@paralleldrive/cuid2';
 import { relations, sql } from 'drizzle-orm';
 import {
   boolean,
+  index,
   integer,
   pgEnum,
   pgTable,
@@ -118,11 +119,11 @@ export const rooms = pgTable(
       onUpdate: 'cascade'
     }),
     currentBlackCardId: varchar('current_black_card_id', { length: 24 }),
-    pickedWhiteCards: varchar('picked_white_cards', { length: 24 })
+    pickedWhiteCards: varchar('picked_white_cards')
       .array()
       .notNull()
       .default(sql`ARRAY[]::text[]`),
-    pickedBlackCards: varchar('picked_black_cards', { length: 24 })
+    pickedBlackCards: varchar('picked_black_cards')
       .array()
       .notNull()
       .default(sql`ARRAY[]::text[]`),
@@ -167,6 +168,64 @@ export const roomPlayers = pgTable(
   })
 );
 
+export const rounds = pgTable(
+  'rounds',
+  {
+    id: varchar('id', { length: 24 })
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    roomCode: varchar('room_code', { length: 6 })
+      .notNull()
+      .references(() => rooms.code, {
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      }),
+    roundNumber: integer('round_number').notNull(),
+    blackCardId: varchar('black_card_id', { length: 24 }).notNull(),
+    judgeId: varchar('judge_id', { length: 24 })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+    roundWinnerId: varchar('round_winner_id', { length: 24 }),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow()
+  },
+  table => ({
+    roomCodeIdx: uniqueIndex('rounds_room_code_idx').on(
+      table.roomCode,
+      table.roundNumber
+    ),
+    judgeIdIdx: index('rounds_judge_id_idx').on(table.judgeId)
+  })
+);
+
+export const roundPlayedCards = pgTable(
+  'round_played_cards',
+  {
+    id: varchar('id', { length: 24 })
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    roundId: varchar('round_id', { length: 24 })
+      .notNull()
+      .references(() => rounds.id, {
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      }),
+    playerId: varchar('player_id', { length: 24 })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+    whiteCardIds: varchar('white_card_ids')
+      .array()
+      .notNull()
+      .default(sql`ARRAY[]::text[]`),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow()
+  },
+  table => ({
+    roundIdIdx: index('round_played_cards_round_id_idx').on(table.roundId),
+    playerIdIdx: index('round_played_cards_player_id_idx').on(table.playerId)
+  })
+);
+
 export const roomRelations = relations(rooms, ({ many }) => ({
   players: many(roomPlayers)
 }));
@@ -181,3 +240,33 @@ export const roomPlayersRelations = relations(roomPlayers, ({ one }) => ({
     references: [rooms.code]
   })
 }));
+
+export const roundsRelations = relations(rounds, ({ one, many }) => ({
+  room: one(rooms, {
+    fields: [rounds.roomCode],
+    references: [rooms.code]
+  }),
+  judge: one(users, {
+    fields: [rounds.judgeId],
+    references: [users.id]
+  }),
+  roundWinner: one(roundPlayedCards, {
+    fields: [rounds.roundWinnerId],
+    references: [roundPlayedCards.id]
+  }),
+  roundPlayedCards: many(roundPlayedCards)
+}));
+
+export const roundPlayedCardsRelations = relations(
+  roundPlayedCards,
+  ({ one }) => ({
+    round: one(rounds, {
+      fields: [roundPlayedCards.roundId],
+      references: [rounds.id]
+    }),
+    player: one(users, {
+      fields: [roundPlayedCards.playerId],
+      references: [users.id]
+    })
+  })
+);

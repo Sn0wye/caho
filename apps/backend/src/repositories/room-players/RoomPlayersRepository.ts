@@ -137,4 +137,41 @@ export class RoomPlayersRepository implements IRoomPlayersRepository {
       )
       .execute();
   }
+
+  public async updatePlayers(
+    roomCode: string,
+    players: Player[]
+  ): Promise<Player[]> {
+    await db.transaction(async tx => {
+      for (const player of players) {
+        await tx
+          .update(roomPlayers)
+          .set({
+            score: player.score,
+            isReady: player.isReady,
+            isHost: player.isHost,
+            isJudge: player.isJudge,
+            cardIds: player.cardIds
+          })
+          .where(
+            and(
+              eq(roomPlayers.roomCode, roomCode),
+              eq(roomPlayers.playerId, player.id)
+            )
+          );
+      }
+    });
+
+    return players;
+  }
+
+  public async setPlayersAsUnready(roomCode: string): Promise<void> {
+    await this.db
+      .update(roomPlayers)
+      .set({
+        isReady: false
+      })
+      .where(eq(roomPlayers.roomCode, roomCode))
+      .returning();
+  }
 }

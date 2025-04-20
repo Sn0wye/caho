@@ -96,7 +96,12 @@ export const GameContextProvider = ({
           break;
         }
         case 'player.cards-drawn': {
-          setCurrentWhiteCards(data.payload);
+          setCurrentWhiteCards(prev => {
+            const newCards = data.payload.filter(
+              (card: WhiteCard) => !prev.some(c => c.id === card.id)
+            );
+            return [...prev, ...newCards];
+          });
           break;
         }
         default: {

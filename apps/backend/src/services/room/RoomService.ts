@@ -14,6 +14,7 @@ import type {
   PublicRoomWithPlayerCountAndHost,
   Ranking,
   Room,
+  Round,
   WhiteCard
 } from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
@@ -22,12 +23,17 @@ import type { CreateRoomDTO } from '@/dto/CreateRoom';
 import type { JoinRoomDTO } from '@/dto/JoinRoom';
 import type { LeaveRoomDTO } from '@/dto/LeaveRoom';
 import { basePack } from '@/cards/base-pack';
+import { CardService } from '../CardService';
+import type { IRoundRepository } from '@/repositories/round';
+import type { IRoundPlayedCardsRepository } from '@/repositories/round-played-cards';
 
 export class RoomService implements IRoomService {
   constructor(
     private readonly roomRepository: IRoomRepository,
     private readonly rankingRepository: IRankingRepository,
-    private readonly roomPlayersRepository: IRoomPlayersRepository
+    private readonly roomPlayersRepository: IRoomPlayersRepository,
+    private readonly roundsRepository: IRoundRepository,
+    private readonly roundPlayedCardsRepository: IRoundPlayedCardsRepository
   ) {}
 
   public async getRoom(roomCode: string): Promise<Room> {
@@ -308,5 +314,89 @@ export class RoomService implements IRoomService {
     );
 
     return currentWhiteCards;
+  }
+
+  public async playCards(
+    roomCode: string,
+    playerId: string,
+    playedCards: WhiteCard[]
+  ): Promise<WhiteCard[]> {
+    const room = await this.roomRepository.getRoomByCode(roomCode);
+    if (!room) {
+      throw new NotFoundError(ROOM_ERRORS.ROOM_NOT_FOUND);
+    }
+
+    const player = await this.roomPlayersRepository.getPlayerFromRoom(
+      roomCode,
+      playerId
+    );
+
+    if (!player) {
+      throw new NotFoundError(ROOM_ERRORS.PLAYER_NOT_FOUND);
+    }
+
+    // get the current round or create a new one.
+
+    const currentRound = await this.roundsRepository.find(roomCode, room.round);
+
+    if (!currentRound) {
+      throw new NotFoundError(ROOM_ERRORS.ROUND_NOT_FOUND);
+    }
+
+    await this.roundPlayedCardsRepository.create({
+      playerId: player.id,
+      roundId: currentRound.id,
+      whiteCardIds: playedCards.map(card => card.id)
+    });
+
+    const cardService = new CardService(roomCode, basePack);
+    const newWhiteCardsAmount = playedCards.length;
+
+    const newWhiteCards = await cardService.getNewWhiteCards(
+      newWhiteCardsAmount
+    );
+
+    // remove cards from player hand and complete with new cards
+    player.cardIds = player.cardIds.filter(
+      cardId => !playedCards.some(playedCard => playedCard.id === cardId)
+    );
+
+    player.cardIds.push(...newWhiteCards.map(card => card.id));
+
+    await this.roomPlayersRepository.updatePlayerInRoom(roomCode, playerId, {
+      cardIds: player.cardIds,
+      isReady: true
+    });
+
+    return newWhiteCards;
+  }
+
+  public async setPlayersAsUnready(roomCode: string): Promise<void> {
+    try {
+      await this.roomPlayersRepository.setPlayersAsUnready(roomCode);
+    } catch (error) {
+      throw new InternalServerError(
+        'Erro ao definir jogadores como não prontos.'
+      );
+    }
+  }
+
+  public async createRound(data: CreateRoundDTO): Promise<Round> {
+    try {
+      const round = await this.roundsRepository.create({
+        id: createId(),
+        roomCode: data.roomCode,
+        judgeId: data.judgeId,
+        blackCardId: data.blackCardId,
+        roundNumber: data.roundNumber,
+        roundWinnerId: data.roundWinnerId,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+
+      return round;
+    } catch (e) {
+      throw new InternalServerError('Erro ao criar rodada.');
+    }
   }
 }
