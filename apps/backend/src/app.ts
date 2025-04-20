@@ -28,6 +28,7 @@ import { roomRoutes } from './http/routes/room';
 import { wsRoutes } from './http/routes/ws';
 import { Pubsub } from './lib/pub-sub';
 import { authPlugin } from './plugins/auth';
+import { checkRoutes } from './http/routes/checks';
 
 // import { csrfPlugin } from './plugins/csrf';
 // import { fastifySocketIO } from './plugins/socketio';
@@ -116,6 +117,7 @@ app.register(authRoutes, {
 app.register(roomRoutes, {
   prefix: '/rooms'
 });
+app.register(checkRoutes);
 app.register(pingRoute);
 app.register(wsRoutes, {
   prefix: '/ws'
