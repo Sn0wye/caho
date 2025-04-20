@@ -10,6 +10,7 @@ import { playerReadyController } from '../controllers/room/player-ready';
 import { startRoomController } from '../controllers/room/start-room';
 import { getRoomBlackCardController } from '../controllers/room/get-room-black-card';
 import { getCurrentWhiteCardsController } from '../controllers/room/get-current-white-cards';
+import { playCardsController } from '../controllers/room/play-card';
 
 export const roomRoutes = async (app: App) => {
   app.register(listPublicController);
@@ -23,4 +24,5 @@ export const roomRoutes = async (app: App) => {
   app.register(endRoomController);
   app.register(playerReadyController);
   app.register(getCurrentWhiteCardsController);
+  app.register(playCardsController);
 };
