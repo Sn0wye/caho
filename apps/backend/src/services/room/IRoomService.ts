@@ -41,7 +41,7 @@ export interface IRoomService {
   playCards(
     roomCode: string,
     playerId: string,
-    playedCards: WhiteCard[]
+    playedCardIds: string[]
   ): Promise<WhiteCard[]>;
   createRound(data: CreateRoundDTO): Promise<Round>;
 }

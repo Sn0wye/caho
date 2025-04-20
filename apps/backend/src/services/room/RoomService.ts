@@ -319,7 +319,7 @@ export class RoomService implements IRoomService {
   public async playCards(
     roomCode: string,
     playerId: string,
-    playedCards: WhiteCard[]
+    playedCardIds: string[]
   ): Promise<WhiteCard[]> {
     const room = await this.roomRepository.getRoomByCode(roomCode);
     if (!room) {
@@ -346,11 +346,11 @@ export class RoomService implements IRoomService {
     await this.roundPlayedCardsRepository.create({
       playerId: player.id,
       roundId: currentRound.id,
-      whiteCardIds: playedCards.map(card => card.id)
+      whiteCardIds: playedCardIds
     });
 
     const cardService = new CardService(roomCode, basePack);
-    const newWhiteCardsAmount = playedCards.length;
+    const newWhiteCardsAmount = playedCardIds.length;
 
     const newWhiteCards = await cardService.getNewWhiteCards(
       newWhiteCardsAmount
@@ -358,7 +358,7 @@ export class RoomService implements IRoomService {
 
     // remove cards from player hand and complete with new cards
     player.cardIds = player.cardIds.filter(
-      cardId => !playedCards.some(playedCard => playedCard.id === cardId)
+      cardId => !playedCardIds.includes(cardId)
     );
 
     player.cardIds.push(...newWhiteCards.map(card => card.id));

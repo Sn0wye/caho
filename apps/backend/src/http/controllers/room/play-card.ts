@@ -2,7 +2,6 @@ import type { App } from '@/app';
 import { BadRequestError } from '@/errors';
 import { ensureAuth } from '@/plugins/ensure-auth';
 import { RoomServiceFactory } from '@/services/room/RoomServiceFactory';
-import { whiteCard } from '@caho/schemas';
 import { z } from 'zod';
 
 export const playCardsController = async (app: App) => {
@@ -12,7 +11,6 @@ export const playCardsController = async (app: App) => {
     '/:roomCode/play-cards',
     {
       schema: {
-        body: z.array(whiteCard),
         tags: ['Rooms'],
         description: 'Get the players of a room',
         params: z.object({
@@ -23,7 +21,7 @@ export const playCardsController = async (app: App) => {
     },
     async (req, res) => {
       const user = req.getUser();
-      const playedCards = req.body;
+      const playedCards = req.body as string[];
       const { roomCode } = req.params;
 
       const player = await roomService.getPlayerFromRoom(roomCode, user.id);
