@@ -14,15 +14,19 @@ export const wsRoutes = async (app: App) => {
         })
       }
     },
-    (conn, req) => {
+    async (conn, req) => {
+      const disconnect = await app.pubsub.subscribe(
+        req.params.roomCode,
+        message => {
+          conn.socket.send(JSON.stringify(message));
+        }
+      );
+
       conn.socket.on('ping', () => {
         conn.socket.pong();
       });
 
-      app.pubsub.subscribe(req.params.roomCode, message => {
-        console.log('message', message);
-        conn.socket.send(JSON.stringify(message));
-      });
+      conn.socket.on('close', disconnect);
     }
   );
 
@@ -38,14 +42,19 @@ export const wsRoutes = async (app: App) => {
         })
       }
     },
-    (conn, req) => {
+    async (conn, req) => {
+      const disconnect = await app.pubsub.subscribe(
+        req.params.userId,
+        message => {
+          conn.socket.send(JSON.stringify(message));
+        }
+      );
+
       conn.socket.on('ping', () => {
         conn.socket.pong();
       });
 
-      app.pubsub.subscribe(req.params.userId, message => {
-        conn.socket.send(JSON.stringify(message));
-      });
+      conn.socket.on('close', disconnect);
     }
   );
 };

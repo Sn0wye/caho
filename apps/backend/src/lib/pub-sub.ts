@@ -14,13 +14,21 @@ export class Pubsub {
     await this.redis.publish(channel, JSON.stringify(event));
   }
 
-  public async subscribe(channel: string, cb: (event: Event) => void) {
+  public async subscribe(
+    channel: string,
+    cb: (event: Event) => void
+  ): Promise<() => Promise<void>> {
     const sub = this.redis.duplicate();
 
-    sub.on('room.message', (_, message) => {
+    sub.on('message', (_, message) => {
       cb(JSON.parse(message));
     });
 
     await sub.subscribe(channel);
+
+    return async () => {
+      await sub.unsubscribe(channel);
+      sub.quit();
+    };
   }
 }
