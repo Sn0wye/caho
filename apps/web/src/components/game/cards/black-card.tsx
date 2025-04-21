@@ -6,51 +6,65 @@ import { CardFooter } from './card-footer';
 import { CardHeader } from './card-header';
 
 export function BlackCard() {
-  const { currentBlackCard } = useGame();
-  // Determine text size class based on character count
+  const { currentBlackCard, selectedWhiteCards, handleUnpickWhiteCard } =
+    useGame();
+
+  const combinedTextLength = useMemo(() => {
+    if (!currentBlackCard?.text) return 0;
+
+    const blackCardText = currentBlackCard.text;
+    const whiteCardsText =
+      selectedWhiteCards?.map(card => card.text).join('') || '';
+
+    return blackCardText.length + whiteCardsText.length;
+  }, [currentBlackCard?.text, selectedWhiteCards]);
+
   const textSizeClass = useMemo(() => {
-    const text = currentBlackCard?.text || '';
-    const charCount = text.length;
+    if (combinedTextLength <= 50) return 'text-3xl';
+    if (combinedTextLength <= 70) return 'text-2xl';
+    if (combinedTextLength <= 100) return 'text-xl';
+    if (combinedTextLength <= 150) return 'text-lg';
+    return 'text-base';
+  }, [combinedTextLength]);
 
-    // Text size thresholds based on character count
-    if (charCount <= 74) return 'text-4xl'; // Up to 74 chars
-    if (charCount <= 100) return 'text-3xl'; // Up to 100 chars
-    if (charCount <= 150) return 'text-2xl'; // Up to 150 chars
-    if (charCount <= 200) return 'text-xl'; // Up to 200 chars
-    return 'text-lg'; // More than 200 chars
-  }, [currentBlackCard?.text]);
-
-  // Process text to replace "___" with styled lines
   const processedContent = useMemo(() => {
     const text = currentBlackCard?.text || '';
-
-    // If no fill-in-the-gap markers, return the text as is
     if (!text.includes('___')) return text;
 
-    // Split by the fill-in-the-gap marker
     const segments = text.split('___');
+    const whiteCards = selectedWhiteCards || [];
 
-    // Map through segments and join with styled lines
     return segments.map((segment, index) => {
-      // Last segment doesn't need a line after it
       if (index === segments.length - 1) {
         // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-        return <span key={index}>{segment}</span>;
+        return <span key={`segment-${index}`}>{segment}</span>;
       }
 
-      // Add a line after each segment (except the last)
+      const hasWhiteCard = index < whiteCards.length;
+
       return (
         // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-        <span key={index}>
+        <span key={`segment-${index}`}>
           {segment}
-          <span className="mx-1 inline-block h-4 w-24 border-b-2 border-zinc-50 align-middle" />
+          {hasWhiteCard ? (
+            <button
+              type="button"
+              onClick={() => handleUnpickWhiteCard(whiteCards[index])}
+              className="my-1 inline-block rounded bg-white px-2 py-1 text-left font-bold text-zinc-950"
+            >
+              {whiteCards[index].text}
+            </button>
+          ) : (
+            // Display empty blank
+            <span className="mx-1 inline-block h-4 w-24 border-b-2 border-white align-middle" />
+          )}
         </span>
       );
     });
-  }, [currentBlackCard?.text]);
+  }, [currentBlackCard?.text, selectedWhiteCards, handleUnpickWhiteCard]);
 
   return (
-    <div className="flex aspect-card h-[30rem] flex-col justify-between gap-5 rounded-2xl border border-zinc-950 bg-zinc-950 p-9 dark:border-zinc-50">
+    <div className="flex aspect-card h-96 flex-col justify-between gap-2 rounded-2xl border border-zinc-950 bg-zinc-950 p-6 dark:border-zinc-50">
       <CardHeader packId={currentBlackCard?.packId || ''} variant="blackCard" />
 
       <div className="flex flex-1 items-center">

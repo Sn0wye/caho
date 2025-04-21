@@ -6,8 +6,10 @@ export const Ongoing = () => {
   return (
     <main className="flex h-[calc(100vh-4rem)] w-full flex-1">
       <GameRankingSidebar />
-      <div className="flex flex-1 flex-col items-center justify-between p-8">
-        <BlackCard />
+      <div className="flex flex-1 flex-col">
+        <div className="flex flex-1 items-center justify-center p-8">
+          <BlackCard />
+        </div>
 
         <GamePlayerDeck />
       </div>

@@ -29,7 +29,7 @@ export function GameRankingSidebar() {
     <ScrollArea
       className={cn(
         'h-[calc(100vh-4rem)] flex-col items-center justify-between border-r border-zinc-200 p-4 dark:border-zinc-900',
-        isCollapsed ? 'w-28' : 'relative max-w-sm flex-1'
+        isCollapsed ? 'w-28' : 'relative w-96 shrink-0'
       )}
     >
       <GameRankingHeader />

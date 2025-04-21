@@ -1,5 +1,8 @@
+'use client';
+
 import type { WhiteCard as WhiteCardType } from '@caho/schemas';
 import { cn } from '@/utils/cn';
+import { useGame } from '@/hooks/game';
 import { CardFooter } from './card-footer';
 import { CardHeader } from './card-header';
 
@@ -9,12 +12,18 @@ type WhiteCardProps = {
 };
 
 export function WhiteCard({ data, className }: WhiteCardProps) {
+  const { handlePickWhiteCard, isWhiteCardPickingDisabled } = useGame();
   const { packId, text } = data;
 
   return (
-    <div
+    <button
+      type="button"
+      disabled={isWhiteCardPickingDisabled}
+      onClick={() => handlePickWhiteCard(data)}
       className={cn(
-        'flex aspect-card h-72 flex-col justify-between gap-2 rounded-xl border border-zinc-950 bg-zinc-50 p-5 transition-all hover:scale-110 dark:border-zinc-50',
+        'flex aspect-card h-72 flex-col justify-between gap-2 rounded-xl border-2 border-zinc-100 bg-white p-5 text-left shadow-xl transition-all disabled:cursor-not-allowed dark:border-zinc-50',
+        !isWhiteCardPickingDisabled &&
+          'hover:-translate-y-4 hover:scale-110 hover:cursor-pointer',
         className
       )}
     >
@@ -25,6 +34,6 @@ export function WhiteCard({ data, className }: WhiteCardProps) {
       </div>
 
       <CardFooter variant="whiteCard" />
-    </div>
+    </button>
   );
 }

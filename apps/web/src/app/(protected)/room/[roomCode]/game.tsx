@@ -22,7 +22,6 @@ export const Game = () => {
        *
        * - [ ] Leave room button
        * - [ ] Toggle sound button
-       * - [ ] Toggle fullscreen button
        *
        */}
     </div>

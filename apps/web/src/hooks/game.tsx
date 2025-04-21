@@ -5,15 +5,18 @@ import type { PlayerEvent, RoomEvent } from '@caho/contracts';
 import type { BlackCard, Player, Room, WhiteCard } from '@caho/schemas';
 import { env } from '@/env.mjs';
 
-// 30 seconds
-const PING_INTERVAL = 30000;
+const PING_INTERVAL_IN_SECONDS = 30 * 1000;
 
 type GameContextType = {
-  currentPlayer: Player;
-  players: Player[];
   room: Room;
+  currentPlayer: Player;
   currentBlackCard: BlackCard | null;
   currentWhiteCards: WhiteCard[];
+  selectedWhiteCards: WhiteCard[];
+  handlePickWhiteCard: (card: WhiteCard) => void;
+  handleUnpickWhiteCard: (card: WhiteCard) => void;
+  isWhiteCardPickingDisabled: boolean;
+  players: Player[];
 };
 
 type WebsocketEvent = PlayerEvent | RoomEvent;
@@ -47,6 +50,43 @@ export const GameContextProvider = ({
   const [currentWhiteCards, setCurrentWhiteCards] = useState<WhiteCard[]>(
     initialWhiteCards ?? []
   );
+  const [selectedWhiteCards, setSelectedWhiteCards] = useState<WhiteCard[]>([]);
+
+  const cardsToPickAmount = currentBlackCard?.pick ?? 0;
+  const isWhiteCardPickingDisabled =
+    selectedWhiteCards?.length === cardsToPickAmount;
+
+  const handlePickWhiteCard = (card: WhiteCard) => {
+    const isAlreadySelected = selectedWhiteCards.some(
+      existingCard => existingCard.id === card.id
+    );
+
+    if (isAlreadySelected || isWhiteCardPickingDisabled) {
+      return;
+    }
+
+    setSelectedWhiteCards(prev => {
+      if (isAlreadySelected) {
+        return prev.filter(prevCard => prevCard.id !== card.id);
+      }
+
+      return [...prev, card];
+    });
+
+    setCurrentWhiteCards(prev => {
+      return prev.filter(prevCard => prevCard.id !== card.id);
+    });
+  };
+
+  const handleUnpickWhiteCard = (card: WhiteCard) => {
+    setSelectedWhiteCards(prev =>
+      prev.filter(prevCard => prevCard.id !== card.id)
+    );
+
+    setCurrentWhiteCards(prev => {
+      return [...prev, card];
+    });
+  };
 
   useEffect(() => {
     const roomWs = new WebSocket(
@@ -125,7 +165,7 @@ export const GameContextProvider = ({
             ws.send('ping');
             console.log('[WS]: Ping sent');
           }
-        }, PING_INTERVAL);
+        }, PING_INTERVAL_IN_SECONDS);
 
         ws.onclose = () => {
           console.log(`[WS]: Disconnected from the WebSocket server ${ws.url}`);
@@ -157,6 +197,10 @@ export const GameContextProvider = ({
         currentPlayer,
         currentBlackCard,
         currentWhiteCards,
+        handlePickWhiteCard,
+        handleUnpickWhiteCard,
+        isWhiteCardPickingDisabled,
+        selectedWhiteCards,
         players
       }}
     >
