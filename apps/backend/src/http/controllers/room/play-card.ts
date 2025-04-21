@@ -7,12 +7,12 @@ import { z } from 'zod';
 export const playCardsController = async (app: App) => {
   const roomService = RoomServiceFactory();
 
-  app.register(ensureAuth).get(
+  app.register(ensureAuth).post(
     '/:roomCode/play-cards',
     {
       schema: {
         tags: ['Rooms'],
-        description: 'Get the players of a room',
+        description: 'Jogar cartas na sala',
         params: z.object({
           roomCode: z.string().min(6).max(6)
         }),
@@ -58,7 +58,7 @@ export const playCardsController = async (app: App) => {
 
       // TODO: if all the players are ready, start the judge phase
 
-      return res.status(204);
+      return res.status(204).send();
     }
   );
 };
