@@ -29,7 +29,7 @@ export const getRoomBlackCardController = async (app: App) => {
       const blackCardId = await roomService.getRoomBlackCardId(roomCode);
 
       if (!blackCardId) {
-        throw new NotFoundError('Carta preta não encontrada');
+        return null;
       }
 
       const blackCard = cardService.getBlackCardById(blackCardId);
