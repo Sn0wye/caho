@@ -46,7 +46,7 @@ export const checkRoutes = async (app: FastifyInstance) => {
         }
 
         try {
-          await redis.ping();
+          await app.redis.ping();
         } catch (redisError) {
           healthStatus.redis = false;
         }
