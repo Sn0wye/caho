@@ -213,20 +213,33 @@ export const roundPlayedCards = pgTable(
     playerId: varchar('player_id', { length: 24 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
-    whiteCardIds: varchar('white_card_ids')
-      .array()
-      .notNull()
-      .default(sql`ARRAY[]::text[]`)
-      .references(() => whiteCards.id, {
-        onDelete: 'cascade',
-        onUpdate: 'cascade'
-      }),
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at').notNull().defaultNow()
   },
   table => ({
     roundIdIdx: index('round_played_cards_round_id_idx').on(table.roundId),
     playerIdIdx: index('round_played_cards_player_id_idx').on(table.playerId)
+  })
+);
+
+export const roundPlayedCardWhiteCards = pgTable(
+  'round_played_card_white_cards',
+  {
+    roundPlayedCardId: varchar('round_played_card_id', { length: 24 })
+      .notNull()
+      .references(() => roundPlayedCards.id, {
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      }),
+    whiteCardId: varchar('white_card_id', { length: 24 })
+      .notNull()
+      .references(() => whiteCards.id, {
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      })
+  },
+  table => ({
+    pk: primaryKey({ columns: [table.roundPlayedCardId, table.whiteCardId] })
   })
 );
 
@@ -317,8 +330,20 @@ export const roundPlayedCardsRelations = relations(
       fields: [roundPlayedCards.playerId],
       references: [users.id]
     }),
-    whiteCards: many(whiteCards, {
-      relationName: 'whiteCards'
+    whiteCards: many(roundPlayedCardWhiteCards)
+  })
+);
+
+export const roundPlayedCardWhiteCardsRelations = relations(
+  roundPlayedCardWhiteCards,
+  ({ one }) => ({
+    roundPlayedCard: one(roundPlayedCards, {
+      fields: [roundPlayedCardWhiteCards.roundPlayedCardId],
+      references: [roundPlayedCards.id]
+    }),
+    whiteCard: one(whiteCards, {
+      fields: [roundPlayedCardWhiteCards.whiteCardId],
+      references: [whiteCards.id]
     })
   })
 );
