@@ -66,7 +66,7 @@ export const startRoomController = async (app: App) => {
       });
 
       for (const player of playersWithoutJudge) {
-        const whiteCards = await cardService.getNewWhiteCards(6);
+        const whiteCards = await cardService.getNewWhiteCards(10);
         await app.pubsub.publish(player.id, {
           event: 'player.cards-drawn',
           payload: whiteCards

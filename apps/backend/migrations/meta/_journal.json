@@ -15,6 +15,20 @@
       "when": 1745005625598,
       "tag": "0001_sturdy_colleen_wing",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1745263540406,
+      "tag": "0002_slim_overlord",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1745765525446,
+      "tag": "0003_workable_triton",
+      "breakpoints": true
     }
   ]
 }

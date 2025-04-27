@@ -216,7 +216,11 @@ export const roundPlayedCards = pgTable(
     whiteCardIds: varchar('white_card_ids')
       .array()
       .notNull()
-      .default(sql`ARRAY[]::text[]`),
+      .default(sql`ARRAY[]::text[]`)
+      .references(() => whiteCards.id, {
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      }),
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at').notNull().defaultNow()
   },
@@ -225,6 +229,51 @@ export const roundPlayedCards = pgTable(
     playerIdIdx: index('round_played_cards_player_id_idx').on(table.playerId)
   })
 );
+
+export const cardPacks = pgTable(
+  'card_packs',
+  {
+    id: varchar('id', { length: 24 })
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    name: varchar('name', {
+      length: 255
+    }).notNull(),
+    slug: varchar('slug', {
+      length: 255
+    }).notNull()
+  },
+  table => ({
+    nameIdx: uniqueIndex('card_packs_name_idx').on(table.name)
+  })
+);
+
+export const whiteCards = pgTable('white_cards', {
+  id: varchar('id', { length: 24 })
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  text: varchar('text', { length: 255 }).notNull(),
+  packId: varchar('pack_id', { length: 24 })
+    .notNull()
+    .references(() => cardPacks.id, {
+      onDelete: 'cascade',
+      onUpdate: 'cascade'
+    })
+});
+
+export const blackCards = pgTable('black_cards', {
+  id: varchar('id', { length: 24 })
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  text: varchar('text', { length: 255 }).notNull(),
+  pick: integer('pick').notNull(),
+  packId: varchar('pack_id', { length: 24 })
+    .notNull()
+    .references(() => cardPacks.id, {
+      onDelete: 'cascade',
+      onUpdate: 'cascade'
+    })
+});
 
 export const roomRelations = relations(rooms, ({ many }) => ({
   players: many(roomPlayers)
@@ -259,7 +308,7 @@ export const roundsRelations = relations(rounds, ({ one, many }) => ({
 
 export const roundPlayedCardsRelations = relations(
   roundPlayedCards,
-  ({ one }) => ({
+  ({ one, many }) => ({
     round: one(rounds, {
       fields: [roundPlayedCards.roundId],
       references: [rounds.id]
@@ -267,6 +316,14 @@ export const roundPlayedCardsRelations = relations(
     player: one(users, {
       fields: [roundPlayedCards.playerId],
       references: [users.id]
+    }),
+    whiteCards: many(whiteCards, {
+      relationName: 'whiteCards'
     })
   })
 );
+
+export const cardPacksRelations = relations(cardPacks, ({ many }) => ({
+  whiteCards: many(whiteCards),
+  blackCards: many(blackCards)
+}));

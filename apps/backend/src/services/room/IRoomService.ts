@@ -7,6 +7,7 @@ import type {
   Ranking,
   Room,
   Round,
+  RoundPlayedCard,
   WhiteCard
 } from '@caho/schemas';
 
@@ -44,4 +45,9 @@ export interface IRoomService {
     playedCardIds: string[]
   ): Promise<WhiteCard[]>;
   createRound(data: CreateRoundDTO): Promise<Round>;
+  getRoundPlayedCards(
+    roomCode: string,
+    roundNumber: number
+  ): Promise<RoundPlayedCard[]>;
+  getRoundNumber(roomCode: string): Promise<number>;
 }

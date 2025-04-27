@@ -15,6 +15,7 @@ import type {
   Ranking,
   Room,
   Round,
+  RoundPlayedCard,
   WhiteCard
 } from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
@@ -398,5 +399,28 @@ export class RoomService implements IRoomService {
     } catch (e) {
       throw new InternalServerError('Erro ao criar rodada.');
     }
+  }
+
+  public async getRoundPlayedCards(
+    roomCode: string,
+    roundNumber: number
+  ): Promise<RoundPlayedCard[]> {
+    const roundPlayedCards =
+      await this.roundPlayedCardsRepository.findByRoomCodeAndRoundNumber(
+        roomCode,
+        roundNumber
+      );
+
+    return roundPlayedCards;
+  }
+
+  public async getRoundNumber(roomCode: string): Promise<number> {
+    const room = await this.roomRepository.getRoomByCode(roomCode);
+
+    if (!room) {
+      throw new NotFoundError(ROOM_ERRORS.ROOM_NOT_FOUND);
+    }
+
+    return room.round;
   }
 }

@@ -1,4 +1,9 @@
-import { blackCard, playerSchema, roomSchema } from '@caho/schemas';
+import {
+  blackCard,
+  playerSchema,
+  roomSchema,
+  roundPlayedCardsSchema
+} from '@caho/schemas';
 import { z } from 'zod';
 
 export const roomEvent = z.union([
@@ -29,6 +34,12 @@ export const roomEvent = z.union([
     payload: z.object({
       roundNumber: z.number().int(),
       blackCard: blackCard
+    })
+  }),
+  z.object({
+    event: z.literal('room.time-to-judge'),
+    payload: z.object({
+      roundPlayedCards: z.array(roundPlayedCardsSchema)
     })
   }),
   z.object({

@@ -1,3 +1,4 @@
+import { whiteCard } from './card';
 import { roomSchema } from './room';
 import { userSchema } from './user';
 import { z } from 'zod';
@@ -23,11 +24,10 @@ export const roundWithRelations = roundSchema.extend({
 export const roundPlayedCardsSchema = z.object({
   id: z.string(),
   roundId: z.string(),
-  playerId: z.string(),
-  whiteCardIds: z.array(z.string()),
+  player: userSchema,
+  whiteCards: z.array(whiteCard),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date()
-  // player: userSchema
 });
 
 export type Round = z.infer<typeof roundSchema>;

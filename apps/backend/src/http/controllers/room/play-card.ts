@@ -57,6 +57,24 @@ export const playCardsController = async (app: App) => {
       });
 
       // TODO: if all the players are ready, start the judge phase
+      const roomPlayers = await roomService.getRoomPlayers(roomCode);
+      const allPlayersReady = roomPlayers.every(player => player.isReady);
+
+      if (allPlayersReady) {
+        const roundNumber = await roomService.getRoundNumber(roomCode);
+
+        const roundPlayedCards = await roomService.getRoundPlayedCards(
+          roomCode,
+          roundNumber
+        );
+
+        await app.pubsub.publish(roomCode, {
+          event: 'room.time-to-judge',
+          payload: {
+            roundPlayedCards
+          }
+        });
+      }
 
       return res.status(204).send();
     }
