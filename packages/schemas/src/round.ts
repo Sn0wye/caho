@@ -14,13 +14,6 @@ export const roundSchema = z.object({
   updatedAt: z.coerce.date()
 });
 
-export const roundWithRelations = roundSchema.extend({
-  room: roomSchema,
-  judge: userSchema,
-  roundWinner: z.lazy(() => roundPlayedCardsSchema.nullable()),
-  roundPlayedCards: z.array(z.lazy(() => roundPlayedCardsSchema))
-});
-
 export const roundPlayedCardsSchema = z.object({
   id: z.string(),
   roundId: z.string(),
@@ -28,6 +21,13 @@ export const roundPlayedCardsSchema = z.object({
   whiteCards: z.array(whiteCard),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date()
+});
+
+export const roundWithRelations = roundSchema.extend({
+  room: roomSchema,
+  judge: userSchema,
+  roundWinner: roundPlayedCardsSchema.nullable(),
+  roundPlayedCards: z.array(roundPlayedCardsSchema)
 });
 
 export type Round = z.infer<typeof roundSchema>;

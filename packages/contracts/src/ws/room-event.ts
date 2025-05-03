@@ -1,10 +1,7 @@
-import {
-  blackCard,
-  playerSchema,
-  roomSchema,
-  roundPlayedCardsSchema
-} from '@caho/schemas';
+import { blackCard, playerSchema, roomSchema } from '@caho/schemas';
 import { z } from 'zod';
+// for some reason, this import is not working inside @caho/schemas
+import { roundPlayedCardsSchema } from '@caho/schemas/src/round';
 
 export const roomEvent = z.union([
   z.object({
