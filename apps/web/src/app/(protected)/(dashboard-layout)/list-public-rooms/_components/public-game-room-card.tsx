@@ -1,46 +1,92 @@
-import Link from 'next/link';
-import type { ListPublicRoomsResponse } from '@caho/contracts';
+'use client';
+
+import { useRouter } from 'next/navigation';
+import type {
+  JoinRoomRequest,
+  JoinRoomResponse,
+  ListPublicRoomsResponse
+} from '@caho/contracts';
+import type { ErrorSchema } from '@caho/schemas';
+import { useMutation } from '@tanstack/react-query';
 import { Hash } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from '@/components/ui/use-toast';
+import { api } from '@/utils/api';
 
 type PublicGameRoomCardProps = ListPublicRoomsResponse[number];
 
-function PublicGameRoomCard({
+const joinRoom = async (
+  payload: JoinRoomRequest
+): Promise<JoinRoomResponse> => {
+  try {
+    const { data } = await api.post<JoinRoomResponse>('/rooms/join', payload);
+    return data;
+  } catch (error) {
+    throw error.response.data as ErrorSchema;
+  }
+};
+
+export function PublicGameRoomCard({
   code,
   maxPlayers,
   maxPoints,
   playerCount,
   hostUsername
 }: PublicGameRoomCardProps) {
-  return (
-    <Link href={`/room/${code}`}>
-      <Card className="transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
-        <CardHeader>
-          <CardTitle className="flex flex-row items-center justify-between gap-2">
-            <span>Sala</span>
-            <div className="flex items-center gap-1">
-              <Hash size={16} className="text-geist-orange" />
-              <span className="font-mono text-lg font-bold leading-none">
-                {code}
-              </span>
-            </div>
-          </CardTitle>
-        </CardHeader>
+  const router = useRouter();
 
-        <CardContent className="flex flex-col gap-2">
-          <PublicGameRoomCardData
-            label="jogadores"
-            value={`${playerCount}/ ${maxPlayers}`}
-          />
-          <PublicGameRoomCardData
-            label="pontos para acabar"
-            value={maxPoints}
-          />
-          <PublicGameRoomCardData label="host" value={hostUsername} />
-        </CardContent>
-      </Card>
-    </Link>
+  const { mutate } = useMutation<
+    JoinRoomResponse,
+    ErrorSchema,
+    JoinRoomRequest
+  >(joinRoom, {
+    mutationKey: ['join-room']
+  });
+
+  function handleJoinRoom() {
+    mutate(
+      { roomCode: code, password: null },
+      {
+        onSuccess: data => {
+          router.push(`/room/${data.code.toUpperCase()}`);
+        },
+        onError: error => {
+          toast({
+            variant: 'destructive',
+            title: 'Erro ao entrar na sala',
+            description: error.message
+          });
+        }
+      }
+    );
+  }
+
+  return (
+    <Card
+      onClick={handleJoinRoom}
+      className="transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900"
+    >
+      <CardHeader>
+        <CardTitle className="flex flex-row items-center justify-between gap-2">
+          <span>Sala</span>
+          <div className="flex items-center gap-1">
+            <Hash size={16} className="text-geist-orange" />
+            <span className="font-mono text-lg font-bold leading-none">
+              {code}
+            </span>
+          </div>
+        </CardTitle>
+      </CardHeader>
+
+      <CardContent className="flex flex-col gap-2">
+        <PublicGameRoomCardData
+          label="jogadores"
+          value={`${playerCount}/ ${maxPlayers}`}
+        />
+        <PublicGameRoomCardData label="pontos para acabar" value={maxPoints} />
+        <PublicGameRoomCardData label="host" value={hostUsername} />
+      </CardContent>
+    </Card>
   );
 }
 
@@ -60,30 +106,3 @@ function PublicGameRoomCardData({
     </div>
   );
 }
-
-function PublicGameRoomCardSkeleton() {
-  return (
-    <figure className="flex cursor-not-allowed flex-col justify-between gap-6 border border-zinc-200/50 bg-white/20 p-6 dark:border-zinc-900/50 dark:bg-zinc-900/20">
-      <Skeleton className="h-8 w-9/12" />
-
-      <div className="flex flex-col gap-3">
-        <Skeleton className="h-5 w-4/12" />
-        <Skeleton className="h-5 w-5/12" />
-        <Skeleton className="h-5 w-3/12" />
-      </div>
-
-      <div className="flex items-center justify-between">
-        <Skeleton className="h-3 w-7/12" />
-        <Skeleton className="h-3 w-4/12" />
-      </div>
-    </figure>
-  );
-}
-
-PublicGameRoomCard.Skeleton = PublicGameRoomCardSkeleton;
-
-export {
-  PublicGameRoomCard,
-  PublicGameRoomCardData,
-  PublicGameRoomCardSkeleton
-};
