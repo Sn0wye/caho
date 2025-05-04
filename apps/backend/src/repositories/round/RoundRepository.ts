@@ -2,6 +2,7 @@ import { db } from '@/db';
 import type { IRoundRepository } from './IRoundRepository';
 import type { Round } from '@caho/schemas';
 import { rounds } from '@/db/schema';
+import { eq } from 'drizzle-orm';
 
 export class RoundRepository implements IRoundRepository {
   private db: typeof db;
@@ -22,5 +23,15 @@ export class RoundRepository implements IRoundRepository {
     });
 
     return round ?? null;
+  }
+
+  public async update(id: string, data: Partial<Round>): Promise<Round | null> {
+    const round = await this.db
+      .update(rounds)
+      .set(data)
+      .where(eq(rounds.id, id))
+      .returning();
+
+    return round[0] ?? null;
   }
 }

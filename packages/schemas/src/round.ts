@@ -1,4 +1,5 @@
 import { whiteCard } from './card';
+import { playerSchema } from './player';
 import { roomSchema } from './room';
 import { userSchema } from './user';
 import { z } from 'zod';
@@ -25,7 +26,7 @@ export const roundPlayedCardsSchema = z.object({
 
 export const roundWithRelations = roundSchema.extend({
   room: roomSchema,
-  judge: userSchema,
+  judge: playerSchema,
   roundWinner: roundPlayedCardsSchema.nullable(),
   roundPlayedCards: z.array(roundPlayedCardsSchema)
 });

@@ -2,12 +2,14 @@ import type { CreateRoomDTO } from '@/dto/CreateRoom';
 import type { JoinRoomDTO } from '@/dto/JoinRoom';
 import type { LeaveRoomDTO } from '@/dto/LeaveRoom';
 import type {
+  BlackCard,
   Player,
   PublicRoomWithPlayerCountAndHost,
   Ranking,
   Room,
   Round,
   RoundPlayedCard,
+  RoundWithRelations,
   WhiteCard
 } from '@caho/schemas';
 
@@ -45,9 +47,20 @@ export interface IRoomService {
     playedCardIds: string[]
   ): Promise<WhiteCard[]>;
   createRound(data: CreateRoundDTO): Promise<Round>;
+  nextRound(
+    roomCode: string,
+    currentRound: number
+  ): Promise<RoundWithRelations & { blackCard: BlackCard }>;
   getRoundPlayedCards(
     roomCode: string,
     roundNumber: number
   ): Promise<RoundPlayedCard[]>;
   getRoundNumber(roomCode: string): Promise<number>;
+  judgeChooseWinner(data: JudgeChooseWinnerDTO): Promise<RoundPlayedCard>;
 }
+
+export type JudgeChooseWinnerDTO = {
+  winnerPlayerId: string;
+  judgePlayerId: string;
+  roomCode: string;
+};

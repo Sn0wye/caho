@@ -41,9 +41,7 @@ export const roomEvent = z.union([
   }),
   z.object({
     event: z.literal('room.round-end'),
-    payload: z.object({
-      roundWinner: playerSchema
-    })
+    payload: roundPlayedCardsSchema
   }),
   z.object({
     event: z.literal('room.black-card-drawn'),

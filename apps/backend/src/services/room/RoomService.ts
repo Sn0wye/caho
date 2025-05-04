@@ -10,16 +10,18 @@ import type { IRoomRepository } from '@/repositories/room';
 import type { IRoomPlayersRepository } from '@/repositories/room-players';
 import { generateCode } from '@/utils/generateCode';
 import type {
+  BlackCard,
   Player,
   PublicRoomWithPlayerCountAndHost,
   Ranking,
   Room,
   Round,
   RoundPlayedCard,
+  RoundWithRelations,
   WhiteCard
 } from '@caho/schemas';
 import { createId } from '@paralleldrive/cuid2';
-import type { IRoomService } from './IRoomService';
+import type { IRoomService, JudgeChooseWinnerDTO } from './IRoomService';
 import type { CreateRoomDTO } from '@/dto/CreateRoom';
 import type { JoinRoomDTO } from '@/dto/JoinRoom';
 import type { LeaveRoomDTO } from '@/dto/LeaveRoom';
@@ -27,6 +29,7 @@ import { basePack } from '@/cards/base-pack';
 import { CardService } from '../CardService';
 import type { IRoundRepository } from '@/repositories/round';
 import type { IRoundPlayedCardsRepository } from '@/repositories/round-played-cards';
+import { getRandomJudge } from '@/utils/getRandomJudge';
 
 export class RoomService implements IRoomService {
   constructor(
@@ -422,5 +425,126 @@ export class RoomService implements IRoomService {
     }
 
     return room.round;
+  }
+
+  public async judgeChooseWinner(
+    data: JudgeChooseWinnerDTO
+  ): Promise<RoundPlayedCard> {
+    const room = await this.getRoom(data.roomCode);
+
+    if (!room) {
+      throw new NotFoundError('Room not found');
+    }
+
+    const player = await this.getPlayerFromRoom(
+      data.roomCode,
+      data.judgePlayerId
+    );
+
+    if (!player) {
+      throw new NotFoundError('Player not found');
+    }
+
+    if (!player.isJudge) {
+      throw new Error('Player is not a judge');
+    }
+
+    const round = await this.roundsRepository.find(data.roomCode, room.round);
+
+    if (!round) {
+      throw new NotFoundError('Round not found');
+    }
+
+    round.roundWinnerId = data.winnerPlayerId;
+    round.updatedAt = new Date();
+
+    try {
+      await this.roundsRepository.update(round.id, round);
+    } catch (error) {
+      throw new InternalServerError('Erro ao escolher vencedor.');
+    }
+
+    const roundPlayedCards =
+      await this.roundPlayedCardsRepository.findByRoomCodeAndRoundNumber(
+        data.roomCode,
+        room.round
+      );
+
+    const winner = roundPlayedCards.find(
+      roundPlayedCard => roundPlayedCard.player.id === data.winnerPlayerId
+    );
+
+    if (!winner) {
+      throw new NotFoundError('Vencedor não encontrado');
+    }
+
+    return winner;
+  }
+
+  public async nextRound(
+    roomCode: string,
+    currentRound: number
+  ): Promise<
+    RoundWithRelations & {
+      blackCard: BlackCard;
+    }
+  > {
+    const [room, players, round] = await Promise.all([
+      this.roomRepository.getRoomByCode(roomCode),
+      this.roomPlayersRepository.getRoomPlayersByCode(roomCode),
+      this.roundsRepository.find(roomCode, currentRound)
+    ]);
+
+    if (!room) {
+      throw new NotFoundError(ROOM_ERRORS.ROOM_NOT_FOUND);
+    }
+
+    if (!round) {
+      throw new NotFoundError(ROOM_ERRORS.ROUND_NOT_FOUND);
+    }
+
+    // TODO: refactor card service to use the db
+    const cardService = new CardService(roomCode, basePack);
+    const newBlackCard = await cardService.getNewBlackCard();
+
+    const nextJudgeId = getRandomJudge(room.prevJudgeId, players);
+
+    const updatedRoom = await this.roomRepository.update(room.id, {
+      round: room.round + 1,
+      judgeId: nextJudgeId,
+      prevJudgeId: room.judgeId
+    });
+
+    const nextRound = await this.roundsRepository.create({
+      id: createId(),
+      roomCode,
+      judgeId: nextJudgeId,
+      blackCardId: newBlackCard.id,
+      roundNumber: round.roundNumber + 1,
+      roundWinnerId: null,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+
+    const judge = players.find(player => player.id === nextJudgeId);
+
+    if (!judge) {
+      throw new NotFoundError('Judge not found');
+    }
+
+    const blackCard = await cardService.getBlackCardById(newBlackCard.id);
+    if (!blackCard) {
+      throw new NotFoundError('Black card not found');
+    }
+
+    return {
+      ...nextRound,
+      room: updatedRoom,
+      judge,
+      roundWinner: null,
+      roundPlayedCards: [],
+      blackCardId: blackCard.id,
+      blackCard
+    };
   }
 }
