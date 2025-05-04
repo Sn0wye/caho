@@ -47,7 +47,7 @@ export interface IRoomService {
     playedCardIds: string[]
   ): Promise<WhiteCard[]>;
   createRound(data: CreateRoundDTO): Promise<Round>;
-  nextRound(
+  startNextRound(
     roomCode: string,
     currentRound: number
   ): Promise<RoundWithRelations & { blackCard: BlackCard }>;
@@ -57,6 +57,20 @@ export interface IRoomService {
   ): Promise<RoundPlayedCard[]>;
   getRoundNumber(roomCode: string): Promise<number>;
   judgeChooseWinner(data: JudgeChooseWinnerDTO): Promise<RoundPlayedCard>;
+  processJudgeChooseWinner(data: JudgeChooseWinnerDTO): Promise<{
+    room: Room;
+    winner: RoundPlayedCard;
+  }>;
+  dealCardsToNonJudgePlayers(data: {
+    roomCode: string;
+    judgeId: string;
+    cardsPerPlayer: number;
+  }): Promise<
+    {
+      playerId: string;
+      cards: WhiteCard[];
+    }[]
+  >;
 }
 
 export type JudgeChooseWinnerDTO = {

@@ -481,7 +481,7 @@ export class RoomService implements IRoomService {
     return winner;
   }
 
-  public async nextRound(
+  public async startNextRound(
     roomCode: string,
     currentRound: number
   ): Promise<
@@ -546,5 +546,71 @@ export class RoomService implements IRoomService {
       blackCardId: blackCard.id,
       blackCard
     };
+  }
+
+  public async processJudgeChooseWinner({
+    roomCode,
+    judgePlayerId,
+    winnerPlayerId
+  }: {
+    roomCode: string;
+    judgePlayerId: string;
+    winnerPlayerId: string;
+  }): Promise<{ room: Room; winner: RoundPlayedCard }> {
+    const room = await this.getRoom(roomCode);
+
+    if (!room) {
+      throw new NotFoundError('Room not found');
+    }
+
+    const player = await this.getPlayerFromRoom(roomCode, judgePlayerId);
+
+    if (!player) {
+      throw new NotFoundError('Player not found');
+    }
+
+    if (!player.isJudge) {
+      throw new Error('Player is not a judge');
+    }
+
+    const winner = await this.judgeChooseWinner({
+      judgePlayerId: player.id,
+      roomCode: room.code,
+      winnerPlayerId
+    });
+
+    return { room, winner };
+  }
+
+  public async dealCardsToNonJudgePlayers({
+    roomCode,
+    judgeId,
+    cardsPerPlayer
+  }: {
+    roomCode: string;
+    judgeId: string;
+    cardsPerPlayer: number;
+  }): Promise<Array<{ playerId: string; cards: WhiteCard[] }>> {
+    const cardService = new CardService(roomCode, basePack);
+    const roomPlayers = await this.getRoomPlayers(roomCode);
+    const playersWithoutJudge = roomPlayers.filter(
+      player => player.id !== judgeId
+    );
+    const result = [];
+
+    for (const player of playersWithoutJudge) {
+      const whiteCards = await cardService.getNewWhiteCards(cardsPerPlayer);
+
+      await this.updatePlayerInRoom(roomCode, player.id, {
+        cardIds: whiteCards.map(card => card.id)
+      });
+
+      result.push({
+        playerId: player.id,
+        cards: whiteCards
+      });
+    }
+
+    return result;
   }
 }
