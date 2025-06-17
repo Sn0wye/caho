@@ -1,6 +1,23 @@
 version: "3.8"
 
+networks:
+  caho:
+    driver: bridge
+
 services:
+  # watchtower:
+  #   image: containrrr/watchtower
+  #   container_name: watchtower
+  #   command:
+  #     - "--label-enable"
+  #     - "--interval"
+  #     - "30"
+  #     - "--rolling-restart"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   ports:
+  #     - "7891:8080"
+
   redis:
     image: redis:latest
     container_name: redis
@@ -10,6 +27,11 @@ services:
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   postgres:
     image: postgres:latest
@@ -22,6 +44,29 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  caho-api:
+    image: ghcr.io/sn0wye/caho-api:prod
+    restart: unless-stopped
+    env_file: ./caho.env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/readyz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    ports:
+      - "8080:8080"
+    networks:
+      - caho
+    depends_on:
+      - postgres
+      - redis
 
 volumes:
   postgres_data:

@@ -14,6 +14,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -25,68 +28,31 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        run: |
-          docker buildx create --use
-          docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/sn0wye/caho-api:${{ github.sha }} --push .
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          platforms: linux/arm64
+          tags: ghcr.io/sn0wye/caho-api:prod
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+          cache-from: type=registry,ref=ghcr.io/sn0wye/caho-api:prod
+          cache-to: type=inline
+          pull: true
 
-      - name: SSH and Deploy
+      - name: Deploy to server via SSH
         uses: appleboy/ssh-action@master
-        env:
-          GITHUB_SHA: ${{ github.sha }}
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            IMAGE_REFERENCE="ghcr.io/sn0wye/caho-api:${{ github.sha }}"
+            set -e
+            echo "Pulling latest image..."
+            docker compose pull caho-api
 
-            echo "IMAGE_REFERENCE: $IMAGE_REFERENCE"
+            echo "Restarting container..."
+            docker compose up -d --no-deps caho-api
 
-            # Pull the new Docker image from GitHub Container Registry
-            echo "Pulling Docker image: $IMAGE_REFERENCE"
-            docker pull $IMAGE_REFERENCE
-
-            # Determine new and old container names and ports
-            if docker ps | grep -q "caho-api-v1"; then
-              new_port=8081
-              old_container="caho-api-v1"
-              new_container="caho-api-v2"
-            elif docker ps | grep -q "caho-api-v2"; then
-              new_port=8080
-              old_container="caho-api-v2"
-              new_container="caho-api-v1"
-            else
-              # No containers are running, so start the first one
-              new_port=8080
-              old_container=""
-              new_container="caho-api-v1"
-            fi
-
-            echo "Old container: $old_container"
-            echo "New container: $new_container"
-            echo "New port: $new_port"
-
-            # Run the new container
-            echo "Running new container: $new_container"
-            docker run -d --name $new_container \
-              --env-file ~/caho.env \
-              -p $new_port:8080 $IMAGE_REFERENCE
-
-            # Wait for the new container to start up
-            echo "Waiting for the new container to start up..."
-            sleep 10
-
-            # Stop and remove the old container if it exists
-            if [ -n "$old_container" ]; then
-              echo "Stopping old container: $old_container"
-              docker stop $old_container
-
-              echo "Removing old container: $old_container"
-              docker rm $old_container
-            fi
-
-            # Reload Nginx to update the upstream list
-            echo "Reloading Nginx"
-            sudo systemctl reload nginx
-
-            echo "Deployment completed successfully."
+            echo "Cleaning old images..."
+            docker image prune -f
