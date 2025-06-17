@@ -34,8 +34,6 @@ jobs:
           push: true
           platforms: linux/arm64
           tags: ghcr.io/sn0wye/caho-api:prod
-          build-args: |
-            BUILDKIT_INLINE_CACHE=1
           cache-from: type=registry,ref=ghcr.io/sn0wye/caho-api:prod
           cache-to: type=inline
           pull: true
