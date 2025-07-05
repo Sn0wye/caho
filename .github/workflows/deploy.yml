@@ -5,10 +5,19 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      skip_build:
+        description: 'Skip build and only deploy'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
+    if: ${{ !inputs.skip_build }}
+    outputs:
+      image_tag: ${{ steps.image.outputs.tag }}
 
     steps:
       - name: Checkout code
@@ -27,17 +36,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set image tag
+        id: image
+        run: echo "tag=ghcr.io/sn0wye/caho-api:prod" >> $GITHUB_OUTPUT
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           platforms: linux/arm64
-          tags: ghcr.io/sn0wye/caho-api:prod
+          tags: ${{ steps.image.outputs.tag }}
           cache-from: type=registry,ref=ghcr.io/sn0wye/caho-api:prod
           cache-to: type=inline
           pull: true
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ always() && (needs.build.result == 'success' || inputs.skip_build) }}
+
+    steps:
       - name: Deploy to server via SSH
         uses: appleboy/ssh-action@master
         with:
