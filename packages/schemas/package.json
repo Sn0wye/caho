@@ -2,9 +2,9 @@
   "name": "@caho/schemas",
   "version": "1.0.0",
   "type": "module",
-  "types": "./src/index.ts",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "private": true,
   "scripts": {
     "build": "tsup",
@@ -23,5 +23,13 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"]
 }
