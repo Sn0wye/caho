@@ -8,12 +8,12 @@ export function GameRankingHeader() {
   return (
     <header
       className={cn(
-        'pointer-events-none absolute left-0 top-0 z-20 flex w-full items-center bg-gradient-to-b from-zinc-50 via-zinc-50 to-transparent p-8 pb-16 dark:from-zinc-950 dark:via-zinc-950',
+        'pointer-events-none absolute left-0 top-0 z-20 flex w-full items-center bg-linear-to-b from-zinc-50 via-zinc-50 to-transparent p-8 pb-16 dark:from-zinc-950 dark:via-zinc-950',
         isCollapsed ? 'justify-center' : 'justify-between'
       )}
     >
       {!isCollapsed && (
-        <h2 className="text-3xl font-bold !leading-none">Ranking</h2>
+        <h2 className="text-3xl font-bold leading-none!">Ranking</h2>
       )}
       <GameRankingCollapseButton />
     </header>

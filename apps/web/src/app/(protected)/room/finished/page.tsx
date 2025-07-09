@@ -13,7 +13,7 @@ export default async function FinishedGamePage() {
           <h1 className="text-5xl font-extrabold sm:text-6xl md:text-8xl">
             Parabéns, {firstName}! <br /> Uma bela bosta.
           </h1>
-          <span className="mt-4 !leading-relaxed dark:text-zinc-500 md:text-xl">
+          <span className="mt-4 leading-relaxed! dark:text-zinc-500 md:text-xl">
             Tua quantidade de acertos foi tão impressionante quanto a
             experiência de um cego em um tiroteio.
           </span>

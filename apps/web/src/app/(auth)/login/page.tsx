@@ -3,7 +3,9 @@
 import type { ComponentProps } from 'react';
 import { useRouter } from 'next/navigation';
 import { signInRequest, type SignInRequest } from '@caho/contracts';
+import { ErrorSchema } from '@caho/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -18,10 +20,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import { env } from '@/env.mjs';
-import { useServerActionMutation } from '@/hooks/server-actions';
 import { loginAction } from './login.action';
 
 export default function LoginPage() {
+  const router = useRouter();
   const form = useForm<SignInRequest>({
     resolver: zodResolver(signInRequest),
     defaultValues: {
@@ -30,23 +32,29 @@ export default function LoginPage() {
     }
   });
 
-  const { push } = useRouter();
-  const { mutate, isLoading } = useServerActionMutation(loginAction);
+  const { mutate, isPending } = useMutation({
+    mutationFn: loginAction,
+    onSuccess: data => {
+      router.push('/dashboard');
+      toast({
+        variant: 'default',
+        title: `Bem-vindo, ${data.username}!`,
+        description: 'Você foi autenticado com sucesso!'
+      });
+    },
+    onError: (error: ErrorSchema) => {
+      toast({
+        variant: 'destructive',
+        title: 'Erro ao entrar',
+        description:
+          error instanceof Error ? error.message : 'Erro desconhecido'
+      });
+    }
+  });
 
-  const onSubmit = async (data: SignInRequest) => {
-    mutate(data, {
-      onSuccess: () => {
-        push('/dashboard');
-      },
-      onError: ({ message }) => {
-        toast({
-          title: 'Erro!',
-          description: message,
-          variant: 'destructive'
-        });
-      }
-    });
-  };
+  function onSubmit(values: SignInRequest) {
+    mutate(values);
+  }
 
   return (
     <div className="w-full">
@@ -63,19 +71,19 @@ export default function LoginPage() {
         <div className="flex gap-2">
           {/* <a
             href="https://api.caho.com.br/auth/apple"
-            className="focus-visible:ring-ring flex h-10 items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
+            className="focus-visible:ring-ring flex h-10 items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-hidden focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
           >
             <AppleIcon className="contrast-0 grayscale" />
           </a> */}
           <a
             href={`${env.NEXT_PUBLIC_BACKEND_URL}/auth/github`}
-            className="focus-visible:ring-ring flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
+            className="focus-visible:ring-ring flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
           >
             <GithubIcon className="contrast-0 grayscale" />
           </a>
           <a
             href={`${env.NEXT_PUBLIC_BACKEND_URL}/auth/google`}
-            className="focus-visible:ring-ring flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
+            className="focus-visible:ring-ring flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
           >
             <GoogleIcon className="contrast-0 grayscale" />
           </a>
@@ -121,7 +129,7 @@ export default function LoginPage() {
               )}
             />
             <Button className="font-semibold">
-              {isLoading ? (
+              {isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <span>Continuar</span>

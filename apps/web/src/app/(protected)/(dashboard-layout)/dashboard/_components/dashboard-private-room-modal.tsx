@@ -64,27 +64,22 @@ export function DashboardPrivateRoomModal() {
     }
   });
 
-  const { mutate } = useMutation<
-    JoinRoomResponse,
-    ErrorSchema,
-    JoinRoomRequest
-  >(joinRoom, {
-    mutationKey: ['join-room']
+  const { mutate, isPending } = useMutation({
+    mutationFn: joinRoom,
+    onSuccess: data => {
+      push(`/room/${data.code}`);
+    },
+    onError: (error: ErrorSchema) => {
+      toast({
+        variant: 'destructive',
+        title: 'Erro ao entrar na sala',
+        description: error.message
+      });
+    }
   });
 
   function onSubmit(values: JoinRoomRequest) {
-    mutate(values, {
-      onSuccess: data => {
-        push(`/room/${data.code}`);
-      },
-      onError: error => {
-        toast({
-          variant: 'destructive',
-          title: 'Erro ao entrar na sala',
-          description: error.message
-        });
-      }
-    });
+    mutate(values);
   }
 
   return (
@@ -99,7 +94,7 @@ export function DashboardPrivateRoomModal() {
         />
       </DialogTrigger>
       <DialogContent className="flex max-w-2xl gap-8 p-8">
-        <figure className="relative flex w-full overflow-clip rounded-md bg-gradient-to-tr from-zinc-100 from-30% via-slate-200 to-slate-400 p-5 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-700">
+        <figure className="relative flex w-full overflow-clip rounded-md bg-linear-to-tr from-zinc-100 from-30% via-slate-200 to-slate-400 p-5 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-700">
           <Noise className="rounded-md" />
 
           <div className="flex flex-col gap-1 self-end">
@@ -188,8 +183,12 @@ export function DashboardPrivateRoomModal() {
                 )}
               />
 
-              <Button type="submit" className="mb-2 w-full">
-                Validar código
+              <Button
+                type="submit"
+                className="mb-2 w-full"
+                disabled={isPending}
+              >
+                {isPending ? 'Validando...' : 'Validar código'}
               </Button>
             </form>
           </Form>

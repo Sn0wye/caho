@@ -44,7 +44,7 @@ export function Lobby() {
           <h1 className="text-5xl font-extrabold sm:text-6xl md:text-7xl">
             Aguardando jogadores
           </h1>
-          <span className="!leading-relaxed dark:text-zinc-500 md:text-xl">
+          <span className="leading-relaxed! dark:text-zinc-500 md:text-xl">
             Tem que esperar os piá entrar pra começar a loucura.
           </span>
         </header>

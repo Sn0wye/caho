@@ -54,9 +54,9 @@ const themeButtonColorVariants: ThemeButtonColorVariants = {
   },
   system: {
     background:
-      'bg-gradient-to-r from-zinc-200 from-50% via-zinc-900 via-50% to-zinc-900',
+      'bg-linear-to-r from-zinc-200 from-50% via-zinc-900 via-50% to-zinc-900',
     foreground:
-      'bg-gradient-to-r from-white from-[37.5%] via-zinc-950 via-[37.5%] to-zinc-950',
+      'bg-linear-to-r from-white from-[37.5%] via-zinc-950 via-[37.5%] to-zinc-950',
     text: 'text-zinc-900'
   }
 };
@@ -101,7 +101,7 @@ export function SettingsThemeSelectorButton({
         {isCurrentTheme && <SettingsThemeSelectorCheckIndicator />}
       </figure>
 
-      <span className="text-zinc-500 transition-colors group-hover:text-zinc-700 group-hover:dark:text-zinc-300">
+      <span className="text-zinc-500 transition-colors group-hover:text-zinc-700 dark:group-hover:text-zinc-300">
         {themeLabelVariants[variant]}
       </span>
     </button>

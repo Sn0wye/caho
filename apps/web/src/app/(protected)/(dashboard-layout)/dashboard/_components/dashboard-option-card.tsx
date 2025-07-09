@@ -44,7 +44,7 @@ export function DashboardOptionCard({
       className={cn(
         'group relative flex w-full flex-col justify-between gap-6 rounded-md p-6 text-left transition-all hover:-translate-y-2 hover:translate-x-2 hover:shadow-[-8px_8px] hover:shadow-zinc-950',
         'bg-zinc-100',
-        'dark:bg-zinc-900/20 dark:hover:bg-gradient-to-br dark:hover:from-zinc-900 dark:hover:via-zinc-900 dark:hover:to-zinc-700 ',
+        'dark:bg-zinc-900/20 dark:hover:bg-linear-to-br dark:hover:from-zinc-900 dark:hover:via-zinc-900 dark:hover:to-zinc-700 ',
         backgroundColorVariants[bgColor],
         darkShadowVariants[bgColor]
       )}

@@ -58,19 +58,19 @@ export default function RegisterPage() {
         <div className="flex gap-2">
           {/* <a
             href="https://api.caho.com.br/auth/apple"
-            className="focus-visible:ring-ring flex h-10 items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
+            className="focus-visible:ring-ring flex h-10 items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-hidden focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
           >
             <AppleIcon className="contrast-0 grayscale" />
           </a> */}
           <a
             href={`${env.NEXT_PUBLIC_BACKEND_URL}/auth/github`}
-            className="focus-visible:ring-ring flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
+            className="focus-visible:ring-ring flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-hidden focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
           >
             <GithubIcon className="contrast-0 grayscale" />
           </a>
           <a
             href={`${env.NEXT_PUBLIC_BACKEND_URL}/auth/google`}
-            className="focus-visible:ring-ring flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
+            className="focus-visible:ring-ring flex h-10 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-3 font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-hidden focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-900 dark:bg-zinc-900/10 dark:hover:bg-zinc-900/80"
           >
             <GoogleIcon className="contrast-0 grayscale" />
           </a>

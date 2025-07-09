@@ -50,7 +50,7 @@ export function BlackCard() {
             <button
               type="button"
               onClick={() => handleUnpickWhiteCard(whiteCards[index])}
-              className="my-1 inline-block rounded bg-white px-2 py-1 text-left font-bold text-zinc-950"
+              className="my-1 inline-block rounded-sm bg-white px-2 py-1 text-left font-bold text-zinc-950"
             >
               {whiteCards[index].text}
             </button>

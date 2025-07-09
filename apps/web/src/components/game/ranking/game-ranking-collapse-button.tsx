@@ -17,7 +17,7 @@ export function GameRankingCollapseButton(
 
   return (
     <button
-      className="pointer-events-auto flex h-fit w-fit items-center justify-center rounded p-1.5 text-zinc-400 transition-all hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-700 dark:hover:bg-zinc-900 dark:hover:text-zinc-400"
+      className="pointer-events-auto flex h-fit w-fit items-center justify-center rounded-sm p-1.5 text-zinc-400 transition-all hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-700 dark:hover:bg-zinc-900 dark:hover:text-zinc-400"
       onClick={handleClick}
       {...props}
     >

@@ -13,7 +13,7 @@ const alertTopBarVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-gradient-to-r from-slate-100 to-slate-300 dark:bg-gradient-to-r dark:from-zinc-900 dark:to-zinc-950 text-zinc-800 dark:text-zinc-200',
+          'bg-linear-to-r from-slate-100 to-slate-300 dark:bg-linear-to-r dark:from-zinc-900 dark:to-zinc-950 text-zinc-800 dark:text-zinc-200',
         warning: 'bg-geist-orange text-zinc-950',
         destructive: 'bg-geist-red text-zinc-950'
       }

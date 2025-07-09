@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 const Card = ({ className, ...props }: React.ComponentProps<'div'>) => (
   <div
     className={cn(
-      'rounded-lg border border-zinc-200 bg-white text-zinc-950 shadow-sm dark:border-zinc-900 dark:bg-zinc-950 dark:text-zinc-50',
+      'rounded-lg border border-zinc-200 bg-white text-zinc-950 shadow-xs dark:border-zinc-900 dark:bg-zinc-950 dark:text-zinc-50',
       className
     )}
     {...props}

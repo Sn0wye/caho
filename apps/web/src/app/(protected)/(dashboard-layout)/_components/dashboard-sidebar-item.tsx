@@ -28,14 +28,14 @@ export function DashboardSidebarItem(props: DashboardSidebarItemProps) {
           className={cn(
             'relative flex w-16 items-center justify-center',
             isActive &&
-              "before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:rounded-r-sm before:bg-zinc-900 before:p-px before:content-[''] hover:cursor-not-allowed before:dark:bg-zinc-200"
+              "before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:rounded-r-sm before:bg-zinc-900 before:p-px before:content-[''] hover:cursor-not-allowed dark:before:bg-zinc-200"
           )}
         >
           <Button
             variant="transparent"
             className={cn(
               isActive &&
-                'text-zinc-900 hover:cursor-not-allowed hover:bg-transparent dark:text-zinc-50 hover:dark:bg-transparent',
+                'text-zinc-900 hover:cursor-not-allowed hover:bg-transparent dark:text-zinc-50 dark:hover:bg-transparent',
               props.className
             )}
             size="icon"

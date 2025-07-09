@@ -3,7 +3,6 @@ import { AuthServerProvider } from '@/auth/server';
 import '@/styles/globals.css';
 import type { PropsWithChildren } from 'react';
 import type { Metadata } from 'next';
-// eslint-disable-next-line camelcase
 import { JetBrains_Mono } from 'next/font/google';
 import { GeistSans } from 'geist/font/sans';
 import { cn } from '@/utils/cn';

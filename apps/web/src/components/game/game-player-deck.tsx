@@ -21,7 +21,7 @@ export function GamePlayerDeck() {
 
   if (isJudge) {
     return (
-      <div className='relative flex h-full max-h-96 w-full max-w-full flex-col items-center justify-center  overflow-clip backdrop-blur-sm before:absolute before:bottom-0 before:-z-10 before:aspect-square before:h-1/2 before:translate-y-1/2 before:rounded-full before:bg-zinc-950 before:blur-[120px] after:absolute after:inset-0 after:-z-20 after:bg-gradient-to-b after:from-white after:to-white/10 after:content-[""] before:dark:bg-yellow-800 after:dark:from-zinc-950  after:dark:to-zinc-950/90'>
+      <div className='relative flex h-full max-h-96 w-full max-w-full flex-col items-center justify-center  overflow-clip backdrop-blur-xs before:absolute before:bottom-0 before:-z-10 before:aspect-square before:h-1/2 before:translate-y-1/2 before:rounded-full before:bg-zinc-950 before:blur-[120px] after:absolute after:inset-0 after:-z-20 after:bg-linear-to-b after:from-white after:to-white/10 after:content-[""] dark:before:bg-yellow-800 dark:after:from-zinc-950  dark:after:to-zinc-950/90'>
         <Image src="/judge.png" alt="Juiz" width={200} height={200} />
 
         <h3 className="text-2xl font-bold">
@@ -47,7 +47,7 @@ export function GamePlayerDeck() {
 
       <div
         className={cn(
-          'absolute inset-0 z-10 flex flex-col items-center justify-center gap-8 overflow-clip backdrop-blur-sm before:absolute before:bottom-0 before:-z-10 before:aspect-square before:h-1/2 before:translate-y-1/2 before:rounded-full before:bg-zinc-950 before:blur-[120px] after:absolute after:inset-0 after:-z-20 after:bg-gradient-to-b after:from-white after:to-white/10 after:content-[""] before:dark:bg-zinc-400 after:dark:from-zinc-950  after:dark:to-zinc-950/90',
+          'absolute inset-0 z-10 flex flex-col items-center justify-center gap-8 overflow-clip backdrop-blur-xs before:absolute before:bottom-0 before:-z-10 before:aspect-square before:h-1/2 before:translate-y-1/2 before:rounded-full before:bg-zinc-950 before:blur-[120px] after:absolute after:inset-0 after:-z-20 after:bg-linear-to-b after:from-white after:to-white/10 after:content-[""] dark:before:bg-zinc-400 dark:after:from-zinc-950  dark:after:to-zinc-950/90',
           !isWhiteCardPickingDisabled && 'hidden'
         )}
       >
@@ -66,7 +66,7 @@ export function GamePlayerDeck() {
 
       <div
         className={cn(
-          'absolute inset-0 z-10 flex flex-col items-center justify-center gap-8 overflow-clip backdrop-blur-sm before:absolute before:bottom-0 before:-z-10 before:aspect-square before:h-1/2 before:translate-y-1/2 before:rounded-full before:bg-zinc-950 before:blur-[120px] after:absolute after:inset-0 after:-z-20 after:bg-gradient-to-b after:from-white after:to-white/10 after:content-[""] before:dark:bg-zinc-400 after:dark:from-zinc-950  after:dark:to-zinc-950/90',
+          'absolute inset-0 z-10 flex flex-col items-center justify-center gap-8 overflow-clip backdrop-blur-xs before:absolute before:bottom-0 before:-z-10 before:aspect-square before:h-1/2 before:translate-y-1/2 before:rounded-full before:bg-zinc-950 before:blur-[120px] after:absolute after:inset-0 after:-z-20 after:bg-linear-to-b after:from-white after:to-white/10 after:content-[""] dark:before:bg-zinc-400 dark:after:from-zinc-950  dark:after:to-zinc-950/90',
           !isPlayerReady && 'hidden'
         )}
       >

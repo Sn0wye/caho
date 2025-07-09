@@ -21,7 +21,7 @@ export function CopyRoomCodeButton({ roomCode }: GameRoomCodeButtonProps) {
       <button
         onClick={copyToClipboard}
         type="button"
-        className="group flex cursor-pointer items-center justify-center gap-1 rounded p-2 text-zinc-600 transition-colors hover:bg-zinc-200/50 hover:text-zinc-800 dark:text-zinc-500 hover:dark:bg-zinc-900/50 hover:dark:text-zinc-300"
+        className="group flex cursor-pointer items-center justify-center gap-1 rounded-sm p-2 text-zinc-600 transition-colors hover:bg-zinc-200/50 hover:text-zinc-800 dark:text-zinc-500 dark:hover:bg-zinc-900/50 dark:hover:text-zinc-300"
       >
         <Hash size={16} className="text-zinc-500" />
         <span className="font-mono font-bold uppercase leading-none">

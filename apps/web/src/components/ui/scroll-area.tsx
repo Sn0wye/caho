@@ -34,7 +34,7 @@ const ScrollBar = ({
       orientation === 'vertical' &&
         'h-full w-2 border-l border-l-transparent p-px',
       orientation === 'horizontal' &&
-        'h-2 border-t border-t-transparent p-[1px]',
+        'h-2 border-t border-t-transparent p-px',
       className
     )}
     {...props}

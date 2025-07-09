@@ -32,7 +32,7 @@ export function SettingsSidebarNavigation() {
               className={cn(
                 buttonVariants({ variant: 'ghost' }),
                 'justify-start',
-                'data-[current=true]:bg-zinc-200 data-[current=true]:hover:bg-zinc-200 data-[current=true]:dark:bg-zinc-800 data-[current=true]:dark:hover:bg-zinc-800'
+                'data-[current=true]:bg-zinc-200 data-[current=true]:hover:bg-zinc-200 dark:data-[current=true]:bg-zinc-800 dark:data-[current=true]:hover:bg-zinc-800'
               )}
             >
               {title}

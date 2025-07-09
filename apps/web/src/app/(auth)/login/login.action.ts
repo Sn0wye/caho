@@ -1,46 +1,53 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { signInRequest, type SignInResponse } from '@caho/contracts';
+import {
+  SignInRequest,
+  signInRequest,
+  type SignInResponse
+} from '@caho/contracts';
 import { AxiosError } from 'axios';
 import { parse } from 'cookie';
-import { createServerAction } from 'zsa';
 import { api } from '@/utils/api';
 
-export const loginAction = createServerAction()
-  .input(signInRequest)
-  .onSuccess(() => {
-    redirect('/dashboard');
-  })
-  .handler(async ({ input }) => {
-    try {
-      const { data, headers } = await api.post<SignInResponse>(
-        '/auth/sign-in',
-        input
-      );
+export async function loginAction(
+  fields: SignInRequest
+): Promise<SignInResponse> {
+  const validatedFields = signInRequest.safeParse(fields);
 
-      if (headers['set-cookie']) {
-        const cookie = parse(headers['set-cookie'][0]) as {
-          auth_session: string;
-          Expires: string;
-        };
+  if (!validatedFields.success) {
+    throw new Error('Error in Login Action');
+  }
 
-        cookies().set({
-          name: 'auth_session',
-          value: cookie.auth_session,
-          expires: new Date(cookie.Expires),
-          path: '/',
-          httpOnly: true,
-          sameSite: 'lax'
-        });
-      }
-      return data;
-    } catch (e) {
-      if (e instanceof AxiosError) {
-        throw e.response?.data.message;
-      }
+  try {
+    const { data, headers } = await api.post<SignInResponse>(
+      '/auth/sign-in',
+      validatedFields.data
+    );
 
-      throw e.response?.data;
+    if (headers['set-cookie']) {
+      const cookieStore = await cookies();
+      const cookie = parse(headers['set-cookie'][0]) as {
+        auth_session: string;
+        Expires: string;
+      };
+
+      cookieStore.set({
+        name: 'auth_session',
+        value: cookie.auth_session,
+        expires: new Date(cookie.Expires),
+        path: '/',
+        httpOnly: true,
+        sameSite: 'lax'
+      });
     }
-  });
+
+    return data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e.response?.data.message;
+    }
+
+    throw e.response?.data;
+  }
+}
