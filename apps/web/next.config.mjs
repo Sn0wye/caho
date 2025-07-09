@@ -7,7 +7,8 @@ await import('./src/env.mjs');
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
-  images: {}
+  images: {},
+  transpilePackages: ['@caho/schemas', '@caho/contracts']
 };
 
 export default config;

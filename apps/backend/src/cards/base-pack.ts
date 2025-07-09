@@ -41,11 +41,6 @@ export const basePack: CardPack = {
         id: 'qredgojuc8i6jzwke4rqz86t'
       },
       {
-        text: '100% Pura Nova Zelândia.',
-        packId: 'base-pack',
-        id: 'sx1e20fclxjx2xwr4c2w9108'
-      },
-      {
         text: '2 Girls 1 Cup.',
         packId: 'base-pack',
         id: 'b1ebmwniohluyfvybtpe8xdc'
@@ -56,7 +51,7 @@ export const basePack: CardPack = {
         id: 'chkecpmtn90m9po7faplm285'
       },
       {
-        text: '50 mg de Zoloft diariamente.',
+        text: '50 mg de Viagra diariamente.',
         packId: 'base-pack',
         id: 'opas17fv9pm7tzdgqf8ek1wu'
       },
@@ -86,12 +81,7 @@ export const basePack: CardPack = {
         id: 'ewbalsfihcmfa83w2kjtbioj'
       },
       {
-        text: 'Uma bola de cera de ouvido, esperma e unhas dos pés.',
-        packId: 'base-pack',
-        id: 'l6dgkirn19sn43bl8kvaw7l2'
-      },
-      {
-        text: 'Um grande pênis negro.',
+        text: 'Uma grande pica negra.',
         packId: 'base-pack',
         id: 'nc45ba6s4tciwzp8trmb2pb4'
       },
@@ -111,27 +101,22 @@ export const basePack: CardPack = {
         id: 'wdriu9ipkx40qt2oo4p5mufn'
       },
       {
-        text: 'Uma bofetada.',
+        text: 'Uma porrada.',
         packId: 'base-pack',
         id: 'ny53u4jgerkfdrkfeb1vgspt'
       },
       {
-        text: 'Um ânus branqueado.',
+        text: 'Um cu rosinha.',
         packId: 'base-pack',
         id: 'b87h66v89b8edyata3fifie2'
       },
       {
-        text: 'Um cu branqueado.',
+        text: 'Um cu branquinho.',
         packId: 'base-pack',
         id: 'azg5kvbbqg2dxnjuo26i0dl6'
       },
       {
-        text: 'Um Bop It™.',
-        packId: 'base-pack',
-        id: 'f589tk5vcc0akwvk661vmkrf'
-      },
-      {
-        text: 'Uma tigela de maionese e dentes humanos.',
+        text: 'Uma tigela de maionese.',
         packId: 'base-pack',
         id: 'cmgbcbp4hlkgjashk87yiaj4'
       },
@@ -141,22 +126,22 @@ export const basePack: CardPack = {
         id: 's9ogmut798m34jwv1bzpjp4o'
       },
       {
-        text: 'Um tumor cerebral.',
-        packId: 'base-pack',
-        id: 'p66ciengsulxxgitbgbe8r70'
-      },
-      {
         text: 'Um balde de cabeças de peixe.',
         packId: 'base-pack',
         id: 'm6bw8ipr400br2bd8wq24kj5'
       },
       {
-        text: 'Uma lata de surra.',
+        text: 'Uma lata de porra.',
         packId: 'base-pack',
         id: 'ajsrc6qdaxgm1ous255lt49f'
       },
       {
-        text: 'Um carinho na coxa interna.',
+        text: 'Uma carícia na coxa.',
+        packId: 'base-pack',
+        id: 'p2wns7uib6zms00vuxawsfag'
+      },
+      {
+        text: 'Uma mão no volante, outra no carinho.',
         packId: 'base-pack',
         id: 'p2wns7uib6zms00vuxawsfag'
       },
@@ -166,32 +151,42 @@ export const basePack: CardPack = {
         id: 'xgvnngsmggz9p6pliigwxkql'
       },
       {
-        text: 'Um gato com... mãos.',
+        text: 'Um gato com mãos.',
         packId: 'base-pack',
         id: 'm0pmoss5r2i8qxx0gsfo5ii2'
       },
       {
-        text: 'Um banco de spanking de cerejeira.',
+        text: 'Um banco de uma cervejaria.',
         packId: 'base-pack',
         id: 'm9ap4tgfg3mjq5mnscyg5313'
       },
       {
-        text: 'Um turista chinês que quer muito algo, mas não consegue comunicar.',
+        text: 'Um turista chinês que quer muito algo, mas não consegue se comunicar.',
         packId: 'base-pack',
         id: 'xb4aavat11axqdfxthzkso1n'
       },
       {
-        text: 'Coçar furtivamente o traseiro.',
+        text: 'Uma coçada discreta no brioco.',
         packId: 'base-pack',
         id: 'kejpaxzzhtqg3ruqzpzwrz73'
       },
       {
-        text: 'Uma caixa térmica cheia de órgãos.',
+        text: 'Uma caixa cheia de órgãos.',
         packId: 'base-pack',
         id: 'n3h3fzb29e4o6zpylnw9smdq'
       },
       {
-        text: 'Uma cópia de Bedside Hitler.',
+        text: 'Uma cópia do Manifesto do Partido Comunista.',
+        packId: 'base-pack',
+        id: 'uhnk9gp0diusg93lf58s08hy'
+      },
+      {
+        text: 'Uma cópia do Manifesto do Partido Comunista.',
+        packId: 'base-pack',
+        id: 'uhnk9gp0diusg93lf58s08hy'
+      },
+      {
+        text: 'Uma cópia do Mein Kampf.',
         packId: 'base-pack',
         id: 'uhnk9gp0diusg93lf58s08hy'
       },
@@ -216,12 +211,12 @@ export const basePack: CardPack = {
         id: 'fgen4d17i01lgw4wzj40awi8'
       },
       {
-        text: 'Um preservativo defeituoso.',
+        text: 'Um preservativo furado.',
         packId: 'base-pack',
         id: 's17h7sz7i39s2wpan3uz20r8'
       },
       {
-        text: 'Um desanimado fã dos Maple Leafs sentado sozinho.',
+        text: 'Um fã dos Mamonas Assassinas sentado sozinho.',
         packId: 'base-pack',
         id: 'v4sfojvfkwnncxk5bxv267s0'
       },
@@ -241,12 +236,12 @@ export const basePack: CardPack = {
         id: 'h8s59w9sxt27djt8bw3xhq7z'
       },
       {
-        text: 'Um jogo justo.',
+        text: 'Um jogo de terror.',
         packId: 'base-pack',
         id: 'b8l13lcybpdfsdigucfbx592'
       },
       {
-        text: 'Um falcão com um boné na cabeça.',
+        text: 'Uma capivara de boné.',
         packId: 'base-pack',
         id: 'g0dz7hmtj2fbpvsz1dcfj8gt'
       },
@@ -256,61 +251,40 @@ export const basePack: CardPack = {
         id: 'yz89c6roaubkpqavj3aj0lay'
       },
       {
-        text: 'Um peido tão poderoso que acorda os gigantes de seu sono milenar.',
+        text: 'Um velho gordo e careca da internet.',
         packId: 'base-pack',
-        id: 'cgq9gd11f013x04ya70swv7d'
+        id: 'znb0fqppn7x4e1bde2wmam17'
       },
       {
-        text: 'Um homem gordo e careca da internet.',
+        text: 'Um velho da internet.',
         packId: 'base-pack',
         id: 'znb0fqppn7x4e1bde2wmam17'
       },
       { text: 'Um feto.', packId: 'base-pack', id: 'j4nwzawv9by1trsj3uggyrku' },
       {
-        text: 'Uma bolsa de cinco litros de vinho barato.',
+        text: 'Uma garrafa de vinho barato.',
         packId: 'base-pack',
         id: 'sysvdisz7m5xnoecdkawg3by'
       },
       {
-        text: 'Uma boneca inflável.',
+        text: 'Uma boneca sexual.',
         packId: 'base-pack',
         id: 'gfpd2gn19hgjvpzlov830420'
       },
       {
-        text: 'Uma boneca inflável.',
+        text: 'Rogério Skylab.',
         packId: 'base-pack',
-        id: 'xl6fj0relumirot1rpptq4mt'
+        id: 'erb0l7ka53w512pv3y2m4vhb'
       },
-      { text: 'Um feto.', packId: 'base-pack', id: 'erb0l7ka53w512pv3y2m4vhb' },
       {
         text: 'Uma boca suja.',
         packId: 'base-pack',
         id: 'tezv8fw92p1zd7zd7mr6xt6e'
       },
       {
-        text: 'Um monte de amêndoas pra caramba.',
+        text: 'Um monte de merda.',
         packId: 'base-pack',
         id: 'mh6pp79ebvdxm7qhvxcz17cr'
-      },
-      {
-        text: 'Um monte de amêndoas pra caramba.',
-        packId: 'base-pack',
-        id: 'lfh9ym4d0dkz2stsm3rayx4n'
-      },
-      {
-        text: 'Um antílope gasoso.',
-        packId: 'base-pack',
-        id: 'x3em49aplhfd36s6jyrq6ehq'
-      },
-      {
-        text: 'Um carinho gentil na coxa interna.',
-        packId: 'base-pack',
-        id: 'gtabz15fpmlt00w6bz43evw7'
-      },
-      {
-        text: 'O saco pontilhado de sardas de um ruivo.',
-        packId: 'base-pack',
-        id: 'x269ostk9m8ei5y4h14323h8'
       },
       {
         text: 'Um bom cheirinho.',
@@ -323,12 +297,7 @@ export const basePack: CardPack = {
         id: 'b716i4lgw0v0zs5i5dpg5t74'
       },
       {
-        text: 'Um fio sutil de esperma que pega a luz enquanto atravessa o ar matinal.',
-        packId: 'base-pack',
-        id: 'xakz8oxwp5mrdhosp6urh277'
-      },
-      {
-        text: 'Um grande macchiato gelado de caramelo sem açúcar.',
+        text: 'Um café gelado sem açúcar.',
         packId: 'base-pack',
         id: 'rymbm5o56x0ktntaxjn0luye'
       },
@@ -348,17 +317,17 @@ export const basePack: CardPack = {
         id: 'qxmpwwv6lfesrg2xtg79jr9s'
       },
       {
-        text: 'Uma noite de despedida de solteira em Slough.',
+        text: 'Uma noite de despedida de solteira em Pelotas.',
         packId: 'base-pack',
         id: 'gb1pypdz82le6yf2hya1sun1'
       },
       {
-        text: 'Uma montagem de vôlei homoerótica.',
+        text: 'Um exame de próstata.',
         packId: 'base-pack',
         id: 'ml5yhs9j4h6a0f2csk3n0l1f'
       },
       {
-        text: 'Uma horda de vikings.',
+        text: 'Uma horda de viados.',
         packId: 'base-pack',
         id: 'b157r6wrtzmxqgx02iblxxkr'
       },
@@ -373,12 +342,12 @@ export const basePack: CardPack = {
         id: 'brft4zkdy4nrlc5j3c86f7su'
       },
       {
-        text: 'Uma operação de caça às baleias japonesa.',
+        text: 'Uma operação de caça às baleias japonesas.',
         packId: 'base-pack',
         id: 'r6ssu5ganorh2fnxhyj5qfaa'
       },
       {
-        text: 'Uma festa de LAN.',
+        text: 'Uma festa do MC LAN.',
         packId: 'base-pack',
         id: 'bd38cutfiij0y6fycatvzzdt'
       },
@@ -388,7 +357,7 @@ export const basePack: CardPack = {
         id: 'bi09dzck53r5e8yge1fokh3g'
       },
       {
-        text: 'Um tornado literal de fogo.',
+        text: 'Um tornado de fogo.',
         packId: 'base-pack',
         id: 'foohnj8o9vuu5v206fzza48q'
       },
@@ -398,12 +367,12 @@ export const basePack: CardPack = {
         id: 'g7n71olzqg7nnqvuaanhjti1'
       },
       {
-        text: 'Uma plateia ao vivo.',
+        text: 'Uma plateia.',
         packId: 'base-pack',
         id: 'a24wr8msmwqcrwzqja1ai5i5'
       },
       {
-        text: 'Uma olhadinha.',
+        text: 'Aquela olhadinha.',
         packId: 'base-pack',
         id: 'ag97gdv5yonk5a9lo30hrwm8'
       },
@@ -423,12 +392,12 @@ export const basePack: CardPack = {
         id: 'nhxkp3ottqa4qdsejop38a18'
       },
       {
-        text: 'Um homem de posses, mas sem meios.',
+        text: 'Aquela coisa.',
         packId: 'base-pack',
         id: 'c6m3r9a4q24josbtb48utnt2'
       },
       {
-        text: 'Um homem à beira do orgasmo.',
+        text: 'Um homem quase gozando.',
         packId: 'base-pack',
         id: 'ux4xx720m6qm8nxjnwua790x'
       },
@@ -448,7 +417,7 @@ export const basePack: CardPack = {
         id: 'hvs102rhn0va918sxgrnc7qf'
       },
       {
-        text: 'Um micro-porco usando uma capa de chuva e botinhas.',
+        text: 'Um porco usando uma capa de chuva e botinhas.',
         packId: 'base-pack',
         id: 'qft2cdpdgjd6uppcyfmgksia'
       },
@@ -498,12 +467,12 @@ export const basePack: CardPack = {
         id: 'ldbpx3mu27dqqgj0o855mj6o'
       },
       {
-        text: 'Um polvo transgênero que perambula pelo cosmos em busca de amor.',
+        text: 'Um polvo gay em busca de amor.',
         packId: 'base-pack',
         id: 'u7urzte4ju6qt8ebolwo81u4'
       },
       {
-        text: 'Um abacaxi com clamídia.',
+        text: 'Um abacaxi estragado.',
         packId: 'base-pack',
         id: 'coponerw8zqkqehp1ek2orj9'
       },
@@ -533,22 +502,12 @@ export const basePack: CardPack = {
         id: 'dnbmjc1j2fmf29oa74fcgobk'
       },
       {
-        text: 'Um deus triste com mamilos cobertos de merda.',
-        packId: 'base-pack',
-        id: 'yjywbvdcgnkkz5k02x1izwie'
-      },
-      {
         text: 'Uma masturbação triste.',
         packId: 'base-pack',
         id: 'zgtct737zlqmltrm86k7uo1i'
       },
       {
-        text: 'Uma salada para homens feita de metal.',
-        packId: 'base-pack',
-        id: 'bf87xaow8pki778bvy08d8xm'
-      },
-      {
-        text: 'Uma surpresa salgada.',
+        text: 'Um final feliz.',
         packId: 'base-pack',
         id: 'fhjxtswzx44kt1x0xlposzhl'
       },
@@ -558,7 +517,7 @@ export const basePack: CardPack = {
         id: 'u6w5s1vkw5f50uvm1v5n3pnl'
       },
       {
-        text: 'Um festival de salsichas.',
+        text: 'A festa da salsicha.',
         packId: 'base-pack',
         id: 'u7xxi2n0bpmleoj3334bxgua'
       },
@@ -578,17 +537,12 @@ export const basePack: CardPack = {
         id: 'qnu0agohh1eswnjdl100mhgf'
       },
       {
-        text: 'Um pneu queimado radical.',
-        packId: 'base-pack',
-        id: 'ct9fhjelyqwc8i0wpbpke0ru'
-      },
-      {
-        text: 'Um vombate doente.',
+        text: 'Um tomate doente.',
         packId: 'base-pack',
         id: 'chnioyj9tcyxtzamih13vf0g'
       },
       {
-        text: 'Um rei-criança doente.',
+        text: 'Uma criança doente.',
         packId: 'base-pack',
         id: 'bvvl4mbl1g3khh21g1jsqcs9'
       },
@@ -598,7 +552,7 @@ export const basePack: CardPack = {
         id: 'ir1wc3g5dce1ae11x16ft4bp'
       },
       {
-        text: 'Um engradado de cerveja VB e um maço de cigarros.',
+        text: 'Um engradado de Skol e um maço de Derby.',
         packId: 'base-pack',
         id: 'meddouz5ixmfnn7da3uiozyy'
       },
@@ -613,17 +567,17 @@ export const basePack: CardPack = {
         id: 'ywxv9ctqr3ggcwz5vdjf8bgu'
       },
       {
-        text: 'Um irlandês sóbrio que não gosta de batatas.',
+        text: 'O tio do churrasco que não gosta de batatas.',
         packId: 'base-pack',
         id: 'd8sa4nos9q9370mn3qexax3j'
       },
       {
-        text: 'Um biscoito São Maria encharcado.',
+        text: 'Uma Bolacha Maria molhada.',
         packId: 'base-pack',
         id: 'wvdx0956y0xs0dre5zn33ypo'
       },
       {
-        text: 'Um nerd espástico.',
+        text: 'Um nerd com espasmos.',
         packId: 'base-pack',
         id: 'b4pmm2379ygpeniv3vxcc3gp'
       },
@@ -638,12 +592,12 @@ export const basePack: CardPack = {
         id: 'hbz79w6i66nr9dc5c9k35l99'
       },
       {
-        text: "Uma assinatura da Men's Fitness.",
+        text: 'Uma assinatura da Smart Fit.',
         packId: 'base-pack',
         id: 'cflmqx69vvpir5iuzrn36hds'
       },
       {
-        text: 'Um Super Soaker™ cheio de xixi de gato.',
+        text: 'Uma pistola de água cheia de xixi de gato.',
         packId: 'base-pack',
         id: 'blrrlr5si8wpzw6v1gn2bvj5'
       },
@@ -653,27 +607,27 @@ export const basePack: CardPack = {
         id: 'hd26i2ae4dur71tnt4hj34ii'
       },
       {
-        text: 'Um chute rápido no rosto.',
+        text: 'Um chute rápido no saco.',
         packId: 'base-pack',
         id: 'd34qg3j9n204vviw744480tr'
       },
       {
-        text: 'Uma detonação termonuclear.',
+        text: 'Uma bomba nuclear.',
         packId: 'base-pack',
         id: 'fkcnte7xoxab43nkgea35jqy'
       },
       {
-        text: 'Mil guerreiros escoceses levantando suas saias em uníssono.',
+        text: 'Mil guerreiros escoceses levantando suas saias simultaneamente.',
         packId: 'base-pack',
         id: 'w8h9sryrpr5otapj1y85i68r'
       },
       {
-        text: "Um ménage à trois com minha esposa e Shaquille O'Neal.",
+        text: 'Um ménage à trois com minha esposa e o Silvio Santos.',
         packId: 'base-pack',
         id: 'rsxg2zgo6iown5cmkbam28lz'
       },
       {
-        text: 'Uma franquia do KFC.',
+        text: 'Uma franquia do McDonalds.',
         packId: 'base-pack',
         id: 'hr27kbxg07x6lbbyhxmnxw5v'
       },
@@ -683,22 +637,27 @@ export const basePack: CardPack = {
         id: 'm58gyzamtluie4pobhnwwvl1'
       },
       {
-        text: 'Um cavalo minúsculo.',
+        text: 'Um cavalo minúsculo, que não é pônei.',
         packId: 'base-pack',
         id: 'uyyogjfi77bvdc4qr76axxjg'
       },
       {
-        text: 'Um ukulele minúsculo e gay.',
+        text: 'Um ukulele minúsculo.',
         packId: 'base-pack',
         id: 'mz95eperf3vxeyuc1jtxg0lz'
       },
       {
-        text: 'Uma tribo de mulheres guerreiras.',
+        text: 'O menor violino do mundo.',
+        packId: 'base-pack',
+        id: 'mz95eperf3vxeyuc1jtxg0lz'
+      },
+      {
+        text: 'Uma tribo de feministas peludas.',
         packId: 'base-pack',
         id: 'yqvhhn4ksr34hviipx3wtjm4'
       },
       {
-        text: "Uma vagina que tem gosto de pisos de banheiro no Tom's Diner.",
+        text: 'Uma vagina que tem gosto do chão do bar da esquina.',
         packId: 'base-pack',
         id: 'l1a4jt5faa36iiaij3xslcow'
       },
@@ -733,7 +692,7 @@ export const basePack: CardPack = {
         id: 'mtdf54ogtb929zxvgrc5hkx3'
       },
       {
-        text: 'Um homem de furgão branco.',
+        text: 'Dois caras numa moto.',
         packId: 'base-pack',
         id: 'ronzbrf22tifwf61b7ct09df'
       },
@@ -758,17 +717,17 @@ export const basePack: CardPack = {
         id: 'bp73bc55oishgg9kjmsp4p1l'
       },
       {
-        text: 'Aaron Burr.',
+        text: 'Dilma Rousseff.',
         packId: 'base-pack',
         id: 'cozqan3kvr78gj52qqsi32zb'
       },
       {
-        text: 'Abstinência.',
+        text: 'Abstinência Alcoólica.',
         packId: 'base-pack',
         id: 'z9j6pzsfuzj7jjxonzz6hc2y'
       },
       {
-        text: 'Vencedora do Oscar, Jair Bolsonaro.',
+        text: 'Vencedor do Oscar, Jair Bolsonaro.',
         packId: 'base-pack',
         id: 'cjqamhqaxv43xvc46h077goi'
       },
@@ -793,7 +752,7 @@ export const basePack: CardPack = {
         id: 'm74dsvie1ntmhpcfaqx69f97'
       },
       {
-        text: 'Realmente pegar doces de um bebê.',
+        text: 'Roubar doces de um bebê.',
         packId: 'base-pack',
         id: 'e3uo7ya1335ksses11w4k7mh'
       },
@@ -835,7 +794,7 @@ export const basePack: CardPack = {
         id: 'idis41worbxygishmvbeikwa'
       },
       {
-        text: 'As quatro pontas do pênis de um equidna.',
+        text: 'A arte de ser monobola.',
         packId: 'base-pack',
         id: 'dvkc3ehjca8z5jfg8f4p0oix'
       },
@@ -845,7 +804,7 @@ export const basePack: CardPack = {
         id: 'tqaymdff6glbvw4ljtz3xwqk'
       },
       {
-        text: 'todas as calças estão pela metade do preço hoje',
+        text: 'Todas as calças estão pela metade do preço hoje',
         packId: 'base-pack',
         id: 'ndue5yys09yzz34k4getyw65'
       },
@@ -855,28 +814,23 @@ export const basePack: CardPack = {
         id: 'zdiwsmg5iqsmgi5f4c5l7l5s'
       },
       {
-        text: 'Camarão à vontade por $4.99.',
+        text: 'Camarão à vontade por R$9.90.',
         packId: 'base-pack',
         id: 'uqf4dld8cftcp9heh067y1wt'
-      },
-      {
-        text: 'Camarão à vontade por $8.99.',
-        packId: 'base-pack',
-        id: 'v21xk6jqwl8mmnjvf3gnmona'
       },
       {
         text: 'Coroinhas.',
         packId: 'base-pack',
         id: 'rgeoi8qikp47pog2kkmrdf3n'
       },
-      { text: 'América.', packId: 'base-pack', id: 't62skmyv76vrl7ci5dpkfnpq' },
+      { text: 'Brasil.', packId: 'base-pack', id: 't62skmyv76vrl7ci5dpkfnpq' },
       {
-        text: 'Gladiadores Americanos.',
+        text: 'Carreta Furacão.',
         packId: 'base-pack',
         id: 'vxeqhf0zri0hun1g6abmuooj'
       },
       {
-        text: 'Americanização.',
+        text: 'Racistas.',
         packId: 'base-pack',
         id: 'g59j6nbxapgxcs0nl3bixebd'
       },
@@ -886,22 +840,27 @@ export const basePack: CardPack = {
         id: 'jgasqrvg2ci7dboh54aca3dp'
       },
       {
-        text: 'Um fuzil de assalto AK-47.',
+        text: 'Uma AK-47.',
         packId: 'base-pack',
         id: 'k7xylke5cf0zfb5o8bh5qfxi'
       },
       {
-        text: 'Uma AK-47.',
-        packId: 'base-pack',
-        id: 'imkgixdmms0frb21e4hxwxvl'
-      },
-      {
-        text: 'Um fuzil de assalto AR-15.',
+        text: 'Uma AR-15.',
         packId: 'base-pack',
         id: 'c7nmvn7tpyp1vwur4gwp90dq'
       },
       {
-        text: 'Uma discussão com Richard Dawkins.',
+        text: 'Uma discussão com o tio Bolsonarista.',
+        packId: 'base-pack',
+        id: 'ndhb35uhg0uyjcctsk1ntgao'
+      },
+      {
+        text: 'Uma discussão com o tio Esquerdista.',
+        packId: 'base-pack',
+        id: 'ndhb35uhg0uyjcctsk1ntgao'
+      },
+      {
+        text: 'Uma discussão com Olavo de Carvalho.',
         packId: 'base-pack',
         id: 'ndhb35uhg0uyjcctsk1ntgao'
       },
@@ -911,17 +870,12 @@ export const basePack: CardPack = {
         id: 'q59s1eq1sbn5egheg0efnvg5'
       },
       {
-        text: 'Uma bunda como dois capacetes de futebol.',
-        packId: 'base-pack',
-        id: 'r34wl3bgi6xgf6t13swpxyje'
-      },
-      {
-        text: 'Uma cirurgia de mama assimétrica.',
+        text: 'Uma cirurgia mal feita.',
         packId: 'base-pack',
         id: 'd8elit4wzzb1yssojrl4ex1v'
       },
       {
-        text: 'Um fluxo interminável de diarreia.',
+        text: 'Diarreia forte.',
         packId: 'base-pack',
         id: 'gc2virh16d6s7ft76mskdrm9'
       },
@@ -956,7 +910,7 @@ export const basePack: CardPack = {
         id: 'wpmyufpew59gjjnm63kd3kkq'
       },
       {
-        text: 'Uma punheta fria de uma prostituta de Edmonton.',
+        text: 'Uma punheta fria de uma prostituta barata.',
         packId: 'base-pack',
         id: 'q0ti6hq2ce0wdk0og63qjl0l'
       },
@@ -966,17 +920,12 @@ export const basePack: CardPack = {
         id: 'jorwo35ggxjg553e5mm98q2s'
       },
       {
-        text: 'Um fuzil de assalto M16.',
-        packId: 'base-pack',
-        id: 'uib7z97czvua395eddw1sr07'
-      },
-      {
-        text: 'Um polvo dando sete punhetas e fumando um cigarro.',
+        text: 'Um polvo batendo sete punhetas e fumando um cigarro.',
         packId: 'base-pack',
         id: 'j1r0btk164gc9tdhb9zan44o'
       },
       {
-        text: 'Um complexo de Édipo.',
+        text: 'Alexandre o Grande.',
         packId: 'base-pack',
         id: 'loqw3s5a0hk9elovru6mcskn'
       },
@@ -986,7 +935,7 @@ export const basePack: CardPack = {
         id: 'npxdw7j9z6yg0pmkbg6eajtl'
       },
       {
-        text: 'Uma mulher mais velha que conhece bem o pênis.',
+        text: 'Uma coroa conhece beeeem o pênis.',
         packId: 'base-pack',
         id: 'o4uiegjvz4gyz7c2o92rz9z2'
       },
@@ -1011,14 +960,9 @@ export const basePack: CardPack = {
         id: 'anvs3iolrf5eegzwluvx75h7'
       },
       {
-        text: 'Um soco ascendente.',
+        text: 'Um gancho de direita.',
         packId: 'base-pack',
         id: 'bi6yy31q5fil82ql6wo3i0or'
-      },
-      {
-        text: 'Contas anais.',
-        packId: 'base-pack',
-        id: 'dhins4pkluccagm1pt6j532q'
       },
       {
         text: 'Anunciando que estou prestes a gozar.',
@@ -1031,12 +975,7 @@ export const basePack: CardPack = {
         id: 'aq643jpu8chiaxn38e7mlxvg'
       },
       {
-        text: 'Outro acidente surpreendente de Osprey.',
-        packId: 'base-pack',
-        id: 'dzo541nstl3s67ex3mjroufk'
-      },
-      {
-        text: 'Qualquer coisa que saia da boca do príncipe Philip.',
+        text: 'Qualquer coisa que saia da boca do príncipe Charles.',
         packId: 'base-pack',
         id: 'av1849qf03ue151cm93i93tj'
       },
@@ -1054,11 +993,6 @@ export const basePack: CardPack = {
         text: 'Asiáticos que não são bons em matemática.',
         packId: 'base-pack',
         id: 'yr7f6xnn84fng1ajm5yvv5s5'
-      },
-      {
-        text: 'Chapéus sem bunda.',
-        packId: 'base-pack',
-        id: 'ur5mekyedkwvf3jqcmh8t319'
       },
       { text: 'Atitude.', packId: 'base-pack', id: 'up710aie7cc3n57ih9ds7pzn' },
       {
@@ -1113,7 +1047,7 @@ export const basePack: CardPack = {
         id: 'n6zyv1j6qkjw2gqg9425zwg4'
       },
       {
-        text: 'Mal ganhando $25,000 por ano.',
+        text: 'Mal ganhando R$5,000 por ano.',
         packId: 'base-pack',
         id: 'qss2v3jt0g5x0gefdgbcdh2r'
       },
@@ -1134,7 +1068,7 @@ export const basePack: CardPack = {
         id: 'ckmi00hm8dx8nzy21ud7w2bp'
       },
       {
-        text: 'Tornar-se uma blueberry.',
+        text: 'Virar um morango.',
         packId: 'base-pack',
         id: 'ly1hh3g4ksbnjibqxsy3tgtl'
       },
@@ -1210,11 +1144,6 @@ export const basePack: CardPack = {
         id: 'k5dl9wz2sv5n1fali19dcwgg'
       },
       {
-        text: 'Ser marginalizado.',
-        packId: 'base-pack',
-        id: 'rv6i6ccr67fjgojzuf9mtw63'
-      },
-      {
         text: 'Estar pegando fogo.',
         packId: 'base-pack',
         id: 'tjqnzcczjo4onf1zojdghu30'
@@ -1230,7 +1159,7 @@ export const basePack: CardPack = {
         id: 'jozi08kwdhmildq8t9deh20p'
       },
       {
-        text: 'Paulo Muzzy.',
+        text: 'Paulo Muzy.',
         packId: 'base-pack',
         id: 'dfvasx566fl86vblotusbp2j'
       },
@@ -1245,12 +1174,12 @@ export const basePack: CardPack = {
         id: 'lkqw14e3rc0hv3sbjfm9wql0'
       },
       {
-        text: 'Atraque e purga.',
+        text: 'Vigiar e punir.',
         packId: 'base-pack',
         id: 'q1ylm48ean5m5wtc76uxujia'
       },
       {
-        text: 'Tartarugas ninja com hálito de ácido.',
+        text: 'Tartarugas Ninja com bafo de bosta.',
         packId: 'base-pack',
         id: 'oxplvb5cysxlhxwyyqznr3u4'
       },
@@ -1276,12 +1205,12 @@ export const basePack: CardPack = {
         id: 'k3d995npzv0aifxvzn5f6t4s'
       },
       {
-        text: 'Sangue, trabalho, lágrimas e suor.',
+        text: 'Sangue, suor e lágrimas.',
         packId: 'base-pack',
         id: 'vcu6u55k7699yptzr6skaw1c'
       },
       {
-        text: 'Chupar meu namorado tão forte que ele defeca.',
+        text: 'Chupar meu namorado tão forte que ele se peida.',
         packId: 'base-pack',
         id: 'koo9127mci4nqnjgqtnczgak'
       },
@@ -1290,12 +1219,7 @@ export const basePack: CardPack = {
         packId: 'base-pack',
         id: 'u9ol92jcpzmk890s97tpqn2v'
       },
-      {
-        text: 'Povo barco; metade barco, metade humano.',
-        packId: 'base-pack',
-        id: 'o9ify72svkivhyon4beytk95'
-      },
-      { text: 'Cacas.', packId: 'base-pack', id: 'udrewrg2p67gvcp026nbzg7z' },
+      { text: 'Cocô.', packId: 'base-pack', id: 'udrewrg2p67gvcp026nbzg7z' },
       {
         text: 'Bond, James Bond.',
         packId: 'base-pack',
@@ -1303,22 +1227,17 @@ export const basePack: CardPack = {
       },
       { text: 'Bono.', packId: 'base-pack', id: 'm1oubca0qkb8im5twp2l30t9' },
       {
-        text: 'Armar a casa para frustrar ladrões.',
-        packId: 'base-pack',
-        id: 'tc1hjrlr20mng3w6f6tgrw5x'
-      },
-      {
-        text: 'Muco nasal.',
+        text: 'Meleca de nariz.',
         packId: 'base-pack',
         id: 'j35nrwlz3ltao0as6xmcqiwx'
       },
       {
-        text: 'Agricultores de frango bósnios.',
+        text: 'Agricultores de frango da Bósnia.',
         packId: 'base-pack',
         id: 'hz3cf7d6682r83job5n5fhba'
       },
       {
-        text: 'Trançar os pentelhos do pênis.',
+        text: 'Trançar os pentelhos.',
         packId: 'base-pack',
         id: 'w32y0a0s7cg87xqlnnf0wmww'
       },
@@ -1349,58 +1268,28 @@ export const basePack: CardPack = {
         id: 'adqozbwrusg92mwyig0r64fg'
       },
       {
-        text: 'Garotos com bunda de bolha.',
-        packId: 'base-pack',
-        id: 'hmgpogfrrjc1z648clhtzqa1'
-      },
-      {
-        text: 'Vodka Natasha.',
-        packId: 'base-pack',
-        id: 'rctrzk74qbhbxffu0h95af29'
-      },
-      {
-        text: 'Bullshitting my ass off.',
+        text: 'Cagando e andando.',
         packId: 'base-pack',
         id: 'wk4r4aggrkmbyl647sep6sa4'
       },
       {
-        text: 'Incendiando a Casa Branca.',
+        text: 'Vandalizar a Praça dos 3 Poderes.',
         packId: 'base-pack',
         id: 'uitk40a84xr5n3vmimebei6f'
-      },
-      {
-        text: 'Comprando o copo certo para escovar os dentes de acordo com meu estilo de vida.',
-        packId: 'base-pack',
-        id: 'r0n5mfs97m4yms24ap7rvt06'
-      },
-      {
-        text: 'Canadá: O Chapéu da América.',
-        packId: 'base-pack',
-        id: 'csqvu2x1qhkgg7yrehh5fg5d'
       },
       {
         text: 'Netflix canadense.',
         packId: 'base-pack',
         id: 'dz7o4la2mduvkcuv19dvq4jp'
       },
-      {
-        text: 'Atum enlatado com golfinho extra.',
-        packId: 'base-pack',
-        id: 'tj1m455ox4ladpiq3g5d39mz'
-      },
-      {
-        text: 'Capturando Newt Gingrich e forçando-o a dançar de macacão.',
-        packId: 'base-pack',
-        id: 'brk8d7i3vypgwhu762dhc628'
-      },
       { text: 'Cardi B.', packId: 'base-pack', id: 'q1g3mg2bo2b9421fkionj5i4' },
       {
-        text: 'Cards Against Humanity.',
+        text: 'Cartas Contra a Humanidade.',
         packId: 'base-pack',
         id: 'ga4102b8vipifh5vabjyey88'
       },
       {
-        text: 'Kid Bengala cheio de dinheiro.',
+        text: 'O Kid Bengala pobre.',
         packId: 'base-pack',
         id: 'my2438oq2fjuwve6ulhc1sut'
       },
@@ -1431,11 +1320,6 @@ export const basePack: CardPack = {
         id: 'lcvroqt183jlj0qcwd259r3m'
       },
       {
-        text: 'Trapacear nas Olimpíadas Especiais.',
-        packId: 'base-pack',
-        id: 'hiud08pusohklr3hvhbjim4v'
-      },
-      {
         text: 'Sexo anal malicioso.',
         packId: 'base-pack',
         id: 'z009vdwc2o8l1rbiyt5vbkcg'
@@ -1456,7 +1340,7 @@ export const basePack: CardPack = {
         id: 'po2dsn5bgva0h3v4yrnwke3n'
       },
       {
-        text: 'Crianças com coleiras.',
+        text: 'Crianças na coleira.',
         packId: 'base-pack',
         id: 'sg6fryaxjbcqw6p70ptm981s'
       },
@@ -1466,34 +1350,14 @@ export const basePack: CardPack = {
         id: 'h8vz41z5i7p6csau1nl5ifg9'
       },
       {
-        text: 'Christopher Walken.',
-        packId: 'base-pack',
-        id: 'x1zr25k4jejarxqyq13m7eti'
-      },
-      {
-        text: 'Vomitar na bolsa de um canguru.',
-        packId: 'base-pack',
-        id: 'trks9fm07727osv352872dzt'
-      },
-      {
-        text: 'Pedaços de mochileiro morto.',
+        text: 'Um mochileiro esquartejado.',
         packId: 'base-pack',
         id: 'ezyve7sst34h1e9uhohnkud4'
-      },
-      {
-        text: 'Pedaços de carona morta.',
-        packId: 'base-pack',
-        id: 'a67jgwfjgr7ir6mq557mxk2r'
       },
       {
         text: 'Pedaços de prostituta morta.',
         packId: 'base-pack',
         id: 'iw6hm7eu5pbwaxar8pur6u29'
-      },
-      {
-        text: 'Chutzpah.',
-        packId: 'base-pack',
-        id: 'p3kmrcy39pye9znob8ex0yha'
       },
       {
         text: 'Baixas civis.',
@@ -1506,7 +1370,7 @@ export const basePack: CardPack = {
         id: 'byffqimy5u1ivd7mfd5tgx8m'
       },
       {
-        text: 'Corpo macio e merdoso do Lula.',
+        text: 'Corpo macio e sedoso do Lula.',
         packId: 'base-pack',
         id: 'rah63o05bsypdccd17sa4544'
       },
@@ -1521,12 +1385,7 @@ export const basePack: CardPack = {
         id: 'tq9ww1igk0e4e41lgziufjre'
       },
       {
-        text: 'Cocassauro rex: o dinossauro mais excitado de todos.',
-        packId: 'base-pack',
-        id: 'nfhvpnkpybo8wurmcsu2399h'
-      },
-      {
-        text: 'Brigas de galo.',
+        text: 'Rinha de galo.',
         packId: 'base-pack',
         id: 'i1b0ntbcdo89z353hsxe1phx'
       },
@@ -1556,39 +1415,34 @@ export const basePack: CardPack = {
         id: 'kb194z01ilzpzwy3cq871dq5'
       },
       {
+        text: 'Sexo não consensual.',
+        packId: 'base-pack',
+        id: 'kb194z01ilzpzwy3cq871dq5'
+      },
+      {
         text: 'Consultores.',
         packId: 'base-pack',
         id: 'wna4mmtuob5t5xua5ee2yiix'
       },
       {
-        text: 'Câncer facial contagioso.',
+        text: 'Câncer de pele contagioso.',
         packId: 'base-pack',
         id: 'mtsy96kf65qdd7r0bu98xlnq'
       },
       {
-        text: 'Se converter ao Islã.',
+        text: 'Virar muçulmano.',
         packId: 'base-pack',
         id: 'oviu237ayrfpsyy5k5t0fp06'
       },
       {
-        text: 'Cookie Monster devorando as hóstias da Eucaristia.',
-        packId: 'base-pack',
-        id: 'i411cjy99fcr007jug9eqztn'
-      },
-      {
-        text: 'Dar uma apalpada.',
+        text: 'Dar uma boa apalpada.',
         packId: 'base-pack',
         id: 'qgvhzpjk6fu6et7p2f8c0akj'
       },
       {
-        text: 'Banhos públicos.',
+        text: 'Banheiros públicos.',
         packId: 'base-pack',
         id: 'rh34tz267l48613188ejs4lv'
-      },
-      {
-        text: 'Conde Chocula.',
-        packId: 'base-pack',
-        id: 'uqsay427hz3og9wj8ob5waqr'
       },
       {
         text: 'Reabilitação ordenada pelo tribunal.',
@@ -1596,16 +1450,15 @@ export const basePack: CardPack = {
         id: 'v42uy14tb3ol8ico0f69l9e5'
       },
       {
-        text: 'Cobrir-me com queijo parmesão e pimenta vermelha porque sou uma pizza.',
+        text: 'Cobrir-me com queijo mussarela e calabresa porque sou uma pizza.',
         packId: 'base-pack',
         id: 'qy49ec1fcql8yn9vdf02dscc'
       },
       {
-        text: 'Sexo com primos gostosos.',
+        text: 'Sexo gostosos com primos.',
         packId: 'base-pack',
         id: 's3wqtqvbhqikwpxjz9wxigex'
       },
-      { text: 'Creed.', packId: 'base-pack', id: 'vvde7xz0djxa53hnyo0fe287' },
       {
         text: 'Dívida esmagadora.',
         packId: 'base-pack',
@@ -1632,7 +1485,7 @@ export const basePack: CardPack = {
         id: 'auwxvhv5nh21ri4a10htx7ep'
       },
       {
-        text: 'Cuddling.',
+        text: 'Carinho.',
         packId: 'base-pack',
         id: 'v7ueaixu791buil1k31zmvos'
       },
@@ -1652,21 +1505,6 @@ export const basePack: CardPack = {
         id: 'myiu84fsj8bywobgchvvf7bf'
       },
       {
-        text: 'Bolas engraçadas do papai.',
-        packId: 'base-pack',
-        id: 'g8e55re2vepfla555zfulhww'
-      },
-      {
-        text: 'Molho marrom do papai.',
-        packId: 'base-pack',
-        id: 'fy2f7c94e8ajvz0kloiwrxre'
-      },
-      {
-        text: 'Papas do Daddies®.',
-        packId: 'base-pack',
-        id: 'h4e9rcia1a1kie2wup9fgw91'
-      },
-      {
         text: 'Questões com o papai.',
         packId: 'base-pack',
         id: 'dwmbz1l60uhsz5s3c4v1ifhs'
@@ -1677,19 +1515,9 @@ export const basePack: CardPack = {
         id: 'e5hw61tnipnej1ru15urio8a'
       },
       {
-        text: 'Delicioso ânus de Daniel Radcliffe.',
+        text: 'A bundinha do Robert Pattinson.',
         packId: 'base-pack',
         id: 'xaheo89k0jjhguvzf66q0aay'
-      },
-      {
-        text: 'Delicioso cu de Daniel Radcliffe.',
-        packId: 'base-pack',
-        id: 'ls3bswa0t7m24lrvirfozkdr'
-      },
-      {
-        text: 'Danny DeVito.',
-        packId: 'base-pack',
-        id: 'e7cnnn4ziuu35rltfyphco9a'
       },
       {
         text: 'Forças escuras e misteriosas além de nosso controle.',
@@ -1703,19 +1531,9 @@ export const basePack: CardPack = {
       },
       { text: 'Estupro.', packId: 'base-pack', id: 'chk20a8hcxtdxsnudcucvae2' },
       {
-        text: 'Banda Dave Matthews.',
+        text: 'Monark defendendo Nazismo.',
         packId: 'base-pack',
         id: 'ncqzg8iqqpjl49hkffg3vx4g'
-      },
-      {
-        text: 'David Bowie voando em um tigre feito de relâmpagos.',
-        packId: 'base-pack',
-        id: 'fdgy16vaqckie8yxfkcmu6yc'
-      },
-      {
-        text: 'David Cameron.',
-        packId: 'base-pack',
-        id: 'rj4slrrdcueie0lg1gp9rdjv'
       },
       {
         text: 'Bebês mortos.',
@@ -1733,7 +1551,7 @@ export const basePack: CardPack = {
         id: 'i0y2621cetn6qwsd5otp2q8l'
       },
       {
-        text: 'Desflorar a princesa.',
+        text: 'Deflorar a princesa.',
         packId: 'base-pack',
         id: 'qfjrxsy4ow7rko47pait7xgf'
       },
@@ -1751,11 +1569,6 @@ export const basePack: CardPack = {
         text: 'Destruir as evidências.',
         packId: 'base-pack',
         id: 'xsoy7kiff6w39kaogd2ebwtz'
-      },
-      {
-        text: 'Dick Cheney.',
-        packId: 'base-pack',
-        id: 'llk7ickhlt9osluh625a4nly'
       },
       {
         text: 'Dedos de pau.',
@@ -1778,30 +1591,19 @@ export const basePack: CardPack = {
         id: 'yc8xdl9m29qwxtv22qzzpzf0'
       },
       {
-        text: 'Disco Inferno.',
-        packId: 'base-pack',
-        id: 'h4cg4tkwhtkjl5agd5k3u3ux'
-      },
-      {
-        text: 'Diversity.',
+        text: 'Diversidade.',
         packId: 'base-pack',
         id: 'tdlncx0h7ld57t3a4leezapf'
       },
-      { text: 'Dogging.', packId: 'base-pack', id: 'jhlmjlyxaq1uld5054wjto5c' },
+      {
+        text: 'Fingir de cachorrinho.',
+        packId: 'base-pack',
+        id: 'jhlmjlyxaq1uld5054wjto5c'
+      },
       {
         text: 'Fazendo sexo anal.',
         packId: 'base-pack',
         id: 'z7ok858l4bfq3ywn48pgk1py'
-      },
-      {
-        text: 'Fazendo sexo anal.',
-        packId: 'base-pack',
-        id: 'zfvpr22h2z8kod2ij9fphi8d'
-      },
-      {
-        text: 'Fazendo cocô no olho do Pudsey Bear.',
-        packId: 'base-pack',
-        id: 'r494hqb5fxngozszsgjct8t0'
       },
       {
         text: 'Cometendo crimes.',
@@ -1809,24 +1611,9 @@ export const basePack: CardPack = {
         id: 'd8phljclo8c5ulghlup8odao'
       },
       {
-        text: 'Fazendo sexo anal.',
-        packId: 'base-pack',
-        id: 'pmkgz1tp69o8yj9m49c00jt0'
-      },
-      {
         text: 'Fazendo a coisa certa.',
         packId: 'base-pack',
         id: 'ed3mc60w4p2hphrnd120plj8'
-      },
-      {
-        text: "Pizza de Sobremesa Oreo™ da Domino's™.",
-        packId: 'base-pack',
-        id: 'griuzjpjksphjb7gtp1ku9rv'
-      },
-      {
-        text: 'Guarda-roupa de Don Cherry.',
-        packId: 'base-pack',
-        id: 'ck7eujoo4pidxwt4osoye7sg'
       },
       {
         text: 'Donald J. Trump.',
@@ -1864,11 +1651,6 @@ export const basePack: CardPack = {
         id: 'luv1ik17uwq60b6pfj94x2ze'
       },
       {
-        text: 'Bebendo água do vaso sanitário e comendo lixo.',
-        packId: 'base-pack',
-        id: 'rt5eqo3yarjty36yhzisxldc'
-      },
-      {
         text: 'Deixando um bebê cair na privada.',
         packId: 'base-pack',
         id: 'eczmcu5a6vxekohsxlw7j9t0'
@@ -1883,7 +1665,9 @@ export const basePack: CardPack = {
         packId: 'base-pack',
         id: 'aruq0snrzmtsbktdw7lhxupj'
       },
-      { text: 'Druidas.', packId: 'base-pack', id: 'hxoog873k2r4qmweth0nts5h' },
+      { text: 'Incas.', packId: 'base-pack', id: 'hxoog873k2r4qmweth0nts5h' },
+      { text: 'Maias.', packId: 'base-pack', id: 'hxoog873k2r4qmweth0nts5h' },
+      { text: 'Astecas.', packId: 'base-pack', id: 'hxoog873k2r4qmweth0nts5h' },
       {
         text: 'Círculos de tambores.',
         packId: 'base-pack',
@@ -1905,7 +1689,7 @@ export const basePack: CardPack = {
         id: 'c425rjx54vxri93q25t5n07x'
       },
       {
-        text: 'Morrendo, mas miraculosamente voltando à vida.',
+        text: 'Morrendo, mas ressucitando.',
         packId: 'base-pack',
         id: 'v04da03w9qpthrivgcso79y1'
       },
@@ -1916,19 +1700,9 @@ export const basePack: CardPack = {
       },
       { text: 'Morrer.', packId: 'base-pack', id: 'k78lb7ff9ktg146po0clewr4' },
       {
-        text: 'Música Turbo-Folk do Leste Europeu.',
+        text: 'Um funkão nervoso.',
         packId: 'base-pack',
         id: 'scanb8it0g4jh1dgyajh6bk8'
-      },
-      {
-        text: 'Comer um ovo cozido do ânus do meu marido.',
-        packId: 'base-pack',
-        id: 'h1j2j3wa06g5362xgas0uilx'
-      },
-      {
-        text: 'Comer um ovo cozido do ânus do meu marido.',
-        packId: 'base-pack',
-        id: 'gbdnebo72wj4c9qv5inq63m6'
       },
       {
         text: 'Comer todos os biscoitos antes da venda beneficente contra a AIDS.',
@@ -1946,16 +1720,11 @@ export const basePack: CardPack = {
         id: 'gjunjvdieewx047oeq3f2cfw'
       },
       {
-        text: 'Comer demais de uma lâmpada.',
+        text: 'Comer demais.',
         packId: 'base-pack',
         id: 'azz96j829r2csodpxkzchfsm'
       },
       { text: 'Êxtase.', packId: 'base-pack', id: 'reb5ozacxa13ozb9u4gfn85q' },
-      {
-        text: 'Ed Balls.',
-        packId: 'base-pack',
-        id: 'dkkjxf3ajyco2fjjnqydyy18'
-      },
       {
         text: 'Cuecas comestíveis.',
         packId: 'base-pack',
@@ -1992,7 +1761,7 @@ export const basePack: CardPack = {
         id: 'dspyvd3914wokqh1npcjtbbx'
       },
       {
-        text: 'Emma Watson.',
+        text: 'Tatá Werneck.',
         packId: 'base-pack',
         id: 'hgjlf4mhb8y5wg6txt6nn8xq'
       },
@@ -2024,7 +1793,7 @@ export const basePack: CardPack = {
       },
       { text: 'Eugenia.', packId: 'base-pack', id: 'qvx6f92wwl02htgmxgam1n3h' },
       {
-        text: 'Euforia™ da Calvin Klein.',
+        text: 'Malbec™ da oBoticário.',
         packId: 'base-pack',
         id: 'gbtl0lsncnsye7smixurjyfs'
       },
@@ -2079,22 +1848,12 @@ export const basePack: CardPack = {
         id: 'pmx1ptzqj9v3srg4biby1nw3'
       },
       {
-        text: 'Calças extremamente apertadas.',
-        packId: 'base-pack',
-        id: 'mbpbsh6fmgmvyqtk1owivqy3'
-      },
-      {
-        text: 'Calças extremamente apertadas.',
-        packId: 'base-pack',
-        id: 'suwfyszdmh2vm4hrd3xoxpc8'
-      },
-      {
         text: 'Facebook.',
         packId: 'base-pack',
         id: 'cmq5mdivdqb8f7aufhmq5n9y'
       },
       {
-        text: 'Desvanecendo-se no nada.',
+        text: 'Sumir no nada.',
         packId: 'base-pack',
         id: 'khd8cq65eq9drwa047zwbutb'
       },
@@ -2113,36 +1872,16 @@ export const basePack: CardPack = {
         packId: 'base-pack',
         id: 'ebm48gjoq0zgcdek0800et1q'
       },
-      {
-        text: 'FALCON PUNCH!!!',
-        packId: 'base-pack',
-        id: 'yq69e6zbgnequ16vhun17ukg'
-      },
       { text: 'Fome.', packId: 'base-pack', id: 'uywprrlek4i7hoep8r4qtlp4' },
-      {
-        text: 'Fancy Feast®.',
-        packId: 'base-pack',
-        id: 'gmexcyv7cl1pkjie3zvvicx1'
-      },
       {
         text: 'Peidar e sair andando.',
         packId: 'base-pack',
         id: 'msfigxfmrifnpqs7cfbq9qtm'
       },
       {
-        text: 'Peidar embaixo da saia e soprar para o Lord Gregory.',
-        packId: 'base-pack',
-        id: 'hvmr4rxrhi9q3uka9ew6hyix'
-      },
-      {
-        text: 'O medo em si.',
+        text: 'O medo de si.',
         packId: 'base-pack',
         id: 'dfh634wqm9gg9a7x4huh6gvv'
-      },
-      {
-        text: "Alimentando Rosie O'Donnell.",
-        packId: 'base-pack',
-        id: 'eq8ftiqm3er60kr75yhkabj1'
       },
       {
         text: 'Comunhão em Cristo.',
@@ -2155,16 +1894,6 @@ export const basePack: CardPack = {
         id: 'bow5d3cxz8wxcvu91z20ekmq'
       },
       {
-        text: 'Fezes em chamas.',
-        packId: 'base-pack',
-        id: 'eg2u0izb3imqeyg72j5uas60'
-      },
-      {
-        text: 'Pudim de figo.',
-        packId: 'base-pack',
-        id: 'z8juadjb7hr23tzxad3q4nwi'
-      },
-      {
         text: 'Enchendo minha maleta com coisas de trabalho.',
         packId: 'base-pack',
         id: 'k6l180yzw1dt5q63fhf6wz6t'
@@ -2175,7 +1904,7 @@ export const basePack: CardPack = {
         id: 'pr3hn1em96iuinkag6brj79y'
       },
       {
-        text: 'Enchendo Sean Hannity com hélio e assistindo ele flutuar para longe.',
+        text: 'Enchendo a Taís Carla com hélio e assistindo ela flutuar para longe.',
         packId: 'base-pack',
         id: 'gwoukre5iuzu6l0be5eahcku'
       },
@@ -2196,22 +1925,17 @@ export const basePack: CardPack = {
         id: 'uv5p4sbz2bc1s6aggb2q332o'
       },
       {
-        text: 'Cinco litros de Special Brew.',
+        text: 'Cinco litros do drink da casa.',
         packId: 'base-pack',
         id: 't215hw4m9gj555pq5wqycfyp'
       },
       {
-        text: 'Subs de cinco dólares.',
+        text: 'Putas de cinco reais.',
         packId: 'base-pack',
         id: 'ag1tiz5s95uukeddcro7nhgz'
       },
       {
-        text: 'Inundação repentina.',
-        packId: 'base-pack',
-        id: 'dlby38kdn8ihiyonuthx6gtf'
-      },
-      {
-        text: 'Preservativos com sabor.',
+        text: 'Camisinhas com sabor.',
         packId: 'base-pack',
         id: 'z9v6sd6t3ed5s076ctqtz96c'
       },
@@ -2240,11 +1964,6 @@ export const basePack: CardPack = {
         packId: 'base-pack',
         id: 'kya3a3udbktzq9l8vjdt3g8r'
       },
-      {
-        text: 'Esterilização forçada.',
-        packId: 'base-pack',
-        id: 'al0yrl6aku4pqkzejoqi56li'
-      },
       { text: 'Fimose.', packId: 'base-pack', id: 'vvewdd0lgxtfina935xbhr08' },
       {
         text: 'Esquecer o Alamo.',
@@ -2257,12 +1976,7 @@ export const basePack: CardPack = {
         id: 'jpznu2czcdea9gapmrawhasq'
       },
       {
-        text: 'Four Loko.',
-        packId: 'base-pack',
-        id: 'ml5mwcxysgexp3blz8uf1f32'
-      },
-      {
-        text: 'Fox News.',
+        text: 'Globo News.',
         packId: 'base-pack',
         id: 'nnxidyi2e2d4ltve5pb78n1f'
       },
@@ -2286,11 +2000,6 @@ export const basePack: CardPack = {
         text: 'Amigos que comem todos os lanches.',
         packId: 'base-pack',
         id: 'nck5vszwvm6nlcioicxl5aad'
-      },
-      {
-        text: 'Amigos que comem todos os seus lanches.',
-        packId: 'base-pack',
-        id: 'li6yiabpj7q24yeauwvebwo3'
       },
       {
         text: 'Amizades com benefícios.',
@@ -2330,27 +2039,17 @@ export const basePack: CardPack = {
       { text: 'Gandalf.', packId: 'base-pack', id: 'pknlyl1nau55b4gfc6yi8t3y' },
       { text: 'Gandhi.', packId: 'base-pack', id: 'veyu1qa7hv1uc7rhnsa9z1xd' },
       {
-        text: 'Garth Brooks.',
-        packId: 'base-pack',
-        id: 's6byaopo98cw0nhh4wv762z3'
-      },
-      {
-        text: 'Gary Coleman.',
-        packId: 'base-pack',
-        id: 'wzva9133h6zz1sdqo12uj3k2'
-      },
-      {
-        text: 'Gary Glitter.',
-        packId: 'base-pack',
-        id: 'miab9jxzci4dfbq645eb2xdm'
-      },
-      {
         text: 'Animais gays.',
         packId: 'base-pack',
         id: 'pv30ty3z8y3slmi2636mm715'
       },
       {
         text: 'Terapia de conversão gay.',
+        packId: 'base-pack',
+        id: 'mdg1j09364q5xjsq7wlg5mso'
+      },
+      {
+        text: 'Cura gay.',
         packId: 'base-pack',
         id: 'mdg1j09364q5xjsq7wlg5mso'
       },
@@ -2371,11 +2070,6 @@ export const basePack: CardPack = {
         id: 'c574112cmyky2lbycpyqgdxh'
       },
       {
-        text: 'Relish de Cavalheiros®.',
-        packId: 'base-pack',
-        id: 'srgs1mch0uwf5a3cmmusft0l'
-      },
-      {
         text: 'Conexão humana genuína.',
         packId: 'base-pack',
         id: 'zqbvdjqebqyecr91lr4k2e66'
@@ -2386,22 +2080,22 @@ export const basePack: CardPack = {
         id: 'xfxy8xcxl7lg6ag2dfh4sho0'
       },
       {
-        text: 'Pornô alemão de masmorra.',
+        text: 'BDSM alemão.',
         packId: 'base-pack',
         id: 'q231pkfq6przh9hejpdvp0ws'
       },
       {
-        text: 'Alemães em férias.',
+        text: 'Alemães de férias.',
         packId: 'base-pack',
         id: 'rub7lgsvm9xrion7kcr0gmm7'
       },
       {
-        text: 'Receber uma multa dirigindo um Zamboni.',
+        text: 'Receber uma multa dirigindo um Tobatta.',
         packId: 'base-pack',
         id: 'np8geadifdtpzrbn52bmkgil'
       },
       {
-        text: 'Ser esmagado por uma máquina de venda automática.',
+        text: 'Ser esmagado por uma máquina de venda.',
         packId: 'base-pack',
         id: 'srwkm5p7qhca1w75hjhks7wu'
       },
@@ -2411,7 +2105,7 @@ export const basePack: CardPack = {
         id: 'p6i7dm8fy8s89dsxbneqidti'
       },
       {
-        text: 'Tirar drogas das ruas e colocá-las em meu corpo.',
+        text: 'Tirar drogas das ruas e usá-las.',
         packId: 'base-pack',
         id: 'eat3zo0huqgwgtl0ij50a782'
       },
@@ -2436,7 +2130,7 @@ export const basePack: CardPack = {
         id: 'u5zrdxya6mbrz6q9p3ktv7w4'
       },
       {
-        text: 'Casar, ter alguns filhos, comprar algumas coisas, se aposentar em Queensland e morrer.',
+        text: 'Casar, ter alguns filhos, comprar algumas coisas, se aposentar nas Maldivas e morrer.',
         packId: 'base-pack',
         id: 'svbn92dxa2ci3268809n0mkv'
       },
@@ -2446,7 +2140,7 @@ export const basePack: CardPack = {
         id: 'pdk6g6kkpbvoahv8xunz7wdd'
       },
       {
-        text: 'Ficar nu(a) e assistir CBeebies.',
+        text: 'Ficar nu(a) e assistir Cartoon Network.',
         packId: 'base-pack',
         id: 'xxvdrm0eb5w1j0oh9kqqbjbb'
       },
@@ -2456,7 +2150,7 @@ export const basePack: CardPack = {
         id: 'xjljb136t6ipkdat2a72ufta'
       },
       {
-        text: 'Ficar nu(a) e assistir Play School.',
+        text: 'Ficar nu(a) e assistir TV Globinho.',
         packId: 'base-pack',
         id: 'gxy4t24x6tg44jte0bbnun4z'
       },
@@ -2475,16 +2169,7 @@ export const basePack: CardPack = {
         packId: 'base-pack',
         id: 'szhtlx9fsp56nzqf32hu1ipz'
       },
-      {
-        text: 'Ficar tão bravo(a) que fica excitado(a).',
-        packId: 'base-pack',
-        id: 'ckf5ptc4ys8wtpty5xclwbat'
-      },
-      {
-        text: 'Casar, ter alguns filhos, tirar algumas fotos, se aposentar no sul da França e morrer.',
-        packId: 'base-pack',
-        id: 'cdbkmnrvf2k3nwu8yp0idn59'
-      },
+      // TODO: stopped here
       {
         text: 'Fantasmas.',
         packId: 'base-pack',

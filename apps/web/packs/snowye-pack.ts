@@ -2545,7 +2545,7 @@ const snowyePack: CardPack = {
       {
         text: 'Casar, foder, matar. (3)',
         packId: 'snowye-base',
-        pick: 0
+        pick: 3
       },
       {
         text: '',
