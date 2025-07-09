@@ -1,6 +1,7 @@
+import { env } from '@/env.mjs';
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: env.NEXT_PUBLIC_BACKEND_URL,
   withCredentials: true
 });
