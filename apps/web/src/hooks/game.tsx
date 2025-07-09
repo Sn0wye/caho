@@ -2,7 +2,13 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { PlayerEvent, RoomEvent } from '@caho/contracts';
-import type { BlackCard, Player, Room, WhiteCard } from '@caho/schemas';
+import type {
+  BlackCard,
+  Player,
+  Room,
+  RoundPlayedCard,
+  WhiteCard
+} from '@caho/schemas';
 import { env } from '@/env.mjs';
 
 const PING_INTERVAL_IN_SECONDS = 30 * 1000;
@@ -16,6 +22,7 @@ type GameContextType = {
   handlePickWhiteCard: (card: WhiteCard) => void;
   handleUnpickWhiteCard: (card: WhiteCard) => void;
   isWhiteCardPickingDisabled: boolean;
+  roundPlayedCards: RoundPlayedCard[];
   players: Player[];
 };
 
@@ -51,6 +58,10 @@ export const GameContextProvider = ({
     initialWhiteCards ?? []
   );
   const [selectedWhiteCards, setSelectedWhiteCards] = useState<WhiteCard[]>([]);
+  const [roundPlayedCards, setRoundPlayedCards] = useState<RoundPlayedCard[]>(
+    []
+  );
+  const [roundWinner, setRoundWinner] = useState<RoundPlayedCard | null>(null);
 
   const cardsToPickAmount = currentBlackCard?.pick ?? 0;
   const isWhiteCardPickingDisabled =
@@ -131,8 +142,13 @@ export const GameContextProvider = ({
 
           break;
         }
-        case 'room.black-card-drawn': {
-          setCurrentBlackCard(data.payload);
+        case 'room.round-start': {
+          setCurrentBlackCard(data.payload.blackCard);
+          setRoom(prevRoom => ({
+            ...prevRoom,
+            round: data.payload.roundNumber
+          }));
+          setSelectedWhiteCards([]);
           break;
         }
         case 'player.cards-drawn': {
@@ -144,13 +160,20 @@ export const GameContextProvider = ({
           });
           break;
         }
-        default: {
+        case 'room.time-to-judge': {
+          setRoundPlayedCards(data.payload.roundPlayedCards);
+          break;
+        }
+        case 'room.round-end': {
+          setRoundWinner(data.payload);
+          break;
+        }
+        default:
           console.log('[WS]: Unhandled event:', {
             event: data.event,
             payload: data.payload
           });
           break;
-        }
       }
       console.log('[WS]: Message received:', data);
     };
@@ -201,6 +224,7 @@ export const GameContextProvider = ({
         handleUnpickWhiteCard,
         isWhiteCardPickingDisabled,
         selectedWhiteCards,
+        roundPlayedCards,
         players
       }}
     >
