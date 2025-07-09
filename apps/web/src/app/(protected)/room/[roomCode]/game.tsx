@@ -7,9 +7,6 @@ import { useGame } from '@/hooks/game';
 
 export const Game = () => {
   const { room } = useGame();
-
-  // TODO: framer motion transitions/animations
-
   return (
     <div className="flex h-screen w-full flex-col items-center justify-between">
       <GameNavbar roomCode={room.code} roomStatus={room.status} />

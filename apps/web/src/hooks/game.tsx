@@ -9,6 +9,7 @@ import type {
   RoundPlayedCard,
   WhiteCard
 } from '@caho/schemas';
+import { api } from '@/utils/api';
 import { env } from '@/env.mjs';
 
 const PING_INTERVAL_IN_SECONDS = 30 * 1000;
@@ -21,6 +22,7 @@ type GameContextType = {
   selectedWhiteCards: WhiteCard[];
   handlePickWhiteCard: (card: WhiteCard) => void;
   handleUnpickWhiteCard: (card: WhiteCard) => void;
+  handlePlayCard: () => Promise<void>;
   isWhiteCardPickingDisabled: boolean;
   roundPlayedCards: RoundPlayedCard[];
   players: Player[];
@@ -97,6 +99,28 @@ export const GameContextProvider = ({
     setCurrentWhiteCards(prev => {
       return [...prev, card];
     });
+  };
+
+  const handlePlayCard = async () => {
+    const cardIds = selectedWhiteCards.map(card => card.id);
+
+    if (cardIds.length !== cardsToPickAmount) {
+      return;
+    }
+
+    try {
+      const response = await api.post(
+        `/rooms/${room.code}/play-cards`,
+        cardIds
+      );
+
+      if (response.status !== 204) {
+        throw new Error('Failed to play cards');
+      }
+    } catch (error) {
+      console.error('Error playing cards:', error);
+      return;
+    }
   };
 
   useEffect(() => {
@@ -223,6 +247,7 @@ export const GameContextProvider = ({
         handlePickWhiteCard,
         handleUnpickWhiteCard,
         isWhiteCardPickingDisabled,
+        handlePlayCard,
         selectedWhiteCards,
         roundPlayedCards,
         players

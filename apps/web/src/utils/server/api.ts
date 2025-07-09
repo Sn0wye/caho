@@ -1,9 +1,10 @@
-import 'server-only';
 import { cookies } from 'next/headers';
 import axios from 'axios';
+import { env } from '@/env.mjs';
+import 'server-only';
 
 export const api = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: env.NEXT_PUBLIC_BACKEND_URL,
   withCredentials: true
 });
 

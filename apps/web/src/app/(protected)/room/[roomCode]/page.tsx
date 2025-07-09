@@ -24,7 +24,6 @@ const getRoom = async (roomCode: string) => {
 
 const getRoomPlayers = async (roomCode: string) => {
   const { data } = await api.get<Player[]>(`/rooms/${roomCode}/players`);
-
   return data;
 };
 
@@ -41,7 +40,8 @@ const getCurrentBlackCard = async (roomCode: string) => {
 };
 
 export default async function GamePage({ params }: GamePageProps) {
-  const room = await getRoom(params.roomCode);
+  const roomCode = params.roomCode.toUpperCase();
+  const room = await getRoom(roomCode);
 
   if (!room) {
     redirect('/dashboard');
@@ -53,7 +53,7 @@ export default async function GamePage({ params }: GamePageProps) {
     redirect('/login');
   }
 
-  const roomPlayers = await getRoomPlayers(params.roomCode);
+  const roomPlayers = await getRoomPlayers(roomCode);
   const currentPlayer = roomPlayers.find(player => player.id === user.id);
 
   if (!currentPlayer) {
@@ -68,8 +68,8 @@ export default async function GamePage({ params }: GamePageProps) {
     redirect('/dashboard');
   }
 
-  const currentWhiteCards = await getCurrentWhiteCards(params.roomCode);
-  const currentBlackCard = await getCurrentBlackCard(params.roomCode);
+  const currentWhiteCards = await getCurrentWhiteCards(roomCode);
+  const currentBlackCard = await getCurrentBlackCard(roomCode);
 
   return (
     <GameContextProvider

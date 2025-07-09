@@ -20,6 +20,7 @@ const joinRoom = async (
 ): Promise<JoinRoomResponse> => {
   try {
     const { data } = await api.post<JoinRoomResponse>('/rooms/join', payload);
+
     return data;
   } catch (error) {
     throw error.response.data as ErrorSchema;

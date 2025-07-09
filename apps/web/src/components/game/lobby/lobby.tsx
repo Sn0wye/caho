@@ -10,12 +10,24 @@ const isReadyMutation = async (code: string) => {
   await api.post(`/rooms/${code}/ready`);
 };
 
+const startGameMutation = async (code: string) => {
+  await api.post(`/rooms/start`, { roomCode: code });
+};
+
 export function Lobby() {
   const { currentPlayer, players, room } = useGame();
-  const { mutate } = useMutation(isReadyMutation);
+  const { mutate: readyMutate } = useMutation(isReadyMutation);
+  const { mutate: startGameMutate } = useMutation(startGameMutation);
+
+  const isEveryoneReady = players.every(player => player.isReady);
+  const isPlayerRoomHost = currentPlayer.isHost;
 
   function handleToggleReady() {
-    mutate(room.code);
+    readyMutate(room.code);
+  }
+
+  function handleStartGame() {
+    startGameMutate(room.code);
   }
 
   return (
@@ -48,7 +60,17 @@ export function Lobby() {
           ))}
         </div>
         {/* TODO: Callback state. */}
-        <Button onClick={handleToggleReady} size="lg">
+        {isEveryoneReady && isPlayerRoomHost && (
+          <Button onClick={handleStartGame} size="lg" className="mt-4">
+            Começar jogo para todos!
+          </Button>
+        )}
+
+        <Button
+          onClick={handleToggleReady}
+          size="lg"
+          variant={currentPlayer.isReady ? 'ghost' : 'default'}
+        >
           {currentPlayer.isReady ? 'Calma aí' : 'Estou pronto'}
         </Button>
 

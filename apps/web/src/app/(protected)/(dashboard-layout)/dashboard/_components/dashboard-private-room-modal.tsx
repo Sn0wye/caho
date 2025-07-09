@@ -29,14 +29,17 @@ import { toast } from '@/components/ui/use-toast';
 import { api } from '@/utils/api';
 import '@caho/contracts';
 import { useRouter } from 'next/navigation';
-import type { JoinRoomRequest, JoinRoomResponse } from '@caho/contracts';
+import {
+  joinRoomRequest,
+  JoinRoomRequest,
+  JoinRoomResponse
+} from '@caho/contracts';
 import type { ErrorSchema } from '@caho/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
 import { Lock } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 import { DashboardOptionCard } from './dashboard-option-card';
 
 export const joinRoom = async (
@@ -50,23 +53,11 @@ export const joinRoom = async (
   }
 };
 
-const formSchema = z.object({
-  roomCode: z
-    .string()
-    .min(6, {
-      message: 'O código da sala deve ter 6 dígitos.'
-    })
-    .transform(value => value.toUpperCase()),
-  password: z.string().min(1, {
-    message: 'A senha da sala é obrigatória.'
-  })
-});
-
 export function DashboardPrivateRoomModal() {
   const { push } = useRouter();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<JoinRoomRequest>({
+    resolver: zodResolver(joinRoomRequest),
     defaultValues: {
       roomCode: '',
       password: ''
@@ -81,10 +72,10 @@ export function DashboardPrivateRoomModal() {
     mutationKey: ['join-room']
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: JoinRoomRequest) {
     mutate(values, {
       onSuccess: data => {
-        push(`/room/${data.code.toUpperCase()}`);
+        push(`/room/${data.code}`);
       },
       onError: error => {
         toast({
@@ -186,7 +177,11 @@ export function DashboardPrivateRoomModal() {
                     </FormLabel>
 
                     <FormControl>
-                      <Input placeholder="********" {...field} />
+                      <Input
+                        placeholder="********"
+                        {...field}
+                        value={field.value ?? ''}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
