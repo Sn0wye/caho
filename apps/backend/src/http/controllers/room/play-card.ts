@@ -56,9 +56,13 @@ export const playCardsController = async (app: App) => {
         payload: cardsDrawn
       });
 
-      // TODO: if all the players are ready, start the judge phase
-      const roomPlayers = await roomService.getRoomPlayers(roomCode);
-      const allPlayersReady = roomPlayers.every(player => player.isReady);
+      const roomPlayersWithoutJudge = await roomService
+        .getRoomPlayers(roomCode)
+        .then(p => p.filter(player => !player.isJudge));
+
+      const allPlayersReady = roomPlayersWithoutJudge.every(
+        player => player.isReady
+      );
 
       if (allPlayersReady) {
         const roundNumber = await roomService.getRoundNumber(roomCode);
