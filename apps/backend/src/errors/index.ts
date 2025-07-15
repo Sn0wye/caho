@@ -7,6 +7,7 @@ export class ApplicationError extends Error {
 }
 
 export class BadRequestError extends ApplicationError {}
+export class ForbiddenError extends ApplicationError {}
 
 export class UnauthorizedError extends ApplicationError {
   constructor(message?: string) {
