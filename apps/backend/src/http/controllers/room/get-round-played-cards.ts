@@ -4,7 +4,7 @@ import { ensureAuth } from '@/plugins/ensure-auth';
 import { RoomServiceFactory } from '@/services/room/RoomServiceFactory';
 import { z } from 'zod';
 
-export const getRoomController = async (app: App) => {
+export const getRoundPlayedCardsController = async (app: App) => {
   const roomService = RoomServiceFactory();
 
   app.register(ensureAuth).get(
