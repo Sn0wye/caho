@@ -35,12 +35,6 @@ importers:
 
   apps/backend:
     dependencies:
-      '@caho/contracts':
-        specifier: workspace:*
-        version: link:../../packages/contracts
-      '@caho/schemas':
-        specifier: workspace:*
-        version: link:../../packages/schemas
       '@faker-js/faker':
         specifier: ^8.4.0
         version: 8.4.0
