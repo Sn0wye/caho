@@ -1,6 +1,0 @@
-packages:
-  - apps/web
-  - apps/backend
-  - packages/contracts
-  - packages/schemas
-  - packages/tsconfig
