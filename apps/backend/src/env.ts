@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const env = createEnv({
   server: {
-    PORT: z.coerce.number().default(8080),
+    PORT: z.coerce.number().default(8081),
     NODE_ENV: z.enum(['production', 'development', 'test']),
     COOKIE_SECRET: z.string().min(1),
     PASSWORD_SECRET: z.string().min(1),

@@ -34,7 +34,7 @@ RUN pnpm run build --filter=@caho/backend
 # Stage 3: Production stage
 FROM base AS runner
 WORKDIR /app
-EXPOSE 8080
+EXPOSE 8081
 CMD ["sh", "-c", "cd apps/backend && pnpm run start"]
 
 COPY --from=installer /app ./

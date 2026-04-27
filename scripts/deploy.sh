@@ -16,7 +16,7 @@ if docker ps | grep -q "caho-api-v1"; then
   old_container="caho-api-v1"
   new_container="caho-api-v2"
 else
-  new_port=8080
+  new_port=8081
   old_container="caho-api-v2"
   new_container="caho-api-v1"
 fi
@@ -29,7 +29,7 @@ echo "New port: $new_port"
 echo "Running new container: $new_container"
 docker run -d --name $new_container \
   --env-file ~/caho.env \
-  -p $new_port:8080 $IMAGE_REFERENCE
+  -p $new_port:8081 $IMAGE_REFERENCE
 
 # Wait for the new container to start up
 echo "Waiting for the new container to start up..."

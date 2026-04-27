@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -15,13 +15,13 @@
       const roomId = 'LCN926';
 
       const player1WsUrls = [
-        `ws://localhost:8080/ws/${player1Pid}`,
-        `ws://localhost:8080/ws/room/${roomId}`
+        `ws://localhost:8081/ws/${player1Pid}`,
+        `ws://localhost:8081/ws/room/${roomId}`
       ];
 
       const player2WsUrls = [
-        `ws://localhost:8080/ws/${player2Pid}`,
-        `ws://localhost:8080/ws/room/${roomId}`
+        `ws://localhost:8081/ws/${player2Pid}`,
+        `ws://localhost:8081/ws/room/${roomId}`
       ];
 
       const logDiv = document.getElementById('log');
