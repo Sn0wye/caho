@@ -1,8 +1,11 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import type * as z from 'zod';
+import { z } from 'zod';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,71 +19,105 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
+import { api } from '@/utils/api';
+import { getApiErrorMessage } from '@/utils/game-api';
 import { useAuth } from '@/auth/client';
-import { profileSchema } from '@/schemas';
+import type { UpdateProfileRequest, UpdateProfileResponse } from '@/contracts';
 
-type ProfileFormValues = z.infer<typeof profileSchema>;
+// Inputs always hold strings; empty ones become null on submit.
+const profileFormSchema = z.object({
+  avatarUrl: z.union([
+    z.literal(''),
+    z.string().trim().url('Informe uma URL válida.')
+  ]),
+  email: z.union([
+    z.literal(''),
+    z.string().trim().email('Informe um email válido.')
+  ]),
+  username: z.string().trim().min(1, 'Informe um nome de usuário.').max(255)
+});
+
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
+
+async function updateProfile(values: ProfileFormValues) {
+  const payload: UpdateProfileRequest = {
+    avatarUrl: values.avatarUrl || null,
+    email: values.email || null,
+    username: values.username
+  };
+
+  const { data } = await api.post<UpdateProfileResponse>(
+    '/auth/profile',
+    payload
+  );
+
+  return data;
+}
 
 export function SettingsProfileForm() {
+  const router = useRouter();
   const { user } = useAuth();
 
   const form = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileSchema),
+    resolver: zodResolver(profileFormSchema),
     mode: 'onChange',
     defaultValues: {
-      avatarUrl: user?.avatarUrl || '',
-      email: user?.email || '',
-      username: user?.username || ''
+      avatarUrl: user?.avatarUrl ?? '',
+      email: user?.email ?? '',
+      username: user?.username ?? ''
     }
   });
 
-  function onSubmit(data: ProfileFormValues) {
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      )
-    });
-  }
+  const { mutate, isPending } = useMutation({
+    mutationFn: updateProfile,
+    onSuccess: updated => {
+      form.reset({
+        avatarUrl: updated.avatarUrl ?? '',
+        email: updated.email ?? '',
+        username: updated.username
+      });
+      toast({ title: 'Perfil atualizado' });
+      // The user comes from the server layout; refresh so nav and avatar match.
+      router.refresh();
+    },
+    onError: error => {
+      toast({
+        variant: 'destructive',
+        title: 'Erro ao atualizar perfil',
+        description: getApiErrorMessage(error)
+      });
+    }
+  });
+
+  const avatarUrl = form.watch('avatarUrl');
+  const username = form.watch('username');
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(values => mutate(values))}
+        className="space-y-8"
+      >
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="flex items-center gap-6 p-6">
+            <Avatar>
+              <AvatarImage src={avatarUrl || undefined} alt="Seu avatar" />
+              <AvatarFallback>
+                {username.slice(0, 1).toUpperCase() || '?'}
+              </AvatarFallback>
+            </Avatar>
+
             <FormField
               control={form.control}
               name="avatarUrl"
               render={({ field }) => (
-                <div className="flex items-center gap-6">
-                  <input
-                    type="file"
-                    className="sr-only"
-                    onChange={field.onChange}
-                    ref={field.ref}
-                    name={field.name}
-                    id={field.name}
-                  />
-
-                  <label
-                    htmlFor={field.name}
-                    className="cursor-pointer hover:opacity-70"
-                  >
-                    <Avatar>
-                      <AvatarImage src={field.value || ''} alt="Your avatar" />
-                      <AvatarFallback>?</AvatarFallback>
-                    </Avatar>
-                  </label>
-                  <div>
-                    <span className="text-lg font-medium">Your avatar</span>
-                    <p className="text-muted-foreground text-sm">
-                      Click on the avatar to upload a custom one from your
-                      files.
-                    </p>
-                  </div>
-                </div>
+                <FormItem className="flex-1">
+                  <FormLabel>URL do avatar</FormLabel>
+                  <FormControl>
+                    <Input placeholder="https://..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
             />
           </CardContent>
@@ -95,9 +132,9 @@ export function SettingsProfileForm() {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
+                    type="email"
                     placeholder="johndoe@example.com"
                     {...field}
-                    value={field.value ?? ''}
                   />
                 </FormControl>
                 <FormMessage />
@@ -110,13 +147,9 @@ export function SettingsProfileForm() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Nome de usuário</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="johndoe"
-                    {...field}
-                    value={field.value ?? ''}
-                  />
+                  <Input placeholder="johndoe" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -124,7 +157,9 @@ export function SettingsProfileForm() {
           />
         </div>
 
-        <Button type="submit">Update</Button>
+        <Button type="submit" disabled={isPending || !form.formState.isDirty}>
+          {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Salvar'}
+        </Button>
       </form>
     </Form>
   );
