@@ -28,6 +28,7 @@ import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { toast } from '@/components/ui/use-toast';
 import { api } from '@/utils/api';
+import { getApiErrorMessage } from '@/utils/game-api';
 import { useAuth } from '@/auth/client';
 import { NEW_ROOM_FORM } from '@/constants/room';
 import { createRoom, type CreateRoom } from '@/contracts';
@@ -45,13 +46,15 @@ const createRoomMutation = async (data: CreateRoom) => {
 
 // TODO: client component hook for getting user
 export const NewRoomCardForm = () => {
-  const { mutate, isLoading } = useMutation(createRoomMutation);
+  const { mutate, isPending } = useMutation({
+    mutationFn: createRoomMutation
+  });
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       password: '',
-      maxPlayers: 2,
+      maxPlayers: NEW_ROOM_FORM.MIN_PLAYERS,
       maxPoints: 10,
       isPublic: false
     }
@@ -68,15 +71,17 @@ export const NewRoomCardForm = () => {
         isPublic: values.isPublic,
         maxPlayers: values.maxPlayers,
         maxPoints: values.maxPoints,
-        password: values.password
+        // A public Room has no password; an empty field means none either.
+        password: values.isPublic ? null : values.password || null
       },
       {
         onSuccess: room => {
           router.push(`/room/${room.code}`);
         },
-        onError: () => {
+        onError: error => {
           toast({
-            description: 'Erro!',
+            title: 'Não deu pra criar a sala',
+            description: getApiErrorMessage(error),
             variant: 'destructive'
           });
         }
@@ -265,8 +270,8 @@ export const NewRoomCardForm = () => {
            * VALID: FINALMENTE! BORA?!
            */}
           <footer className="flex items-center justify-end">
-            <Button type="submit">
-              {isLoading ? (
+            <Button type="submit" disabled={isPending}>
+              {isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 'Criar sala!'

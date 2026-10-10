@@ -19,7 +19,9 @@ export const Providers = ({ children }: ProvidersProps) => {
             retry: 1
           },
           mutations: {
-            retry: 1
+            // Mutations are commands (join, play, pick); a rejected one fails
+            // the same way twice, and a retry could double-submit.
+            retry: false
           }
         }
       })

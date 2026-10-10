@@ -8,16 +8,15 @@ export const api = axios.create({
   withCredentials: true
 });
 
-api.interceptors.request.use(config => {
-  if (isServer) {
-    const sessionCookie = cookies().get('auth_session')?.value ?? '';
+// Server-side requests have no browser cookie jar, so forward the session as a
+// Bearer token (the backend accepts either).
+api.interceptors.request.use(async config => {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('auth_session')?.value;
 
-    console.log({ sessionCookie });
-
+  if (sessionCookie) {
     config.headers.Authorization = `Bearer ${sessionCookie}`;
   }
 
   return config;
 });
-
-const isServer = typeof window === 'undefined';

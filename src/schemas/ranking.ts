@@ -6,7 +6,8 @@ export const rankingSchema = z.array(
     cardIds: true,
     isHost: true,
     isJudge: true,
-    isReady: true
+    isReady: true,
+    isActive: true
   })
 );
 

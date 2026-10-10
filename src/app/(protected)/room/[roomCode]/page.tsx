@@ -1,45 +1,57 @@
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import { AxiosError } from 'axios';
+import { JoinRoomPrompt } from '@/components/game/join/join-room-prompt';
 import { api } from '@/utils/server/api';
 import { getUser } from '@/auth/server';
 import { GameContextProvider } from '@/hooks/game';
-import type { BlackCard, Player, Room as RoomType, WhiteCard } from '@/schemas';
+import type {
+  RoomPlayer,
+  RoundSnapshot,
+  SanitizedRoom,
+  WhiteCard
+} from '@/schemas';
 import { Game } from './game';
 
 type GamePageProps = {
-  params: {
+  params: Promise<{
     roomCode: string;
-  };
+  }>;
 };
 
 const getRoom = async (roomCode: string) => {
-  const { data } = await api.get<RoomType>(`/rooms/${roomCode}`);
-
-  return data;
+  try {
+    const { data } = await api.get<SanitizedRoom>(`/rooms/${roomCode}`);
+    return data;
+  } catch (error) {
+    if (error instanceof AxiosError && error.response?.status === 404) {
+      return null;
+    }
+    throw error;
+  }
 };
 
 const getRoomPlayers = async (roomCode: string) => {
-  const { data } = await api.get<Player[]>(`/rooms/${roomCode}/players`);
+  const { data } = await api.get<RoomPlayer[]>(`/rooms/${roomCode}/players`);
   return data;
 };
 
-const getCurrentWhiteCards = async (roomCode: string) => {
+const getHand = async (roomCode: string) => {
   const { data } = await api.get<WhiteCard[]>(`/rooms/${roomCode}/white-cards`);
-
-  return data;
+  return data ?? [];
 };
 
-const getCurrentBlackCard = async (roomCode: string) => {
-  const { data } = await api.get<BlackCard>(`/rooms/${roomCode}/black-card`);
-
-  return data;
+const getRound = async (roomCode: string) => {
+  const { data } = await api.get<RoundSnapshot | null>(
+    `/rooms/${roomCode}/round`
+  );
+  return data || null;
 };
 
 export default async function GamePage({ params }: GamePageProps) {
-  const roomCode = params.roomCode.toUpperCase();
-  const room = await getRoom(roomCode);
+  const roomCode = (await params).roomCode.toUpperCase();
 
-  if (!room) {
-    redirect('/dashboard');
+  if (roomCode.length !== 6) {
+    notFound();
   }
 
   const user = await getUser();
@@ -48,31 +60,34 @@ export default async function GamePage({ params }: GamePageProps) {
     redirect('/login');
   }
 
-  const roomPlayers = await getRoomPlayers(roomCode);
-  const currentPlayer = roomPlayers.find(player => player.id === user.id);
+  const room = await getRoom(roomCode);
 
-  if (!currentPlayer) {
-    throw new Error('Current player not found');
-  }
-
-  // TODO: review this logic
-  const userIsInRoom = roomPlayers.some(player => player.id === user?.id);
-
-  if (!userIsInRoom) {
-    //TODO: verify connection, etc
+  if (!room) {
     redirect('/dashboard');
   }
 
-  const currentWhiteCards = await getCurrentWhiteCards(roomCode);
-  const currentBlackCard = await getCurrentBlackCard(roomCode);
+  const players = await getRoomPlayers(roomCode);
+  const isMember = players.some(player => player.id === user.id);
+
+  if (!isMember) {
+    return (
+      <JoinRoomPrompt
+        room={room}
+        playerCount={players.length}
+        hostName={players.find(player => player.isHost)?.username ?? null}
+      />
+    );
+  }
+
+  const [hand, round] = await Promise.all([
+    getHand(roomCode),
+    getRound(roomCode)
+  ]);
 
   return (
     <GameContextProvider
-      initialRoom={room}
-      initialPlayers={roomPlayers}
-      initialCurrentPlayer={currentPlayer}
-      initialWhiteCards={currentWhiteCards}
-      initialBlackCard={currentBlackCard}
+      userId={user.id}
+      initialState={{ room, players, hand, round }}
     >
       <Game />
     </GameContextProvider>

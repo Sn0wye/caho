@@ -1,9 +1,8 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import { AxiosError } from 'axios';
-import { parse } from 'cookie';
 import { api } from '@/utils/api';
+import { storeBackendSession } from '@/auth/session-cookie';
 import {
   signInRequest,
   type SignInRequest,
@@ -25,22 +24,7 @@ export async function loginAction(
       validatedFields.data
     );
 
-    if (headers['set-cookie']) {
-      const cookieStore = await cookies();
-      const cookie = parse(headers['set-cookie'][0]) as {
-        auth_session: string;
-        Expires: string;
-      };
-
-      cookieStore.set({
-        name: 'auth_session',
-        value: cookie.auth_session,
-        expires: new Date(cookie.Expires),
-        path: '/',
-        httpOnly: true,
-        sameSite: 'lax'
-      });
-    }
+    await storeBackendSession(headers['set-cookie']);
 
     return data;
   } catch (e) {
@@ -48,6 +32,6 @@ export async function loginAction(
       throw e.response?.data.message;
     }
 
-    throw e.response?.data;
+    throw e;
   }
 }

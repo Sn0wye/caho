@@ -1,28 +1,34 @@
 'use client';
 
 import { cn } from '@/utils/cn';
-import { useGame } from '@/hooks/game';
 import type { WhiteCard as WhiteCardType } from '@/schemas';
 import { CardFooter } from './card-footer';
 import { CardHeader } from './card-header';
 
 type WhiteCardProps = {
   data: WhiteCardType;
+  onClick?: (card: WhiteCardType) => void;
+  disabled?: boolean;
   className?: string;
 };
 
-export function WhiteCard({ data, className }: WhiteCardProps) {
-  const { handlePickWhiteCard, isWhiteCardPickingDisabled } = useGame();
+export function WhiteCard({
+  data,
+  onClick,
+  disabled = false,
+  className
+}: WhiteCardProps) {
   const { packId, text } = data;
+  const isInteractive = !!onClick && !disabled;
 
   return (
     <button
       type="button"
-      disabled={isWhiteCardPickingDisabled}
-      onClick={() => handlePickWhiteCard(data)}
+      disabled={disabled || !onClick}
+      onClick={() => onClick?.(data)}
       className={cn(
-        'aspect-card flex h-72 flex-col justify-between gap-2 rounded-xl border-2 border-zinc-100 bg-white p-5 text-left shadow-xl transition-all disabled:cursor-not-allowed dark:border-zinc-50',
-        !isWhiteCardPickingDisabled &&
+        'aspect-card flex h-72 shrink-0 snap-center flex-col justify-between gap-2 rounded-xl border-2 border-zinc-100 bg-white p-5 text-left shadow-xl transition-all disabled:cursor-not-allowed dark:border-zinc-50',
+        isInteractive &&
           'hover:-translate-y-4 hover:scale-110 hover:cursor-pointer',
         className
       )}
