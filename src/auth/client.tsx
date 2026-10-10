@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, type ReactNode } from 'react';
 import type { User } from '@/schemas';
 
 type Props = {
@@ -17,15 +17,14 @@ type AuthContextType = {
 
 const AuthContext = createContext({} as AuthContextType);
 
-export function AuthClientProvider(props: Props) {
-  const [user] = useState(props.user);
-  const [sessionCookie] = useState(props.sessionCookie);
-
+// Read straight from props (not useState) so router.refresh() after a profile
+// update reaches every consumer.
+export function AuthClientProvider({ user, sessionCookie, children }: Props) {
   return (
     <AuthContext.Provider
       value={{ user, isAuthenticated: !!user, sessionCookie }}
     >
-      {props.children}
+      {children}
     </AuthContext.Provider>
   );
 }
