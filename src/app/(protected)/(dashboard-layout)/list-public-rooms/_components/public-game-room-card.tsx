@@ -40,7 +40,8 @@ export function PublicGameRoomCard({
     JoinRoomResponse,
     ErrorSchema,
     JoinRoomRequest
-  >(joinRoom, {
+  >({
+    mutationFn: joinRoom,
     mutationKey: ['join-room']
   });
 

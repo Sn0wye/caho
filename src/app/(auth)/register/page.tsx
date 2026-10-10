@@ -1,6 +1,7 @@
 'use client';
 
 import type { ComponentProps } from 'react';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -21,6 +22,7 @@ import { useServerActionMutation } from '@/hooks/server-actions';
 import { registerAction } from './register.action';
 
 export default function RegisterPage() {
+  const router = useRouter();
   const form = useForm<SignUpRequest>({
     resolver: zodResolver(signUpRequest),
     defaultValues: {
@@ -29,10 +31,13 @@ export default function RegisterPage() {
     }
   });
 
-  const { mutate, isLoading } = useServerActionMutation(registerAction);
+  const { mutate, isPending } = useServerActionMutation(registerAction);
 
   const onSubmit = async (data: SignUpRequest) => {
     mutate(data, {
+      // Navigate here: a redirect() inside the server action surfaces as a
+      // NEXT_REDIRECT error in the mutation.
+      onSuccess: () => router.push('/dashboard'),
       onError: ({ message }) => {
         toast({
           title: 'Erro!',
@@ -116,7 +121,7 @@ export default function RegisterPage() {
               )}
             />
             <Button className="font-semibold">
-              {isLoading ? (
+              {isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <span>Continuar</span>

@@ -23,7 +23,9 @@ export const useGameRankingSidebarContext = create<GameRankingSidebarContext>(
 
 export function GameRankingSidebar() {
   const { isCollapsed } = useGameRankingSidebarContext();
-  const { players } = useGame();
+  const { players, judgeId, round, currentPlayer } = useGame();
+  const ranked = [...players].sort((a, b) => b.score - a.score);
+  const isPlaying = round?.status === 'PLAYING';
 
   return (
     <ScrollArea
@@ -35,9 +37,14 @@ export function GameRankingSidebar() {
       <GameRankingHeader />
 
       <div className="mt-24 flex w-full flex-1 flex-col items-center gap-2">
-        {players.map(player => (
+        {ranked.map(player => (
           <Fragment key={player.id}>
-            <GameRankingPlayer player={player} />
+            <GameRankingPlayer
+              player={player}
+              isJudge={player.id === judgeId}
+              hasPlayed={isPlaying && player.isReady}
+              isCurrentUser={player.id === currentPlayer?.id}
+            />
             <Separator className="last:hidden" />
           </Fragment>
         ))}

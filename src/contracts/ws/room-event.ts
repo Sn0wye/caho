@@ -1,19 +1,25 @@
 import { z } from 'zod';
 import {
   blackCard,
-  playerSchema,
-  roomSchema,
-  roundPlayedCardsSchema
+  rankingSchema,
+  roomPlayerSchema,
+  roundPlayedCardsSchema,
+  sanitizedRoomSchema
 } from '@/schemas';
 
+// Mirrors the backend's `src/contracts/ws/room-event.ts`. See the backend's
+// `docs/ws-events.md` for how each event patches client state.
 export const roomEvent = z.union([
   z.object({
-    event: z.literal('room.message'),
-    payload: z.object({ message: z.string() })
+    event: z.literal('room.started'),
+    payload: z.object({
+      room: sanitizedRoomSchema,
+      players: z.array(roomPlayerSchema)
+    })
   }),
   z.object({
     event: z.literal('room.player-joined'),
-    payload: playerSchema
+    payload: roomPlayerSchema
   }),
   z.object({
     event: z.literal('room.player-left'),
@@ -23,32 +29,36 @@ export const roomEvent = z.union([
   }),
   z.object({
     event: z.literal('room.player-update'),
-    payload: playerSchema
-  }),
-  z.object({
-    event: z.literal('room.started'),
-    payload: roomSchema
+    payload: roomPlayerSchema
   }),
   z.object({
     event: z.literal('room.round-start'),
     payload: z.object({
       roundNumber: z.number().int(),
+      judgeId: z.string(),
       blackCard: blackCard
     })
   }),
   z.object({
     event: z.literal('room.time-to-judge'),
     payload: z.object({
+      roundNumber: z.number().int(),
       roundPlayedCards: z.array(roundPlayedCardsSchema)
     })
   }),
   z.object({
     event: z.literal('room.round-end'),
-    payload: roundPlayedCardsSchema
+    payload: z.object({
+      roundNumber: z.number().int(),
+      winner: roundPlayedCardsSchema.nullable(),
+      winnerId: z.string().nullable(),
+      newScore: z.number().int().nullable(),
+      reason: z.enum(['picked', 'aborted'])
+    })
   }),
   z.object({
-    event: z.literal('room.black-card-drawn'),
-    payload: blackCard
+    event: z.literal('room.game-end'),
+    payload: rankingSchema
   })
 ]);
 

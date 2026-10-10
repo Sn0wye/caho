@@ -102,7 +102,7 @@ const AlertDialogCancel = ({
 }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel>) => (
   <AlertDialogPrimitive.Cancel
     className={cn(
-      buttonVariants({ variant: 'outline-solid' }),
+      buttonVariants({ variant: 'outline' }),
       'mt-2 sm:mt-0',
       className
     )}

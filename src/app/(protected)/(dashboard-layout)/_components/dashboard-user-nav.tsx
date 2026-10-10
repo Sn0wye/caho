@@ -1,5 +1,6 @@
 'use client';
 
+import { useTransition } from 'react';
 import Link from 'next/link';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,6 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { signOutAction } from '@/actions/sign-out';
-import { useServerActionMutation } from '@/hooks/server-actions';
 import type { User } from '@/schemas';
 
 type Props = {
@@ -21,7 +21,8 @@ type Props = {
 };
 
 export function DashboardUserNav({ user }: Props) {
-  const { mutate: signOut } = useServerActionMutation(signOutAction);
+  const [, startSignOut] = useTransition();
+  const signOut = () => startSignOut(() => signOutAction());
 
   return (
     <DropdownMenu>
@@ -65,7 +66,7 @@ export function DashboardUserNav({ user }: Props) {
         <DropdownMenuSeparator />
         {/* <SignOutButton> */}
         <DropdownMenuItem asChild className="w-full">
-          <button type="button" onClick={() => signOut(null)}>
+          <button type="button" onClick={signOut}>
             Sair
           </button>
           {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}

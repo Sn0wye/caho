@@ -5,7 +5,7 @@ const gameStatusColorVariants: {
   [key in RoomStatus]: BadgeVariants['variant'];
 } = {
   'LOBBY': 'orange',
-  'IN_PROGRESS': 'outline-solid',
+  'IN_PROGRESS': 'outline',
   'FINISHED': 'destructive'
 };
 
