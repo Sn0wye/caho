@@ -1,28 +1,16 @@
 'use server';
 
-import { AxiosError } from 'axios';
-import { createServerAction } from 'zsa';
-import { api } from '@/utils/api';
-import { storeBackendSession } from '@/auth/session-cookie';
-import { signUpRequest, type SignUpResponse } from '@/contracts';
+import { authenticate, type AuthResult } from '@/auth/authenticate';
+import { signUpRequest, type SignUpRequest } from '@/contracts';
 
-export const registerAction = createServerAction()
-  .input(signUpRequest)
-  .handler(async ({ input }) => {
-    try {
-      const { data, headers } = await api.post<SignUpResponse>(
-        '/auth/sign-up',
-        input
-      );
+export async function registerAction(
+  fields: SignUpRequest
+): Promise<AuthResult> {
+  const validatedFields = signUpRequest.safeParse(fields);
 
-      await storeBackendSession(headers['set-cookie']);
+  if (!validatedFields.success) {
+    return { ok: false, message: 'Usuário ou senha inválidos' };
+  }
 
-      return data;
-    } catch (e) {
-      if (e instanceof AxiosError) {
-        throw e.response?.data.message;
-      }
-
-      throw e;
-    }
-  });
+  return authenticate('/auth/sign-up', validatedFields.data);
+}

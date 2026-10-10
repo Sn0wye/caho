@@ -3,6 +3,7 @@
 import type { ComponentProps } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -18,7 +19,6 @@ import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import { signUpRequest, type SignUpRequest } from '@/contracts';
 import { env } from '@/env.mjs';
-import { useServerActionMutation } from '@/hooks/server-actions';
 import { registerAction } from './register.action';
 
 export default function RegisterPage() {
@@ -31,22 +31,33 @@ export default function RegisterPage() {
     }
   });
 
-  const { mutate, isPending } = useServerActionMutation(registerAction);
-
-  const onSubmit = async (data: SignUpRequest) => {
-    mutate(data, {
-      // Navigate here: a redirect() inside the server action surfaces as a
-      // NEXT_REDIRECT error in the mutation.
-      onSuccess: () => router.push('/dashboard'),
-      onError: ({ message }) => {
+  const { mutate, isPending } = useMutation({
+    mutationFn: registerAction,
+    onSuccess: result => {
+      if (!result.ok) {
         toast({
-          title: 'Erro!',
-          description: message,
-          variant: 'destructive'
+          variant: 'destructive',
+          title: 'Erro ao registrar',
+          description: result.message
         });
+        return;
       }
-    });
-  };
+
+      router.push('/dashboard');
+    },
+    // The action itself only rejects when the request to Next fails.
+    onError: () => {
+      toast({
+        variant: 'destructive',
+        title: 'Erro ao registrar',
+        description: 'Algo deu errado. Tente novamente.'
+      });
+    }
+  });
+
+  function onSubmit(values: SignUpRequest) {
+    mutate(values);
+  }
 
   return (
     <div className="w-full">

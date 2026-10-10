@@ -19,7 +19,6 @@ import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import { signInRequest, type SignInRequest } from '@/contracts';
 import { env } from '@/env.mjs';
-import type { ErrorSchema } from '@/schemas';
 import { loginAction } from './login.action';
 
 export default function LoginPage() {
@@ -34,20 +33,29 @@ export default function LoginPage() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: loginAction,
-    onSuccess: data => {
+    onSuccess: result => {
+      if (!result.ok) {
+        toast({
+          variant: 'destructive',
+          title: 'Erro ao entrar',
+          description: result.message
+        });
+        return;
+      }
+
       router.push('/dashboard');
       toast({
         variant: 'default',
-        title: `Bem-vindo, ${data.username}!`,
+        title: `Bem-vindo, ${result.user.username}!`,
         description: 'Você foi autenticado com sucesso!'
       });
     },
-    onError: (error: ErrorSchema) => {
+    // The action itself only rejects when the request to Next fails.
+    onError: () => {
       toast({
         variant: 'destructive',
         title: 'Erro ao entrar',
-        description:
-          error instanceof Error ? error.message : 'Erro desconhecido'
+        description: 'Algo deu errado. Tente novamente.'
       });
     }
   });
