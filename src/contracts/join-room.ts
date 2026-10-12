@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { roomSchema } from '@/schemas';
+import { sanitizedRoomSchema } from '@/schemas';
 
 export const joinRoomRequest = z.object({
   roomCode: z
@@ -14,6 +14,7 @@ export const joinRoomRequest = z.object({
 
 export type JoinRoomRequest = z.infer<typeof joinRoomRequest>;
 
-export const joinRoomResponse = roomSchema;
+// The joined Room, without its password.
+export const joinRoomResponse = sanitizedRoomSchema;
 
 export type JoinRoomResponse = z.infer<typeof joinRoomResponse>;
