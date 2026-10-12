@@ -32,14 +32,14 @@ import { getApiErrorMessage } from '@/utils/game-api';
 import { useAuth } from '@/auth/client';
 import { NEW_ROOM_FORM } from '@/constants/room';
 import { createRoom, type CreateRoom } from '@/contracts';
-import type { Room } from '@/schemas';
+import type { SanitizedRoom } from '@/schemas';
 
 const formSchema = createRoom;
 
 type FormSchema = z.infer<typeof formSchema>;
 
 const createRoomMutation = async (data: CreateRoom) => {
-  const { data: room } = await api.post<Room>('/rooms/create', data);
+  const { data: room } = await api.post<SanitizedRoom>('/rooms/create', data);
 
   return room;
 };
