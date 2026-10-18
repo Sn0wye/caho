@@ -33,9 +33,9 @@ export default async function DashboardPage() {
         <DashboardPrivateRoomModal />
 
         <DashboardOptionCard
-          title="Encontrar uma partida pública"
-          description="Algumas pessoas tem coragem de deixar uma sala pública... Tente a sorte lá!"
-          href="/list-public-rooms"
+          title="Encontrar uma partida"
+          description="Veja todas as salas esperando jogadores e entre numa."
+          href="/rooms"
           bgColor="yellow"
           icon={<Search />}
         />

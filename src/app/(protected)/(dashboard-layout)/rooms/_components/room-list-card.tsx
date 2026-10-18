@@ -2,18 +2,18 @@
 
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
-import { Hash } from 'lucide-react';
+import { Hash, Lock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/components/ui/use-toast';
 import { api } from '@/utils/api';
 import type {
   JoinRoomRequest,
   JoinRoomResponse,
-  ListPublicRoomsResponse
+  ListRoomsResponse
 } from '@/contracts';
 import type { ErrorSchema } from '@/schemas';
 
-type PublicGameRoomCardProps = ListPublicRoomsResponse[number];
+type RoomListCardProps = ListRoomsResponse[number];
 
 const joinRoom = async (
   payload: JoinRoomRequest
@@ -27,13 +27,14 @@ const joinRoom = async (
   }
 };
 
-export function PublicGameRoomCard({
+export function RoomListCard({
   code,
   maxPlayers,
   maxPoints,
   playerCount,
-  hostUsername
-}: PublicGameRoomCardProps) {
+  hostUsername,
+  hasPassword
+}: RoomListCardProps) {
   const router = useRouter();
 
   const { mutate } = useMutation<
@@ -46,6 +47,11 @@ export function PublicGameRoomCard({
   });
 
   function handleJoinRoom() {
+    // A locked Room asks for its password on the Room page's join prompt.
+    if (hasPassword) {
+      router.push(`/room/${code.toUpperCase()}`);
+      return;
+    }
     mutate(
       { roomCode: code, password: null },
       {
@@ -70,10 +76,19 @@ export function PublicGameRoomCard({
     >
       <CardHeader>
         <CardTitle className="flex flex-row items-center justify-between gap-2">
-          <span>Sala</span>
+          <span className="flex items-center gap-2">
+            Sala
+            {hasPassword && (
+              <Lock
+                size={16}
+                className="text-zinc-500"
+                aria-label="Com senha"
+              />
+            )}
+          </span>
           <div className="flex items-center gap-1">
             <Hash size={16} className="text-geist-orange" />
-            <span className="font-mono text-lg font-bold leading-none">
+            <span className="font-mono text-lg leading-none font-bold">
               {code}
             </span>
           </div>
@@ -81,18 +96,18 @@ export function PublicGameRoomCard({
       </CardHeader>
 
       <CardContent className="flex flex-col gap-2">
-        <PublicGameRoomCardData
+        <RoomListCardData
           label="jogadores"
           value={`${playerCount}/ ${maxPlayers}`}
         />
-        <PublicGameRoomCardData label="pontos para acabar" value={maxPoints} />
-        <PublicGameRoomCardData label="host" value={hostUsername} />
+        <RoomListCardData label="pontos para acabar" value={maxPoints} />
+        <RoomListCardData label="host" value={hostUsername} />
       </CardContent>
     </Card>
   );
 }
 
-function PublicGameRoomCardData({
+function RoomListCardData({
   label,
   value
 }: {
@@ -101,7 +116,7 @@ function PublicGameRoomCardData({
 }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="font-medium capitalize text-zinc-700 dark:text-zinc-300">
+      <span className="font-medium text-zinc-700 capitalize dark:text-zinc-300">
         {label}:
       </span>
       <span className="text-zinc-500 dark:text-zinc-400">{value}</span>

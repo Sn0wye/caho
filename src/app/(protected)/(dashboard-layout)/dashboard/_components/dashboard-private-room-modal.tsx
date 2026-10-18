@@ -79,7 +79,8 @@ export function DashboardPrivateRoomModal() {
   });
 
   function onSubmit(values: JoinRoomRequest) {
-    mutate(values);
+    // An empty field means no password; the backend only checks it on a locked Room.
+    mutate({ ...values, password: values.password || null });
   }
 
   return (
@@ -94,7 +95,7 @@ export function DashboardPrivateRoomModal() {
         />
       </DialogTrigger>
       <DialogContent className="flex max-w-2xl gap-8 p-8">
-        <figure className="bg-linear-to-tr relative flex w-full overflow-clip rounded-md from-zinc-100 from-30% via-slate-200 to-slate-400 p-5 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-700">
+        <figure className="relative flex w-full overflow-clip rounded-md bg-linear-to-tr from-zinc-100 from-30% via-slate-200 to-slate-400 p-5 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-700">
           <Noise className="rounded-md" />
 
           <div className="flex flex-col gap-1 self-end">
@@ -103,7 +104,7 @@ export function DashboardPrivateRoomModal() {
               Sala
               <span className="font-semibold text-zinc-950 dark:text-zinc-200">
                 {' '}
-                privada!
+                de amigos!
               </span>
             </h2>
             <span className="text-sm text-zinc-400 dark:text-zinc-400">
@@ -118,8 +119,7 @@ export function DashboardPrivateRoomModal() {
               Entrar com um código
             </DialogTitle>
             <DialogDescription>
-              Uma sala privada necessita de um código e senha, peça para o seu
-              amigo te passar!
+              Peça o código para o seu amigo. Se a sala tiver senha, ela também!
             </DialogDescription>
           </DialogHeader>
 
@@ -173,6 +173,7 @@ export function DashboardPrivateRoomModal() {
 
                     <FormControl>
                       <Input
+                        type="password"
                         placeholder="********"
                         {...field}
                         value={field.value ?? ''}

@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { Eye, EyeOff, Loader2, Lock, Trophy, Users } from 'lucide-react';
+import { Loader2, Lock, Trophy, Users } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -24,8 +24,6 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Switch } from '@/components/ui/switch';
 import { toast } from '@/components/ui/use-toast';
 import { api } from '@/utils/api';
 import { getApiErrorMessage } from '@/utils/game-api';
@@ -55,8 +53,7 @@ export const NewRoomCardForm = () => {
     defaultValues: {
       password: '',
       maxPlayers: NEW_ROOM_FORM.MIN_PLAYERS,
-      maxPoints: 10,
-      isPublic: false
+      maxPoints: 10
     }
   });
 
@@ -68,11 +65,10 @@ export const NewRoomCardForm = () => {
 
     mutate(
       {
-        isPublic: values.isPublic,
         maxPlayers: values.maxPlayers,
         maxPoints: values.maxPoints,
-        // A public Room has no password; an empty field means none either.
-        password: values.isPublic ? null : values.password || null
+        // An empty field means no password: the Room is open to anyone.
+        password: values.password || null
       },
       {
         onSuccess: room => {
@@ -88,8 +84,6 @@ export const NewRoomCardForm = () => {
       }
     );
   };
-
-  const isPublic = form.watch('isPublic');
 
   return (
     <section className="flex flex-col gap-10">
@@ -196,70 +190,34 @@ export const NewRoomCardForm = () => {
           <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-900">
             <FormField
               control={form.control}
-              name="isPublic"
+              name="password"
               render={({ field }) => (
-                <FormItem className="flex w-full flex-row items-center justify-between space-x-3">
+                <FormItem>
                   <div className="flex items-center gap-4">
-                    {isPublic ? (
-                      <Eye size={18} className="shrink-0 text-zinc-500" />
-                    ) : (
-                      <EyeOff size={18} className="shrink-0 text-zinc-500" />
-                    )}
+                    <Lock size={18} className="shrink-0 text-zinc-500" />
                     <div>
                       <FormLabel className="text-zinc-700 dark:text-zinc-300">
-                        Deixar a sala pública?
+                        Senha:
                       </FormLabel>
                       <FormDescription>
-                        Uma sala pública pode ser encontrada por qualquer pessoa
-                        que esteja procurando por uma sala.
+                        Opcional. Toda sala aparece na lista de partidas; com
+                        senha, só entra quem souber. Deixe vazio pra sala
+                        aberta.
                       </FormDescription>
                     </div>
                   </div>
-
                   <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
+                    <Input
+                      type="password"
+                      placeholder="Ideia de senha: número do cartão de crédito e CVV"
+                      {...field}
+                      value={field.value ?? ''}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
-
-            {!isPublic && (
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem className="ml-7">
-                    <Separator className="mb-4 mt-6" />
-                    <div className="flex items-center gap-4">
-                      <Lock size={18} className="shrink-0 text-zinc-500" />
-                      <div>
-                        <FormLabel className="text-zinc-700 dark:text-zinc-300">
-                          Senha:
-                        </FormLabel>
-                        <FormDescription>
-                          Por mais que seja só um jogo, evite colocar uma senha
-                          óbvia. Ninguém quer ter sua sala invadida, né?
-                        </FormDescription>
-                      </div>
-                    </div>
-                    <FormControl>
-                      {/* TODO: fix this */}
-                      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                      {/** @ts-ignore  */}
-                      <Input
-                        type="password"
-                        placeholder="Ideia de senha: número do cartão de crédito e CVV"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
           </div>
 
           {/*
