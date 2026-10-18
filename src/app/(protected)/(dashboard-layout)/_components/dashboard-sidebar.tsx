@@ -31,8 +31,8 @@ export async function DashboardSidebar() {
 
         <DashboardSidebarItem
           icon={<Search size={20} />}
-          label="Partidas públicas"
-          href="/list-public-rooms"
+          label="Partidas"
+          href="/rooms"
         />
 
         <DashboardSidebarItem

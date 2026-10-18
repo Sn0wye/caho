@@ -19,7 +19,6 @@ export const roomSchema = z.object({
     .string()
     .or(z.null())
     .transform(v => (v === '' || v === undefined ? null : v)),
-  isPublic: z.string().transform(v => v === 'true'),
   prevJudgeId: z.string().min(1).or(z.null()).default(null),
   judgeId: z.string().min(1).or(z.null()).default(null),
   round: z.number().int().min(0).positive().default(0),
@@ -30,18 +29,21 @@ export const roomSchema = z.object({
   updatedAt: z.coerce.date()
 });
 
-export const publicRoomWithPlayerCountAndHost = z.object({
+// A LOBBY Room as the rooms page lists it. Every Room is listed; hasPassword
+// says whether joining needs one.
+export const roomListingSchema = z.object({
   id: z.string(),
   code: z.string(),
   maxPlayers: z.number(),
   maxPoints: z.number(),
   playerCount: z.number(),
-  hostUsername: z.string()
+  hostUsername: z.string(),
+  hasPassword: z.boolean()
 });
 
 // What the backend serves for any Room read, create and join: the stored Room
-// without its password. Written out because roomSchema parses form input
-// (`isPublic` from a string), which a stored Room would fail.
+// with its password reduced to hasPassword. Written out because roomSchema
+// parses form input, which a stored Room would fail.
 export const sanitizedRoomSchema = z.object({
   id: z.string(),
   code: z.string(),
@@ -49,7 +51,7 @@ export const sanitizedRoomSchema = z.object({
   maxPoints: z.number().int(),
   status: z.enum(['LOBBY', 'IN_PROGRESS', 'FINISHED']),
   hostId: z.string(),
-  isPublic: z.boolean(),
+  hasPassword: z.boolean(),
   prevJudgeId: z.string().nullable(),
   judgeId: z.string().nullable(),
   round: z.number().int(),
@@ -66,6 +68,4 @@ export type SanitizedRoom = z.infer<typeof sanitizedRoomSchema>;
 
 export type RoomStatus = Room['status'];
 
-export type PublicRoomWithPlayerCountAndHost = z.infer<
-  typeof publicRoomWithPlayerCountAndHost
->;
+export type RoomListing = z.infer<typeof roomListingSchema>;

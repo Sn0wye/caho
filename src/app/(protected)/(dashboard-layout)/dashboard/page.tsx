@@ -15,7 +15,7 @@ export default async function DashboardPage() {
     <section className="flex w-full max-w-6xl flex-col gap-8">
       <DashboardPageHeader
         title="Dashboard"
-        subtitle="Aqui você pode criar uma nova sala, entrar em uma sala com um código ou encontrar uma sala pública."
+        subtitle="Aqui você pode criar uma nova sala, entrar em uma sala com um código ou escolher uma da lista de partidas."
         icon={<Home size={24} />}
       />
       <Separator className="w-full" />
@@ -33,9 +33,9 @@ export default async function DashboardPage() {
         <DashboardPrivateRoomModal />
 
         <DashboardOptionCard
-          title="Encontrar uma partida pública"
-          description="Algumas pessoas tem coragem de deixar uma sala pública... Tente a sorte lá!"
-          href="/list-public-rooms"
+          title="Encontrar uma partida"
+          description="Veja todas as salas esperando jogadores e entre numa."
+          href="/rooms"
           bgColor="yellow"
           icon={<Search />}
         />

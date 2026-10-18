@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-export function PublicGameRoomCardSkeleton() {
+export function RoomListCardSkeleton() {
   return (
     <figure className="flex cursor-not-allowed flex-col justify-between gap-6 border border-zinc-200/50 bg-white/20 p-6 dark:border-zinc-900/50 dark:bg-zinc-900/20">
       <Skeleton className="h-8 w-9/12" />

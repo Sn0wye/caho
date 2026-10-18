@@ -34,7 +34,7 @@ export function JoinRoomPrompt({
     mutationFn: () =>
       api.post('/rooms/join', {
         roomCode: room.code,
-        password: room.isPublic ? null : password
+        password: room.hasPassword ? password : null
       }),
     onSuccess: () => router.refresh()
   });
@@ -52,7 +52,7 @@ export function JoinRoomPrompt({
           </h1>
           <span className="max-w-md text-balance text-zinc-500 dark:text-zinc-400">
             {isFinished
-              ? 'Chegou tarde. Crie uma sala nova ou procure uma pública.'
+              ? 'Chegou tarde. Crie uma sala nova ou procure outra.'
               : `${hostName ?? 'Alguém'} te chamou pra jogar. ${room.status === 'IN_PROGRESS' ? 'O jogo já começou, mas dá pra entrar a partir da próxima rodada.' : 'Entre e fique pronto.'}`}
           </span>
         </header>
@@ -70,10 +70,10 @@ export function JoinRoomPrompt({
             <dt className="sr-only">Pontos</dt>
             <dd>{room.maxPoints} pontos para vencer</dd>
           </div>
-          {!room.isPublic && (
+          {room.hasPassword && (
             <div className="flex items-center gap-2">
               <Lock size={16} />
-              <dd>Sala privada</dd>
+              <dd>Sala com senha</dd>
             </div>
           )}
         </dl>
@@ -86,7 +86,7 @@ export function JoinRoomPrompt({
               mutate();
             }}
           >
-            {!room.isPublic && (
+            {room.hasPassword && (
               <div className="flex flex-col gap-2">
                 <Label htmlFor="room-password">Senha da sala</Label>
                 <Input
