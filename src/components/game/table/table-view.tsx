@@ -47,7 +47,7 @@ export function FeltAnchor({
         transform: `translate(${position.x * radius}px, ${position.y * radius}px) rotate(${turn}deg)`
       }}
     >
-      <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2">
+      <div className="pointer-events-auto absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2">
         {children}
       </div>
     </div>
@@ -59,6 +59,8 @@ type StandingAnchorProps = {
   className?: string;
   // Scale with distance, so far seats look smaller (the 2.5D cue).
   perspectiveScale?: boolean;
+  // Height above the felt, in table units, e.g. over a lifted card.
+  height?: number;
   children: ReactNode;
 };
 
@@ -74,10 +76,11 @@ export function StandingAnchor({
   position,
   className,
   perspectiveScale = false,
+  height = 0,
   children
 }: StandingAnchorProps) {
   const view = useTableView();
-  const screen = tableToScreen(position, view);
+  const screen = tableToScreen(position, view, height);
   const scale = perspectiveScale ? ` scale(${screen.scale})` : '';
 
   return (

@@ -79,20 +79,26 @@ export function screenToTable(
  * Where a table-space point lands on screen, relative to the table's centre,
  * plus its perspective `scale` (above 1 nearer the viewer). The forward of
  * screenToTable, for things drawn over the scene instead of on the felt.
+ * `height` raises the point off the felt, in table units (e.g. a lifted card).
  *
  * @example
  * tableToScreen({ x: 0, y: 1 }, view); // the near rim: { x: 0, y: 260, scale: 1.2 }
  */
 export function tableToScreen(
   point: CursorPosition,
-  view: TableView
+  view: TableView,
+  height = 0
 ): ScreenPoint & { scale: number } {
   const tilt = toRad(view.tiltDeg);
   const spin = toRad(view.spinDeg);
   const u = (point.x * Math.cos(spin) - point.y * Math.sin(spin)) * view.radius;
   const v = (point.x * Math.sin(spin) + point.y * Math.cos(spin)) * view.radius;
-  const scale = view.perspective / (view.perspective - v * Math.sin(tilt));
-  return { x: u * scale, y: v * Math.cos(tilt) * scale, scale };
+  const h = height * view.radius;
+  // rotateX(tilt) of (u, v, h): h leans the point up the screen and nearer.
+  const y = v * Math.cos(tilt) - h * Math.sin(tilt);
+  const depth = v * Math.sin(tilt) + h * Math.cos(tilt);
+  const scale = view.perspective / (view.perspective - depth);
+  return { x: u * scale, y: y * scale, scale };
 }
 
 // The world layer is drawn with rotateZ(spin); undo it.

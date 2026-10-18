@@ -1,6 +1,7 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
+import type { CursorPosition } from '@/contracts';
 import { useGame } from '@/hooks/game';
 import { handSlotPosition, type TableSeat } from './table-seats';
 import { StandingAnchor } from './table-view';
@@ -13,10 +14,12 @@ const NO_CURSORS = new Map();
 // client lays the Hand out, so it lines up with the lifted card.
 export function TableCursors({
   seats,
-  handSize
+  handSize,
+  cursorHeight
 }: {
   seats: TableSeat[];
   handSize?: (seat: TableSeat) => number;
+  cursorHeight?: (playerId: string, point: CursorPosition) => number;
 }) {
   const { cursors } = useGame();
   const positions = useSyncExternalStore(
@@ -39,6 +42,7 @@ export function TableCursors({
       <StandingAnchor
         key={player.id}
         position={position}
+        height={cursorHeight?.(player.id, position) ?? 0}
         className="pointer-events-none transition-transform duration-100 ease-linear"
       >
         <div

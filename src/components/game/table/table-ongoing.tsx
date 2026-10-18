@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Check, Gavel, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useGame } from '@/hooks/game';
@@ -9,8 +9,17 @@ import { GamePlayerDeck } from '../game-player-deck';
 import { GameRoundHeader } from '../round/game-round-header';
 import { useJudgePick } from '../round/use-judge-pick';
 import { GameTable } from './game-table';
+import {
+  previewSide,
+  useCardPreview,
+  type CardPreview
+} from './table-card-preview';
 import { useHandHover } from './table-hands';
-import { JudgingFelt } from './table-judging';
+import {
+  answerCursorHeight,
+  JudgingFelt,
+  useAnswerCards
+} from './table-judging';
 import type { TableSeat } from './table-seats';
 import { FeltAnchor } from './table-view';
 
@@ -25,6 +34,7 @@ export function TableOngoing() {
   const judge = useJudgePick();
   const isJudging = round?.status === 'JUDGING';
   const pick = round?.blackCard?.pick ?? 0;
+  const answerCards = useAnswerCards(judge.answers.length);
 
   // Players don't share their Hands' sizes, so derive them: a full Hand, less
   // the cards played this Round until the refill.
@@ -45,7 +55,7 @@ export function TableOngoing() {
           <>
             {!isJudging && <PlayedCardBacks seats={seats} />}
             {isJudging ? (
-              <JudgingFelt judge={judge} seats={seats} />
+              <JudgingFelt judge={judge} cards={answerCards} />
             ) : (
               <RoundFelt />
             )}
@@ -69,6 +79,9 @@ export function TableOngoing() {
         }}
         overlay={isJudging ? <JudgingBar judge={judge} /> : <TableHand />}
         handSize={handSize}
+        cursorHeight={
+          isJudging ? answerCursorHeight(answerCards, judgeId) : undefined
+        }
       />
     </main>
   );
@@ -78,6 +91,20 @@ export function TableOngoing() {
 function RoundFelt() {
   const { round, hasPlayed, playedCards, selectedCards, unselectCard } =
     useGame();
+  const preview = useCardPreview();
+  const [hoverSide, setHoverSide] = useState<CardPreview['side'] | null>(null);
+  const answers = hasPlayed ? playedCards : selectedCards;
+
+  // Zoomed beside the table while hovered, following picks as they change.
+  useEffect(() => {
+    preview(
+      hoverSide && round
+        ? { card: round.blackCard, answers, side: hoverSide }
+        : null
+    );
+  }, [preview, hoverSide, round, answers]);
+
+  useEffect(() => () => preview(null), [preview]);
 
   if (!round) {
     return (
@@ -91,13 +118,23 @@ function RoundFelt() {
 
   return (
     <FeltAnchor position={{ x: 0, y: -0.05 }}>
-      <BlackCard
-        size="sm"
-        card={round.blackCard}
-        answers={hasPlayed ? playedCards : selectedCards}
-        onAnswerClick={hasPlayed ? undefined : unselectCard}
-        className="shadow-[0_18px_30px_rgba(0,0,0,0.55)]"
-      />
+      <div
+        data-testid="felt-black-card"
+        // Move too: a card under a resting pointer gets no pointerenter.
+        onPointerMove={event => {
+          if (event.pointerType === 'touch' || hoverSide) return;
+          setHoverSide(previewSide(event.clientX));
+        }}
+        onPointerLeave={() => setHoverSide(null)}
+      >
+        <BlackCard
+          size="sm"
+          card={round.blackCard}
+          answers={answers}
+          onAnswerClick={hasPlayed ? undefined : unselectCard}
+          className="shadow-[0_18px_30px_rgba(0,0,0,0.55)]"
+        />
+      </div>
     </FeltAnchor>
   );
 }
