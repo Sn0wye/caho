@@ -1,12 +1,13 @@
 'use client';
 
-import { useMemo, useRef, type ReactNode } from 'react';
+import { useCallback, useMemo, useRef, type ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 import { useGame } from '@/hooks/game';
 import { TableCursors } from './table-cursors';
 import type { TableView } from './table-geometry';
+import { HandHoverProvider, TableHands } from './table-hands';
 import { TableSeatMarker } from './table-seat-marker';
-import { arrangeSeats, type TableSeat } from './table-seats';
+import { arrangeSeats, handSlotPosition, type TableSeat } from './table-seats';
 import { TableViewProvider } from './table-view';
 import { useCursorBroadcast } from './use-cursor-broadcast';
 import { useElementSize } from './use-element-size';
@@ -27,6 +28,10 @@ type GameTableProps = {
   seatStatus: (seat: TableSeat) => ReactNode;
   // Drawn over the scene, e.g. the hand or the lobby buttons.
   overlay?: ReactNode;
+  // How many cards each Player holds. When set, the others' Hands lie face
+  // down in front of their seats, and hovering a card of this Player's Hand
+  // lifts it on everyone else's table.
+  handSize?: (seat: TableSeat) => number;
   className?: string;
 };
 
@@ -41,6 +46,7 @@ export function GameTable({
   felt,
   seatStatus,
   overlay,
+  handSize,
   className
 }: GameTableProps) {
   const { players, currentPlayer, sendCursor } = useGame();
@@ -66,6 +72,22 @@ export function GameTable({
     view,
     send: sendCursor
   });
+
+  const selfSeat = seats.find(seat => seat.player.id === currentPlayer?.id);
+  const { hoverCard } = pointer;
+  const hoverHandCard = useCallback(
+    (card: number | null) => {
+      if (card === null || !selfSeat || !handSize) {
+        hoverCard(null);
+        return;
+      }
+      const size = handSize(selfSeat);
+      if (size <= 0) return;
+      const slot = Math.min(card, size - 1);
+      hoverCard(slot, handSlotPosition(selfSeat, slot, size));
+    },
+    [hoverCard, selfSeat, handSize]
+  );
 
   return (
     <TableViewProvider value={view}>
@@ -105,6 +127,13 @@ export function GameTable({
                   className="absolute inset-0"
                   style={{ transform: `rotateZ(${view.spinDeg}deg)` }}
                 >
+                  {handSize && (
+                    <TableHands
+                      seats={seats}
+                      selfId={currentPlayer?.id}
+                      handSize={handSize}
+                    />
+                  )}
                   {felt(seats)}
                 </div>
               </div>
@@ -126,14 +155,14 @@ export function GameTable({
           </>
         )}
 
-        {overlay}
+        <HandHoverProvider value={hoverHandCard}>{overlay}</HandHoverProvider>
 
         {width > 0 && (
           <div
             className="pointer-events-none absolute left-1/2 z-40"
             style={{ top: `${CENTER_Y * 100}%` }}
           >
-            <TableCursors seats={seats} />
+            <TableCursors seats={seats} handSize={handSize} />
           </div>
         )}
       </div>

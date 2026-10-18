@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback } from 'react';
 import { Check, Gavel, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
@@ -9,12 +10,16 @@ import { GamePlayerDeck } from '../game-player-deck';
 import { GameRoundHeader } from '../round/game-round-header';
 import { useJudgePick } from '../round/use-judge-pick';
 import { GameTable } from './game-table';
+import { useHandHover } from './table-hands';
 import type { TableSeat } from './table-seats';
 import { FeltAnchor } from './table-view';
 
 // The black card is h-72 × w-48 at size "sm"; scaled to fit the felt.
 const CARD_WIDTH = 192;
 const CARD_HEIGHT = 288;
+
+// Mirrors the backend's HAND_SIZE (services/room/gameRules.ts).
+const HAND_SIZE = 10;
 
 type JudgePick = ReturnType<typeof useJudgePick>;
 
@@ -23,6 +28,18 @@ export function TableOngoing() {
   // One pick shared by the cards on the felt and the confirm button.
   const judge = useJudgePick();
   const isJudging = round?.status === 'JUDGING';
+  const pick = round?.blackCard?.pick ?? 0;
+
+  // Players don't share their Hands' sizes, so derive them: a full Hand, less
+  // the cards played this Round until the refill.
+  const handSize = useCallback(
+    ({ player }: TableSeat) => {
+      if (!round) return 0;
+      const hasPlayed = player.isReady && player.id !== judgeId;
+      return HAND_SIZE - (hasPlayed ? pick : 0);
+    },
+    [round, judgeId, pick]
+  );
 
   return (
     <main className="flex h-[calc(100vh-4rem)] w-full flex-1 flex-col">
@@ -51,6 +68,7 @@ export function TableOngoing() {
           );
         }}
         overlay={isJudging ? <JudgingBar judge={judge} /> : <TableHand />}
+        handSize={handSize}
       />
     </main>
   );
@@ -189,9 +207,14 @@ function JudgingBar({ judge }: { judge: JudgePick }) {
 
 // This Player's hand along the bottom edge, over the near side of the table.
 function TableHand() {
+  const hoverCard = useHandHover();
+
   return (
-    <div className="absolute inset-x-0 bottom-0 z-20 h-72 translate-y-10">
-      <GamePlayerDeck />
+    <div
+      className="absolute inset-x-0 bottom-0 z-20 h-72 translate-y-10"
+      onPointerLeave={() => hoverCard(null)}
+    >
+      <GamePlayerDeck onCardHover={hoverCard} />
     </div>
   );
 }

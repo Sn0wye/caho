@@ -2,14 +2,22 @@
 
 import { useSyncExternalStore } from 'react';
 import { useGame } from '@/hooks/game';
-import type { TableSeat } from './table-seats';
+import { handSlotPosition, type TableSeat } from './table-seats';
 import { StandingAnchor } from './table-view';
 
 const NO_CURSORS = new Map();
 
 // Other Players' pointers, drawn where they point on the table. Positions
-// arrive ~20 times a second; the transition smooths the gaps between them.
-export function TableCursors({ seats }: { seats: TableSeat[] }) {
+// arrive ~20 times a second; the transition smooths the gaps between them. A
+// cursor resting on a card of its Player's Hand points at that card as this
+// client lays the Hand out, so it lines up with the lifted card.
+export function TableCursors({
+  seats,
+  handSize
+}: {
+  seats: TableSeat[];
+  handSize?: (seat: TableSeat) => number;
+}) {
   const { cursors } = useGame();
   const positions = useSyncExternalStore(
     cursors.subscribe,
@@ -17,9 +25,15 @@ export function TableCursors({ seats }: { seats: TableSeat[] }) {
     () => NO_CURSORS
   );
 
-  return seats.map(({ player, color }) => {
-    const position = positions.get(player.id);
-    if (!position) return null;
+  return seats.map(seat => {
+    const { player, color } = seat;
+    const cursor = positions.get(player.id);
+    if (!cursor) return null;
+    const size = handSize?.(seat) ?? 0;
+    const position =
+      cursor.card != null && size > 0
+        ? handSlotPosition(seat, Math.min(cursor.card, size - 1), size)
+        : cursor;
 
     return (
       <StandingAnchor

@@ -25,17 +25,20 @@ type Options = {
 /**
  * Turns pointer moves over the scene into table-space cursor messages,
  * throttled to SEND_INTERVAL_MS with a trailing send so the final resting
- * position always goes out.
+ * position always goes out. While the pointer rests on a card of this Player's
+ * Hand, `hoverCard` pins the cursor to that card on the table instead.
  *
  * @example
  * const pointer = useCursorBroadcast({ sceneRef, centerY: 0.42, view, send });
  * <div onPointerMove={pointer.onPointerMove} onPointerLeave={pointer.onPointerLeave} />
+ * <Card onPointerEnter={() => pointer.hoverCard(2, slotPosition)} />
  */
 export function useCursorBroadcast({ sceneRef, centerY, view, send }: Options) {
   const lastSentAt = useRef(0);
   const pending = useRef<CursorPosition | null>(null);
   const trailingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isShown = useRef(false);
+  const isHoveringCard = useRef(false);
 
   const flush = useCallback(() => {
     trailingTimer.current = null;
@@ -47,7 +50,19 @@ export function useCursorBroadcast({ sceneRef, centerY, view, send }: Options) {
     send({ event: 'cursor.move', payload: position });
   }, [send]);
 
+  const queue = useCallback(
+    (position: CursorPosition) => {
+      pending.current = position;
+      if (trailingTimer.current) return;
+      const wait = SEND_INTERVAL_MS - (Date.now() - lastSentAt.current);
+      if (wait <= 0) flush();
+      else trailingTimer.current = setTimeout(flush, wait);
+    },
+    [flush]
+  );
+
   const hide = useCallback(() => {
+    isHoveringCard.current = false;
     pending.current = null;
     if (trailingTimer.current) clearTimeout(trailingTimer.current);
     trailingTimer.current = null;
@@ -59,7 +74,8 @@ export function useCursorBroadcast({ sceneRef, centerY, view, send }: Options) {
   const onPointerMove = useCallback(
     (event: PointerEvent<HTMLElement>) => {
       const scene = sceneRef.current;
-      if (!scene || event.pointerType === 'touch') return;
+      if (!scene || event.pointerType === 'touch' || isHoveringCard.current)
+        return;
       const rect = scene.getBoundingClientRect();
       const position = screenToTable(
         {
@@ -72,16 +88,22 @@ export function useCursorBroadcast({ sceneRef, centerY, view, send }: Options) {
         hide();
         return;
       }
-      pending.current = position;
-      if (trailingTimer.current) return;
-      const wait = SEND_INTERVAL_MS - (Date.now() - lastSentAt.current);
-      if (wait <= 0) flush();
-      else trailingTimer.current = setTimeout(flush, wait);
+      queue(position);
     },
-    [sceneRef, centerY, view, hide, flush]
+    [sceneRef, centerY, view, hide, queue]
+  );
+
+  // `position` is where the card lies on the table; null when the pointer
+  // leaves the card, after which pointer moves take over again.
+  const hoverCard = useCallback(
+    (card: number | null, position?: CursorPosition) => {
+      isHoveringCard.current = card !== null;
+      if (card !== null && position) queue({ ...position, card });
+    },
+    [queue]
   );
 
   useEffect(() => hide, [hide]);
 
-  return { onPointerMove, onPointerLeave: hide };
+  return { onPointerMove, onPointerLeave: hide, hoverCard };
 }
