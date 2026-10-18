@@ -9,7 +9,7 @@ import { HandHoverProvider, TableHands } from './table-hands';
 import { TableSeatMarker } from './table-seat-marker';
 import { arrangeSeats, handSlotPosition, type TableSeat } from './table-seats';
 import { TableViewProvider } from './table-view';
-import { useCursorBroadcast } from './use-cursor-broadcast';
+import { CursorPinProvider, useCursorBroadcast } from './use-cursor-broadcast';
 import { useElementSize } from './use-element-size';
 
 // The table's centre sits a bit above the scene's middle, leaving the bottom
@@ -74,98 +74,105 @@ export function GameTable({
   });
 
   const selfSeat = seats.find(seat => seat.player.id === currentPlayer?.id);
-  const { hoverCard } = pointer;
+  const { pin } = pointer;
   const hoverHandCard = useCallback(
     (card: number | null) => {
       if (card === null || !selfSeat || !handSize) {
-        hoverCard(null);
+        pin(null);
         return;
       }
       const size = handSize(selfSeat);
       if (size <= 0) return;
       const slot = Math.min(card, size - 1);
-      hoverCard(slot, handSlotPosition(selfSeat, slot, size));
+      pin({ ...handSlotPosition(selfSeat, slot, size), card: slot });
     },
-    [hoverCard, selfSeat, handSize]
+    [pin, selfSeat, handSize]
   );
 
   return (
     <TableViewProvider value={view}>
-      <div
-        ref={sceneRef}
-        data-testid="game-table"
-        onPointerMove={pointer.onPointerMove}
-        onPointerLeave={pointer.onPointerLeave}
-        className={cn(
-          'relative min-h-0 flex-1 overflow-clip bg-[radial-gradient(ellipse_at_50%_35%,var(--color-zinc-100),var(--color-zinc-300))] dark:bg-[radial-gradient(ellipse_at_50%_35%,var(--color-zinc-900),var(--color-zinc-950)_70%)]',
-          className
-        )}
-      >
-        {width > 0 && (
-          <>
-            <div
-              className="absolute inset-0"
-              style={{
-                perspective: `${view.perspective}px`,
-                perspectiveOrigin: `50% ${CENTER_Y * 100}%`
-              }}
-            >
+      <CursorPinProvider value={pin}>
+        <div
+          ref={sceneRef}
+          data-testid="game-table"
+          onPointerMove={pointer.onPointerMove}
+          onPointerLeave={pointer.onPointerLeave}
+          className={cn(
+            'relative min-h-0 flex-1 overflow-clip bg-[radial-gradient(ellipse_at_50%_35%,var(--color-zinc-100),var(--color-zinc-300))] dark:bg-[radial-gradient(ellipse_at_50%_35%,var(--color-zinc-900),var(--color-zinc-950)_70%)]',
+            className
+          )}
+        >
+          {width > 0 && (
+            <>
               <div
-                className="absolute"
+                className="absolute inset-0"
                 style={{
-                  left: '50%',
-                  top: `${CENTER_Y * 100}%`,
-                  width: view.radius * 2,
-                  height: view.radius * 2,
-                  transform: `translate(-50%, -50%) rotateX(${view.tiltDeg}deg)`,
-                  transformStyle: 'preserve-3d'
+                  perspective: `${view.perspective}px`,
+                  perspectiveOrigin: `50% ${CENTER_Y * 100}%`
                 }}
               >
-                <TableEdge />
-                <TableFelt />
                 <div
-                  className="absolute inset-0"
-                  style={{ transform: `rotateZ(${view.spinDeg}deg)` }}
+                  className="absolute"
+                  style={{
+                    left: '50%',
+                    top: `${CENTER_Y * 100}%`,
+                    width: view.radius * 2,
+                    height: view.radius * 2,
+                    transform: `translate(-50%, -50%) rotateX(${view.tiltDeg}deg)`,
+                    transformStyle: 'preserve-3d'
+                  }}
                 >
-                  {handSize && (
-                    <TableHands
-                      seats={seats}
-                      selfId={currentPlayer?.id}
-                      handSize={handSize}
-                    />
-                  )}
-                  {felt(seats)}
+                  <TableEdge />
+                  <TableFelt />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      // Kept in 3D so a card can tilt off the felt toward the
+                      // camera; a hair above the felt so they never z-fight.
+                      transform: `translateZ(1px) rotateZ(${view.spinDeg}deg)`,
+                      transformStyle: 'preserve-3d'
+                    }}
+                  >
+                    {handSize && (
+                      <TableHands
+                        seats={seats}
+                        selfId={currentPlayer?.id}
+                        handSize={handSize}
+                      />
+                    )}
+                    {felt(seats)}
+                  </div>
                 </div>
               </div>
-            </div>
 
+              <div
+                className="pointer-events-none absolute left-1/2 z-10"
+                style={{ top: `${CENTER_Y * 100}%` }}
+              >
+                {/* This Player is the camera, so only the others get a seat. */}
+                {seats
+                  .filter(seat => seat.player.id !== currentPlayer?.id)
+                  .map(seat => (
+                    <TableSeatMarker key={seat.player.id} seat={seat}>
+                      {seatStatus(seat)}
+                    </TableSeatMarker>
+                  ))}
+              </div>
+            </>
+          )}
+
+          <HandHoverProvider value={hoverHandCard}>{overlay}</HandHoverProvider>
+
+          {width > 0 && (
             <div
-              className="pointer-events-none absolute left-1/2 z-10"
+              className="pointer-events-none absolute left-1/2 z-40"
               style={{ top: `${CENTER_Y * 100}%` }}
             >
-              {/* This Player is the camera, so only the others get a seat. */}
-              {seats
-                .filter(seat => seat.player.id !== currentPlayer?.id)
-                .map(seat => (
-                  <TableSeatMarker key={seat.player.id} seat={seat}>
-                    {seatStatus(seat)}
-                  </TableSeatMarker>
-                ))}
+              <TableCursors seats={seats} handSize={handSize} />
             </div>
-          </>
-        )}
-
-        <HandHoverProvider value={hoverHandCard}>{overlay}</HandHoverProvider>
-
-        {width > 0 && (
-          <div
-            className="pointer-events-none absolute left-1/2 z-40"
-            style={{ top: `${CENTER_Y * 100}%` }}
-          >
-            <TableCursors seats={seats} handSize={handSize} />
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </CursorPinProvider>
     </TableViewProvider>
   );
 }

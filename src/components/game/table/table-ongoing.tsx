@@ -3,7 +3,6 @@
 import { useCallback } from 'react';
 import { Check, Gavel, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/utils/cn';
 import { useGame } from '@/hooks/game';
 import { BlackCard } from '../cards/black-card';
 import { GamePlayerDeck } from '../game-player-deck';
@@ -11,12 +10,9 @@ import { GameRoundHeader } from '../round/game-round-header';
 import { useJudgePick } from '../round/use-judge-pick';
 import { GameTable } from './game-table';
 import { useHandHover } from './table-hands';
+import { JudgingFelt } from './table-judging';
 import type { TableSeat } from './table-seats';
 import { FeltAnchor } from './table-view';
-
-// The black card is h-72 × w-48 at size "sm"; scaled to fit the felt.
-const CARD_WIDTH = 192;
-const CARD_HEIGHT = 288;
 
 // Mirrors the backend's HAND_SIZE (services/room/gameRules.ts).
 const HAND_SIZE = 10;
@@ -48,7 +44,11 @@ export function TableOngoing() {
         felt={seats => (
           <>
             {!isJudging && <PlayedCardBacks seats={seats} />}
-            {isJudging ? <JudgingFelt judge={judge} /> : <RoundFelt />}
+            {isJudging ? (
+              <JudgingFelt judge={judge} seats={seats} />
+            ) : (
+              <RoundFelt />
+            )}
           </>
         )}
         seatStatus={({ player }) => {
@@ -123,58 +123,6 @@ function PlayedCardBacks({ seats }: { seats: TableSeat[] }) {
         </div>
       </FeltAnchor>
     ));
-}
-
-// Every answer revealed face-up on the felt; the Judge clicks one.
-function JudgingFelt({ judge }: { judge: JudgePick }) {
-  const {
-    round,
-    isJudge,
-    answers,
-    chosenPlayerId,
-    setChosenPlayerId,
-    isPending
-  } = judge;
-  if (!round) return null;
-
-  const scale = answers.length <= 3 ? 0.72 : answers.length <= 6 ? 0.56 : 0.45;
-
-  return (
-    <FeltAnchor position={{ x: 0, y: 0 }}>
-      <div className="flex w-[34rem] flex-wrap items-center justify-center gap-3">
-        {answers.map((answer, index) => {
-          const isChosen = chosenPlayerId === answer.player.id;
-          return (
-            <button
-              key={answer.id}
-              type="button"
-              disabled={!isJudge || isPending}
-              onClick={() => setChosenPlayerId(answer.player.id)}
-              aria-pressed={isChosen}
-              aria-label={`Resposta ${index + 1}`}
-              className={cn(
-                'rounded-xl transition-transform',
-                isJudge && 'hover:-translate-y-2 hover:cursor-pointer',
-                isChosen && 'ring-4 ring-orange-400'
-              )}
-              style={{ width: CARD_WIDTH * scale, height: CARD_HEIGHT * scale }}
-            >
-              <div
-                style={{ transform: `scale(${scale})`, transformOrigin: '0 0' }}
-              >
-                <BlackCard
-                  size="sm"
-                  card={round.blackCard}
-                  answers={answer.whiteCards}
-                  className="shadow-[0_12px_20px_rgba(0,0,0,0.5)]"
-                />
-              </div>
-            </button>
-          );
-        })}
-      </div>
-    </FeltAnchor>
-  );
 }
 
 function JudgingBar({ judge }: { judge: JudgePick }) {
