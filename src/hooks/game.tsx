@@ -6,7 +6,8 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useReducer
+  useReducer,
+  useState
 } from 'react';
 import {
   fetchRoomResync,
@@ -14,8 +15,14 @@ import {
   type RoomResync
 } from '@/utils/game-api';
 import { ROUND_RESULT_DISPLAY_MS } from '@/constants/room';
-import type { PlayerEvent, RoomEvent } from '@/contracts';
+import {
+  isCursorEvent,
+  type CursorMessage,
+  type PlayerEvent,
+  type RoomEvent
+} from '@/contracts';
 import type { RoomPlayer, WhiteCard } from '@/schemas';
+import { CursorStore } from './cursor-store';
 import {
   gameReducer,
   rankingFromPlayers,
@@ -34,6 +41,9 @@ type GameContextType = GameState & {
   selectedCards: WhiteCard[];
   isSelectionComplete: boolean;
   connection: SocketStatus;
+  // Other Players' live cursors; read with useSyncExternalStore.
+  cursors: CursorStore;
+  sendCursor: (message: CursorMessage) => void;
   selectCard: (card: WhiteCard) => void;
   unselectCard: (card: WhiteCard) => void;
   markCardsPlayed: (cards: WhiteCard[]) => void;
@@ -55,6 +65,7 @@ export const GameContextProvider = ({
 }: GameContextProviderProps) => {
   const [state, dispatch] = useReducer(gameReducer, initialState, init);
   const roomCode = state.room.code;
+  const [cursors] = useState(() => new CursorStore());
 
   const loadDeadlines = useCallback(() => {
     fetchRoundSnapshot(roomCode)
@@ -64,6 +75,17 @@ export const GameContextProvider = ({
 
   const handleEvent = useCallback(
     (event: RoomEvent | PlayerEvent) => {
+      // Cursors skip the reducer so a moving mouse doesn't re-render the game.
+      if (isCursorEvent(event)) {
+        if (event.payload.playerId === userId) return;
+        if (event.event === 'room.cursor-move') {
+          cursors.move(event.payload.playerId, event.payload);
+        } else {
+          cursors.remove(event.payload.playerId);
+        }
+        return;
+      }
+      if (event.event === 'room.player-left') cursors.remove(event.payload.id);
       dispatch({ type: 'event', event });
       // The events don't carry deadlines; the snapshot does.
       if (
@@ -73,7 +95,7 @@ export const GameContextProvider = ({
         loadDeadlines();
       }
     },
-    [loadDeadlines]
+    [loadDeadlines, cursors, userId]
   );
 
   const handleOpen = useCallback(() => {
@@ -82,7 +104,7 @@ export const GameContextProvider = ({
       .catch(error => console.error('[game] resync failed', error));
   }, [roomCode]);
 
-  const connection = useRoomSockets({
+  const { status: connection, sendCursor } = useRoomSockets({
     roomCode,
     userId,
     onEvent: handleEvent,
@@ -120,13 +142,15 @@ export const GameContextProvider = ({
       selectedCards,
       isSelectionComplete: pick > 0 && selectedCards.length === pick,
       connection,
+      cursors,
+      sendCursor,
       selectCard: card => dispatch({ type: 'select-card', cardId: card.id }),
       unselectCard: card =>
         dispatch({ type: 'unselect-card', cardId: card.id }),
       markCardsPlayed: cards => dispatch({ type: 'cards-played', cards }),
       dismissResult: () => dispatch({ type: 'dismiss-result' })
     };
-  }, [state, userId, connection]);
+  }, [state, userId, connection, cursors, sendCursor]);
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 };
