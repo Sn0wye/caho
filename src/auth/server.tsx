@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { cache } from 'react';
 import { cookies } from 'next/headers';
-import { api } from '@/utils/api';
+import { api } from '@/utils/server/api';
 import type { User } from '@/schemas';
 import 'server-only';
 import { AuthClientProvider } from './client';
@@ -27,11 +27,8 @@ export const getUser = cache(async (): Promise<User | null> => {
   }
 
   try {
-    const { data } = await api.get<User>('/auth/profile', {
-      headers: {
-        cookie: `auth_session=${sessionCookie.value}`
-      }
-    });
+    // The server api forwards the session as a Bearer token.
+    const { data } = await api.get<User>('/auth/profile');
 
     return data;
   } catch {
