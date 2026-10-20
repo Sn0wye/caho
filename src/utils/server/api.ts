@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import axios from 'axios';
 import { env } from '@/env.mjs';
 import 'server-only';
@@ -18,5 +18,22 @@ api.interceptors.request.use(async config => {
     config.headers.Authorization = `Bearer ${sessionCookie}`;
   }
 
+  const playerIp = await requestingPlayerIp();
+  if (playerIp && env.BACKEND_PROXY_SECRET) {
+    config.headers['x-caho-client-ip'] = playerIp;
+    config.headers['x-caho-proxy-secret'] = env.BACKEND_PROXY_SECRET;
+  }
+
   return config;
 });
+
+// These calls leave from Vercel's shared egress IPs, so the backend's per-IP
+// rate limits would lump players together. Forward the player's own IP, which
+// the backend trusts only alongside the shared secret. Vercel overwrites
+// x-real-ip / x-forwarded-for with the real client, so players can't spoof it.
+async function requestingPlayerIp(): Promise<string | null> {
+  const requestHeaders = await headers();
+  const forwardedFor = requestHeaders.get('x-forwarded-for')?.split(',')[0];
+
+  return requestHeaders.get('x-real-ip') ?? forwardedFor?.trim() ?? null;
+}

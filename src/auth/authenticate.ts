@@ -1,4 +1,4 @@
-import { api } from '@/utils/api';
+import { api } from '@/utils/server/api';
 import { getApiErrorMessage } from '@/utils/game-api';
 import type { SignInResponse, SignUpRequest } from '@/contracts';
 import 'server-only';

@@ -16,7 +16,10 @@ const publicBackendUrl = z
 
 export const env = createEnv({
   server: {
-    NODE_ENV: z.enum(['development', 'test', 'production'])
+    NODE_ENV: z.enum(['development', 'test', 'production']),
+    // Proves to the backend that a forwarded player IP came from this server.
+    // Must equal the backend's FRONTEND_PROXY_SECRET. Unset: no IP is forwarded.
+    BACKEND_PROXY_SECRET: z.string().min(32).optional()
   },
   client: {
     NEXT_PUBLIC_BACKEND_URL: publicBackendUrl,
@@ -24,6 +27,7 @@ export const env = createEnv({
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    BACKEND_PROXY_SECRET: process.env.BACKEND_PROXY_SECRET || undefined,
     NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
     NEXT_PUBLIC_WEBSOCKET_URL: process.env.NEXT_PUBLIC_WEBSOCKET_URL
   },
