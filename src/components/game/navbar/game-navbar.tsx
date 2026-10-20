@@ -6,6 +6,7 @@ import { ThemeSwitcher } from '@/components/theme-switcher';
 import { Button } from '@/components/ui/button';
 import { useGame } from '@/hooks/game';
 import { GameEndButton } from './game-end-button';
+import { GameLayoutToggle } from './game-layout-toggle';
 import { GameLeaveButton } from './game-leave-button';
 import { GameNavbarStatus } from './game-navbar-status';
 import { CopyRoomCodeButton } from './game-room-code-button';
@@ -27,6 +28,7 @@ export function GameNavbar() {
       </div>
 
       <div className="flex items-center gap-3">
+        {!isFinished && <GameLayoutToggle />}
         <ThemeSwitcher />
         {isHost && room.status === 'IN_PROGRESS' && <GameEndButton />}
         {isFinished ? (
