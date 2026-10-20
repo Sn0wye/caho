@@ -37,7 +37,7 @@ export function RoomListCard({
 }: RoomListCardProps) {
   const router = useRouter();
 
-  const { mutate } = useMutation<
+  const { mutate, isPending } = useMutation<
     JoinRoomResponse,
     ErrorSchema,
     JoinRoomRequest
@@ -47,6 +47,10 @@ export function RoomListCard({
   });
 
   function handleJoinRoom() {
+    // The whole Card is the button, so a double click sent two joins; the
+    // backend now refuses the second (already in the Room) and its error toast
+    // showed up after a join that worked.
+    if (isPending) return;
     // A locked Room asks for its password on the Room page's join prompt.
     if (hasPassword) {
       router.push(`/room/${code.toUpperCase()}`);
