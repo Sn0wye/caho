@@ -141,6 +141,10 @@ function applyEvent(
       };
     case 'player.cards-drawn':
       return replaceHand(state, payload);
+    // GameContextProvider routes cursors to the CursorStore instead.
+    case 'room.cursor-move':
+    case 'room.cursor-leave':
+      return state;
   }
 }
 

@@ -1,39 +1,23 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import { Check, Gavel, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/utils/cn';
-import { getApiErrorMessage, pickWinner } from '@/utils/game-api';
-import { useGame } from '@/hooks/game';
 import { BlackCard } from '../cards/black-card';
+import { useJudgePick } from './use-judge-pick';
 
 // The judging phase: every answer shown as its completed Black Card, without
 // names. Only the Judge can pick; everyone else watches the same table.
 export function GameJudging() {
-  const { room, round, isJudge } = useGame();
-  const [chosenPlayerId, setChosenPlayerId] = useState<string | null>(null);
-
-  // Sorted by id (random cuid) so the order doesn't reveal who played first,
-  // and every client sees the same table.
-  const answers = useMemo(
-    () =>
-      [...(round?.playedCards ?? [])].sort((a, b) => a.id.localeCompare(b.id)),
-    [round?.playedCards]
-  );
-
-  const { mutate: confirmWinner, isPending } = useMutation({
-    mutationFn: (playerId: string) => pickWinner(room.code, playerId),
-    onError: error => {
-      toast({
-        variant: 'destructive',
-        title: 'Não deu pra escolher o vencedor',
-        description: getApiErrorMessage(error)
-      });
-    }
-  });
+  const {
+    round,
+    isJudge,
+    answers,
+    chosenPlayerId,
+    setChosenPlayerId,
+    confirmWinner,
+    isPending
+  } = useJudgePick();
 
   if (!round) return null;
 

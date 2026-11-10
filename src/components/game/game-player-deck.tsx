@@ -15,7 +15,12 @@ import { WhiteCard } from './cards/white-card';
 const overlayClassName =
   'absolute inset-0 z-10 flex flex-col items-center justify-center gap-8 overflow-clip backdrop-blur-xs before:absolute before:bottom-0 before:-z-10 before:aspect-square before:h-1/2 before:translate-y-1/2 before:rounded-full before:bg-zinc-950 before:blur-[120px] after:absolute after:inset-0 after:-z-20 after:bg-linear-to-b after:from-white after:to-white/10 after:content-[""] dark:before:bg-zinc-400 dark:after:from-zinc-950 dark:after:to-zinc-950/90';
 
-export function GamePlayerDeck() {
+type GamePlayerDeckProps = {
+  // Which card (by position in the Hand) the pointer rests on, or null.
+  onCardHover?: (card: number | null) => void;
+};
+
+export function GamePlayerDeck({ onCardHover }: GamePlayerDeckProps = {}) {
   const {
     room,
     visibleHand,
@@ -69,12 +74,13 @@ export function GamePlayerDeck() {
           'justify-start xl:justify-center'
         )}
       >
-        {visibleHand.map(card => (
+        {visibleHand.map((card, index) => (
           <WhiteCard
             key={card.id}
             data={card}
             onClick={selectCard}
             disabled={isSelectionComplete || hasPlayed}
+            onHoverChange={isHovered => onCardHover?.(isHovered ? index : null)}
           />
         ))}
       </div>

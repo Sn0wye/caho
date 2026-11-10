@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import type { PlayerEvent, RoomEvent } from '@/contracts';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { CursorMessage, PlayerEvent, RoomEvent } from '@/contracts';
 import { env } from '@/env.mjs';
 
 // Keeps proxies from reaping an idle socket; the backend ignores the payload.
@@ -33,10 +33,21 @@ type Channel = {
 
 // Two sockets per Room: the Room channel (`room.*`) and the private Player
 // channel (`player.*`, which also drives presence). Both reconnect with backoff.
+// The Room socket also carries this Player's cursor out (backend ADR-0006).
 export function useRoomSockets({ roomCode, userId, onEvent, onOpen }: Options) {
   const [status, setStatus] = useState<SocketStatus>('connecting');
   const handlers = useRef({ onEvent, onOpen });
   handlers.current = { onEvent, onOpen };
+  const roomSocket = useRef<WebSocket | null>(null);
+
+  // Dropped while the socket is down: a stale cursor is worthless, and the next
+  // move after reconnecting replaces it.
+  const sendCursor = useCallback((message: CursorMessage) => {
+    const socket = roomSocket.current;
+    if (socket?.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify(message));
+    }
+  }, []);
 
   useEffect(() => {
     let disposed = false;
@@ -57,6 +68,7 @@ export function useRoomSockets({ roomCode, userId, onEvent, onOpen }: Options) {
 
       const socket = new WebSocket(channel.url);
       channel.socket = socket;
+      if (key === 'room') roomSocket.current = socket;
 
       socket.onopen = () => {
         channel.attempts = 0;
@@ -109,7 +121,7 @@ export function useRoomSockets({ roomCode, userId, onEvent, onOpen }: Options) {
     };
   }, [roomCode, userId]);
 
-  return status;
+  return { status, sendCursor };
 }
 
 function makeChannel(url: string): Channel {
