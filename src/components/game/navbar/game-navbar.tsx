@@ -28,7 +28,7 @@ export function GameNavbar() {
       </div>
 
       <div className="flex items-center gap-3">
-        {!isFinished && <GameLayoutToggle />}
+        <GameLayoutToggle />
         <ThemeSwitcher />
         {isHost && room.status === 'IN_PROGRESS' && <GameEndButton />}
         {isFinished ? (

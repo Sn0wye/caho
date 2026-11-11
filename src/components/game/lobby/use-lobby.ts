@@ -2,7 +2,7 @@
 
 import { useMutation } from '@tanstack/react-query';
 import { toast } from '@/components/ui/use-toast';
-import { getApiErrorMessage, startGame, toggleReady } from '@/utils/game-api';
+import { getApiErrorMessage } from '@/utils/game-api';
 import { MIN_PLAYERS_TO_START } from '@/constants/room';
 import { useGame } from '@/hooks/game';
 
@@ -16,13 +16,13 @@ const showError = (title: string) => (error: unknown) => {
 
 // The lobby's rules and actions, shared by the classic and table layouts.
 export function useLobby() {
-  const { currentPlayer, players, room } = useGame();
+  const { currentPlayer, players, room, actions } = useGame();
   const ready = useMutation({
-    mutationFn: () => toggleReady(room.code),
+    mutationFn: () => actions.toggleReady(),
     onError: showError('Não deu pra mudar seu status')
   });
   const start = useMutation({
-    mutationFn: () => startGame(room.code),
+    mutationFn: () => actions.startGame(),
     onError: showError('Não deu pra começar o jogo')
   });
 

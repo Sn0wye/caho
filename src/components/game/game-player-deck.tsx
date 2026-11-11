@@ -2,15 +2,12 @@
 
 import type { ReactNode } from 'react';
 import Image from 'next/image';
-import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { getApiErrorMessage, playCards } from '@/utils/game-api';
 import { useGame } from '@/hooks/game';
-import type { WhiteCard as WhiteCardType } from '@/schemas';
 import { Button } from '../ui/button';
-import { toast } from '../ui/use-toast';
 import { WhiteCard } from './cards/white-card';
+import { usePlayCards } from './use-play-cards';
 
 const overlayClassName =
   'absolute inset-0 z-10 flex flex-col items-center justify-center gap-8 overflow-clip backdrop-blur-xs before:absolute before:bottom-0 before:-z-10 before:aspect-square before:h-1/2 before:translate-y-1/2 before:rounded-full before:bg-zinc-950 before:blur-[120px] after:absolute after:inset-0 after:-z-20 after:bg-linear-to-b after:from-white after:to-white/10 after:content-[""] dark:before:bg-zinc-400 dark:after:from-zinc-950 dark:after:to-zinc-950/90';
@@ -22,33 +19,15 @@ type GamePlayerDeckProps = {
 
 export function GamePlayerDeck({ onCardHover }: GamePlayerDeckProps = {}) {
   const {
-    room,
     visibleHand,
     selectedCards,
     selectCard,
     isSelectionComplete,
     isJudge,
-    hasPlayed,
-    markCardsPlayed
+    hasPlayed
   } = useGame();
 
-  const { mutate: submitCards, isPending } = useMutation({
-    mutationFn: (cards: WhiteCardType[]) =>
-      playCards(
-        room.code,
-        cards.map(card => card.id)
-      ),
-    // The refilled Hand can arrive over the socket before this resolves, so use
-    // the cards captured at submit time.
-    onSuccess: (_, cards) => markCardsPlayed(cards),
-    onError: error => {
-      toast({
-        variant: 'destructive',
-        title: 'Não deu pra jogar essas cartas',
-        description: getApiErrorMessage(error)
-      });
-    }
-  });
+  const { submitCards, isPending } = usePlayCards();
 
   if (isJudge) {
     return (

@@ -7,11 +7,16 @@ import {
   useEffect,
   useMemo,
   useReducer,
-  useState
+  useState,
+  type Dispatch
 } from 'react';
 import {
   fetchRoomResync,
   fetchRoundSnapshot,
+  pickWinner,
+  playCards,
+  startGame,
+  toggleReady,
   type RoomResync
 } from '@/utils/game-api';
 import { ROUND_RESULT_DISPLAY_MS } from '@/constants/room';
@@ -27,11 +32,22 @@ import {
   gameReducer,
   rankingFromPlayers,
   roundFromSnapshot,
+  type GameAction,
   type GameState
 } from './game-reducer';
 import { useRoomSockets, type SocketStatus } from './use-room-sockets';
 
-type GameContextType = GameState & {
+// The commands a Player can send. The real provider posts them to the backend;
+// the demo provider (hooks/demo-game.tsx) answers them locally.
+export type GameActions = {
+  toggleReady: () => Promise<void>;
+  startGame: () => Promise<void>;
+  playCards: (cardIds: string[]) => Promise<void>;
+  pickWinner: (winnerPlayerId: string) => Promise<void>;
+};
+
+export type GameContextType = GameState & {
+  actions: GameActions;
   currentPlayer: RoomPlayer | null;
   judgeId: string | null;
   isJudge: boolean;
@@ -50,7 +66,7 @@ type GameContextType = GameState & {
   dismissResult: () => void;
 };
 
-const GameContext = createContext<GameContextType | null>(null);
+export const GameContext = createContext<GameContextType | null>(null);
 
 type GameContextProviderProps = {
   userId: string;
@@ -63,7 +79,11 @@ export const GameContextProvider = ({
   initialState,
   children
 }: GameContextProviderProps) => {
-  const [state, dispatch] = useReducer(gameReducer, initialState, init);
+  const [state, dispatch] = useReducer(
+    gameReducer,
+    initialState,
+    initGameState
+  );
   const roomCode = state.room.code;
   const [cursors] = useState(() => new CursorStore());
 
@@ -121,7 +141,44 @@ export const GameContextProvider = ({
     return () => clearTimeout(timer);
   }, [state.lastResult]);
 
-  const value = useMemo<GameContextType>(() => {
+  const actions = useMemo<GameActions>(
+    () => ({
+      toggleReady: () => toggleReady(roomCode),
+      startGame: () => startGame(roomCode),
+      playCards: cardIds => playCards(roomCode, cardIds),
+      pickWinner: winnerPlayerId => pickWinner(roomCode, winnerPlayerId)
+    }),
+    [roomCode]
+  );
+
+  const value = useMemo<GameContextType>(
+    () =>
+      deriveGameContext(state, userId, {
+        actions,
+        connection,
+        cursors,
+        sendCursor,
+        dispatch
+      }),
+    [state, userId, actions, connection, cursors, sendCursor]
+  );
+
+  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
+};
+
+type GameContextDeps = Pick<
+  GameContextType,
+  'actions' | 'connection' | 'cursors' | 'sendCursor'
+> & { dispatch: Dispatch<GameAction> };
+
+// Everything the context derives from the reducer state, shared by the real
+// and demo providers.
+export function deriveGameContext(
+  state: GameState,
+  userId: string,
+  { actions, connection, cursors, sendCursor, dispatch }: GameContextDeps
+): GameContextType {
+  {
     const currentPlayer = state.players.find(p => p.id === userId) ?? null;
     const judgeId = state.round?.judgeId ?? state.room.judgeId ?? null;
     const selectedCards = state.selectedCardIds
@@ -141,6 +198,7 @@ export const GameContextProvider = ({
         .sort((a, b) => a.text.localeCompare(b.text)),
       selectedCards,
       isSelectionComplete: pick > 0 && selectedCards.length === pick,
+      actions,
       connection,
       cursors,
       sendCursor,
@@ -150,12 +208,10 @@ export const GameContextProvider = ({
       markCardsPlayed: cards => dispatch({ type: 'cards-played', cards }),
       dismissResult: () => dispatch({ type: 'dismiss-result' })
     };
-  }, [state, userId, connection, cursors, sendCursor]);
+  }
+}
 
-  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
-};
-
-function init(initial: RoomResync): GameState {
+export function initGameState(initial: RoomResync): GameState {
   return {
     room: initial.room,
     players: initial.players,

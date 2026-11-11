@@ -1,18 +1,30 @@
 'use client';
 
-import { Box, LayoutGrid } from 'lucide-react';
+import { Box, Layers, LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip';
-import { useGameLayout } from '../table/use-game-layout';
+import {
+  GAME_LAYOUTS,
+  useGameLayout,
+  type GameLayout
+} from '../table/use-game-layout';
 
-// Switches between the 2.5D table and the classic flat layout.
+const LAYOUTS: Record<GameLayout, { label: string; icon: typeof Box }> = {
+  '3d': { label: 'Mesa 3D', icon: Box },
+  'table': { label: 'Mesa 2.5D com cursores', icon: Layers },
+  'classic': { label: 'Layout clássico', icon: LayoutGrid }
+};
+
+// Cycles through the 3D table, the 2.5D table and the classic flat layout.
 export function GameLayoutToggle() {
   const { layout, setLayout } = useGameLayout();
-  const isTable = layout === 'table';
+  const next =
+    GAME_LAYOUTS[(GAME_LAYOUTS.indexOf(layout) + 1) % GAME_LAYOUTS.length];
+  const Icon = LAYOUTS[next].icon;
 
   return (
     <Tooltip>
@@ -20,15 +32,13 @@ export function GameLayoutToggle() {
         <Button
           variant="outline"
           size="icon"
-          aria-label={isTable ? 'Usar layout clássico' : 'Usar layout de mesa'}
-          onClick={() => setLayout(isTable ? 'classic' : 'table')}
+          aria-label={`Usar ${LAYOUTS[next].label}`}
+          onClick={() => setLayout(next)}
         >
-          {isTable ? <LayoutGrid size={16} /> : <Box size={16} />}
+          <Icon size={16} />
         </Button>
       </TooltipTrigger>
-      <TooltipContent>
-        {isTable ? 'Layout clássico' : 'Mesa 3D com cursores'}
-      </TooltipContent>
+      <TooltipContent>{LAYOUTS[next].label}</TooltipContent>
     </Tooltip>
   );
 }
