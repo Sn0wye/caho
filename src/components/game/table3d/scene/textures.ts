@@ -672,3 +672,199 @@ export function posterTexture(index: number): Texture {
     return toTexture(element);
   });
 }
+
+const MENU: [item: string, price: string][] = [
+  ['CAIPIRINHA', '12'],
+  ['CERVEJA', '8'],
+  ['PINGA', '5'],
+  ['DIGNIDADE', 'EM FALTA'],
+  ['FIADO', 'SÓ AMANHÃ']
+];
+
+/**
+ * The bar's chalkboard: today's prices, in the game's voice.
+ *
+ * @example
+ * <meshStandardMaterial map={chalkboardTexture()} />
+ */
+export function chalkboardTexture(): Texture {
+  return cached('chalkboard', () => {
+    const width = 768;
+    const height = 560;
+    const { element, context } = canvas(width, height);
+    const random = seeded(61);
+    context.fillStyle = '#1c2a26';
+    context.fillRect(0, 0, width, height);
+    // Wiped-off chalk.
+    for (let i = 0; i < 14; i++) {
+      context.fillStyle = `rgba(255, 255, 255, ${0.015 + random() * 0.025})`;
+      context.beginPath();
+      context.ellipse(
+        random() * width,
+        random() * height,
+        80 + random() * 160,
+        20 + random() * 40,
+        random() * 0.6 - 0.3,
+        0,
+        Math.PI * 2
+      );
+      context.fill();
+    }
+    context.textBaseline = 'middle';
+    context.fillStyle = '#ffd866';
+    context.textAlign = 'center';
+    context.font = `900 64px ${fontFamily()}`;
+    context.fillText('HOJE TEM', width / 2, 70);
+    context.fillStyle = '#ff7eb6';
+    context.fillRect(width / 2 - 150, 112, 300, 5);
+    context.font = `700 44px ${fontFamily()}`;
+    MENU.forEach(([item, price], index) => {
+      const y = 176 + index * 76;
+      context.fillStyle = '#f4f1e8';
+      context.textAlign = 'left';
+      context.fillText(item, 48, y);
+      context.fillStyle = index > 2 ? '#ff7eb6' : '#8fe3c0';
+      context.textAlign = 'right';
+      context.fillText(index > 2 ? price : `R$ ${price}`, width - 48, y);
+    });
+    grain(context, 14, random);
+    return toTexture(element);
+  });
+}
+
+const JUKEBOX_TUBES = ['#ff9a3c', '#ff4fa3', '#ffd84a', '#4fe0d0'];
+
+/**
+ * The jukebox's front, self-lit: an arch of coloured tubes around a title
+ * window, the record rows and a speaker grille. Transparent outside the arch.
+ *
+ * @example
+ * <meshBasicMaterial map={jukeboxTexture()} alphaTest={0.5} />
+ */
+export function jukeboxTexture(): Texture {
+  return cached('jukebox', () => {
+    const width = 384;
+    const height = 720;
+    const { element, context } = canvas(width, height);
+    const half = width / 2;
+    const arch = (inset: number) => {
+      context.beginPath();
+      context.moveTo(inset, height - inset);
+      context.lineTo(inset, half);
+      context.arc(half, half, half - inset, Math.PI, 0);
+      context.lineTo(width - inset, height - inset);
+      context.closePath();
+    };
+    arch(0);
+    context.fillStyle = '#3a2014';
+    context.fill();
+    // The tubes: nested arches, one colour each.
+    JUKEBOX_TUBES.forEach((color, index) => {
+      arch(16 + index * 15);
+      context.strokeStyle = color;
+      context.lineWidth = 10;
+      context.stroke();
+    });
+    arch(78);
+    context.fillStyle = '#170d0a';
+    context.fill();
+
+    context.fillStyle = '#f6e9c8';
+    context.beginPath();
+    context.roundRect(100, 150, width - 200, 96, 10);
+    context.fill();
+    context.fillStyle = '#7a1626';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.font = `900 34px ${fontFamily()}`;
+    context.fillText('TOCA', half, 180);
+    context.fillText('RAUL!', half, 218);
+
+    // Record rows, a few of them lit.
+    for (let row = 0; row < 5; row++) {
+      for (let column = 0; column < 2; column++) {
+        const isLit = (row * 2 + column) % 3 === 0;
+        context.fillStyle = isLit ? '#ffd84a' : '#c9b48a';
+        context.fillRect(104 + column * 92, 272 + row * 26, 84, 18);
+      }
+    }
+    // Speaker grille.
+    context.fillStyle = '#c99a4e';
+    context.beginPath();
+    context.roundRect(96, 430, width - 192, 240, 14);
+    context.fill();
+    context.fillStyle = '#2a1810';
+    for (let x = 112; x < width - 104; x += 14) {
+      context.fillRect(x, 444, 6, 212);
+    }
+    return toTexture(element);
+  });
+}
+
+const DART_RING: [radius: number, even: string, odd: string][] = [
+  [1, '#16120f', '#16120f'],
+  [0.82, '#c8321e', '#2f8a4a'],
+  [0.76, '#1a1512', '#ecdcb4'],
+  [0.5, '#c8321e', '#2f8a4a'],
+  [0.44, '#1a1512', '#ecdcb4']
+];
+
+/**
+ * A dartboard, face on.
+ *
+ * @example
+ * <meshStandardMaterial map={dartboardTexture()} />
+ */
+export function dartboardTexture(): Texture {
+  return cached('dartboard', () => {
+    const size = 512;
+    const half = size / 2;
+    const { element, context } = canvas(size);
+    const slice = Math.PI / 10;
+    for (const [radius, even, odd] of DART_RING) {
+      for (let i = 0; i < 20; i++) {
+        context.fillStyle = i % 2 === 0 ? even : odd;
+        context.beginPath();
+        context.moveTo(half, half);
+        context.arc(
+          half,
+          half,
+          half * radius,
+          (i - 0.5) * slice,
+          (i + 0.5) * slice
+        );
+        context.closePath();
+        context.fill();
+      }
+    }
+    context.fillStyle = '#2f8a4a';
+    context.beginPath();
+    context.arc(half, half, half * 0.09, 0, Math.PI * 2);
+    context.fill();
+    context.fillStyle = '#c8321e';
+    context.beginPath();
+    context.arc(half, half, half * 0.04, 0, Math.PI * 2);
+    context.fill();
+    return toTexture(element);
+  });
+}
+
+/**
+ * The lit "SAÍDA" sign over the door.
+ *
+ * @example
+ * <meshBasicMaterial map={exitTexture()} />
+ */
+export function exitTexture(): Texture {
+  return cached('exit', () => {
+    const { element, context } = canvas(256, 96);
+    context.fillStyle = '#1f9d55';
+    context.fillRect(0, 0, 256, 96);
+    context.fillStyle = '#eafff2';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.font = `900 60px ${fontFamily()}`;
+    context.fillText('SAÍDA', 128, 52);
+    return toTexture(element);
+  });
+}

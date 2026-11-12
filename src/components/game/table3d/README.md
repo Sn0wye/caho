@@ -24,7 +24,6 @@ Layers **never import each other**. They share only:
 | Layer | Entry (default export) | In Canvas | Owns |
 |---|---|---|---|
 | env | `scene/environment.tsx` | yes | room, table, lights, reflections |
-| postfx | `scene/post-fx.tsx` | yes | post-processing |
 | cards | `cards/cards-3d.tsx` | yes | every card: decks, Hands, played piles, answers, trophies |
 | players | `players/players-3d.tsx` | yes | pawns, nameplates, 3D cursors, cursor broadcast, confetti |
 | camera | `camera/camera-rig.tsx` | yes | the camera: seat view, orbit, zoom, cinematic moves |

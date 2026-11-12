@@ -21,7 +21,6 @@ import { JudgeProvider, useGameFx, useSeats } from './use-table';
 // Each layer is its own chunk behind its own error boundary, so one broken
 // layer never takes the table down with it. See README.md for who owns what.
 const Environment3D = lazy(() => import('./scene/environment'));
-const PostFx = lazy(() => import('./scene/post-fx'));
 const Cards3D = lazy(() => import('./cards/cards-3d'));
 const Players3D = lazy(() => import('./players/players-3d'));
 const CameraRig = lazy(() => import('./camera/camera-rig'));
@@ -31,7 +30,6 @@ const Sound = lazy(() => import('./audio/sound'));
 
 type LayerName =
   | 'env'
-  | 'postfx'
   | 'cards'
   | 'players'
   | 'camera'
@@ -102,8 +100,12 @@ export function Table3D() {
           {layer('cards', Cards3D)}
           {layer('toys', Toys3D)}
           {layer('camera', CameraRig)}
-          {layer('postfx', PostFx)}
         </Canvas>
+        {/* The only post effect: darker corners, for free. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.38)_100%)]"
+        />
         {layer('hud', Hud)}
         {layer('sound', Sound)}
       </main>

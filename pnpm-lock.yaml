@@ -62,9 +62,6 @@ importers:
       '@react-three/fiber':
         specifier: ^9.8.2
         version: 9.8.2(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(three@0.187.0)
-      '@react-three/postprocessing':
-        specifier: ^3.2.2
-        version: 3.2.2(@react-three/fiber@9.8.2(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(three@0.187.0))(@types/three@0.187.0)(postprocessing@6.39.6(three@0.187.0))(react@19.1.0)(three@0.187.0)
       '@react-three/rapier':
         specifier: ^2.2.0
         version: 2.2.0(@react-three/fiber@9.8.2(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(three@0.187.0))(react@19.1.0)(three@0.187.0)
@@ -119,9 +116,6 @@ importers:
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      postprocessing:
-        specifier: ^6.39.6
-        version: 6.39.6(three@0.187.0)
       react:
         specifier: ^19.1.0
         version: 19.1.0
@@ -1495,14 +1489,6 @@ packages:
         optional: true
       react-native:
         optional: true
-
-  '@react-three/postprocessing@3.2.2':
-    resolution: {integrity: sha512-y/ePU8gytOCAjQMy7At9gZFr/Xi/YGSHlNEir3fCY88+FoBpzL4RsTpzyKnrGshcD8wmJ5ppI5kWzz0dtNPkWQ==}
-    peerDependencies:
-      '@react-three/fiber': '>=9.7.0'
-      postprocessing: ^6.36.0
-      react: ^19.0.0
-      three: '>= 0.156.0'
 
   '@react-three/rapier@2.2.0':
     resolution: {integrity: sha512-mVsqbKXlGZoN+XrqdhzFZUQmy8pibEOVzl4k7LC+LHe84bQnYBSagy1Hvbda6bL1PJDdTFyiDiBk5buKFinNIQ==}
@@ -3080,12 +3066,6 @@ packages:
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
 
-  n8ao@2.0.1:
-    resolution: {integrity: sha512-MoP1QKUdj4/3cKEnhFl917t0eQwWGER1l43ckz5mNOPyYWGRDGQbVoTOQz/VBvy01in6QVNG+AL6Xxx5AjZBYA==}
-    peerDependencies:
-      postprocessing: '>=6.30.0'
-      three: '>=0.137'
-
   nanoid@3.3.11:
     resolution: {integrity: sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -3261,11 +3241,6 @@ packages:
   postcss@8.5.6:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
-
-  postprocessing@6.39.6:
-    resolution: {integrity: sha512-HIVhnU8R9tF2YBMXOF2x+TKt3ia+caSHGsycSqrfkd426vH/jwm7w19YQCWsA8jMQJXvAsniLYMiJaNugxUFtA==}
-    peerDependencies:
-      three: '>= 0.168.0 < 0.188.0'
 
   potpack@1.0.2:
     resolution: {integrity: sha512-choctRBIV9EMT9WGAZHn3V7t0Z2pMQyl0EZE6pFc/6ml3ssw7Dlf/oAOvFwjm1HVsqfQN8GfeFyJ+d8tRzqueQ==}
@@ -4900,17 +4875,6 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
       - immer
-
-  '@react-three/postprocessing@3.2.2(@react-three/fiber@9.8.2(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(three@0.187.0))(@types/three@0.187.0)(postprocessing@6.39.6(three@0.187.0))(react@19.1.0)(three@0.187.0)':
-    dependencies:
-      '@react-three/fiber': 9.8.2(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(three@0.187.0)
-      maath: 0.10.8(@types/three@0.187.0)(three@0.187.0)
-      n8ao: 2.0.1(postprocessing@6.39.6(three@0.187.0))(three@0.187.0)
-      postprocessing: 6.39.6(three@0.187.0)
-      react: 19.1.0
-      three: 0.187.0
-    transitivePeerDependencies:
-      - '@types/three'
 
   '@react-three/rapier@2.2.0(@react-three/fiber@9.8.2(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(three@0.187.0))(react@19.1.0)(three@0.187.0)':
     dependencies:
@@ -6568,11 +6532,6 @@ snapshots:
       object-assign: 4.1.1
       thenify-all: 1.6.0
 
-  n8ao@2.0.1(postprocessing@6.39.6(three@0.187.0))(three@0.187.0):
-    dependencies:
-      postprocessing: 6.39.6(three@0.187.0)
-      three: 0.187.0
-
   nanoid@3.3.11: {}
 
   napi-postinstall@0.3.0: {}
@@ -6739,10 +6698,6 @@ snapshots:
       nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
-
-  postprocessing@6.39.6(three@0.187.0):
-    dependencies:
-      three: 0.187.0
 
   potpack@1.0.2: {}
 

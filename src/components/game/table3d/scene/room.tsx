@@ -1,22 +1,34 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo, useRef } from 'react';
 import {
   AdditiveBlending,
   Color,
   DoubleSide,
+  Euler,
+  Float32BufferAttribute,
   LatheGeometry,
+  Matrix4,
+  Object3D,
+  Quaternion,
   Shape,
   ShapeGeometry,
-  Vector2
+  Vector2,
+  Vector3,
+  type BufferGeometry,
+  type InstancedMesh
 } from 'three';
 import { FLOOR_Y } from '../space';
 import { useEnvMap } from './env-map';
 import { CEILING_Y } from './lamp';
 import { adultsOnlyStrokes, cahoStrokes, NeonTubes } from './neon';
 import {
+  chalkboardTexture,
+  dartboardTexture,
+  exitTexture,
   floorTexture,
   glowTexture,
+  jukeboxTexture,
   posterTexture,
   rugTexture,
   seeded,
@@ -39,7 +51,11 @@ export const NEON_PINK = '#ff2f9e';
 export const NEON_PURPLE = '#a64dff';
 export const NEON_TEAL = '#21e0cf';
 export const BAR_AMBER = '#ffad55';
+// Nothing blooms: tubes sit just over 1 so they clip to a hot, saturated
+// colour instead of white.
+const NEON_LEVEL = 2;
 const LAMP_WARM = '#ffb46a';
+const WALL_TINT = new Color(1.7, 1.6, 1.7);
 
 // The seated camera sees a band of far wall between the far Players' heads
 // and the top of the frame, ≈ y −0.4…0.5: every wall keeps its accent there.
@@ -80,6 +96,12 @@ function Walls() {
           <planeGeometry args={[ROOM_HALF * 2, WALL_HEIGHT]} />
           <meshStandardMaterial
             map={texture}
+            // Over 1: the wallpaper is painted dark and the room has few
+            // lights, so the walls carry their own brightness.
+            color={WALL_TINT}
+            emissiveMap={texture}
+            emissive="#ffffff"
+            emissiveIntensity={0.3}
             roughness={0.85}
             envMap={envMap}
             envMapIntensity={0.08}
@@ -115,6 +137,9 @@ function Floor() {
         <planeGeometry args={[ROOM_HALF * 2, ROOM_HALF * 2]} />
         <meshStandardMaterial
           map={textures.floor}
+          emissiveMap={textures.floor}
+          emissive="#ffffff"
+          emissiveIntensity={0.14}
           roughness={0.42}
           envMap={envMap}
           envMapIntensity={0.15}
@@ -200,7 +225,27 @@ function bottleProfile(kind: 'wine' | 'squat'): Vector2[] {
   return points.map(([x, y]) => new Vector2(x, y));
 }
 
-const GLASS_COLORS = ['#3a1a08', '#0f2a14', '#c9d4d0', '#4a1020', '#5a3a10'];
+const GLASS_COLORS = [
+  '#8a4212',
+  '#1f6a30',
+  '#dfe8e4',
+  '#8a1830',
+  '#b07a1c',
+  '#2a5a8a'
+];
+const BOTTLE_KINDS = ['wine', 'squat'] as const;
+type BottleKind = (typeof BOTTLE_KINDS)[number];
+
+let bottleGeometries: Record<BottleKind, LatheGeometry> | undefined;
+
+// Shared by every row for the page's lifetime, like the textures.
+function bottleGeometry(kind: BottleKind): LatheGeometry {
+  bottleGeometries ??= {
+    wine: new LatheGeometry(bottleProfile('wine'), 12),
+    squat: new LatheGeometry(bottleProfile('squat'), 12)
+  };
+  return bottleGeometries[kind];
+}
 
 type BottlesProps = {
   count: number;
@@ -209,46 +254,65 @@ type BottlesProps = {
   position: [number, number, number];
 };
 
-// A row of bottles. Dark glass that catches the coloured lights on its edges.
+// A row of bottles: glossy coloured glass, one draw call per shape.
 function Bottles({ count, width, seed, position }: BottlesProps) {
   const envMap = useEnvMap();
-  const geometries = useMemo(
-    () => ({
-      wine: new LatheGeometry(bottleProfile('wine'), 16),
-      squat: new LatheGeometry(bottleProfile('squat'), 16)
-    }),
-    []
-  );
+  const wine = useRef<InstancedMesh>(null);
+  const squat = useRef<InstancedMesh>(null);
   const bottles = useMemo(() => {
     const random = seeded(seed);
     return Array.from({ length: count }, (_, index) => ({
       x: -width / 2 + ((index + 0.3 + random() * 0.4) / count) * width,
       z: (random() - 0.5) * 0.08,
-      kind: random() > 0.45 ? ('wine' as const) : ('squat' as const),
+      kind: random() > 0.45 ? BOTTLE_KINDS[0] : BOTTLE_KINDS[1],
       scale: 0.85 + random() * 0.3,
       color: GLASS_COLORS[Math.floor(random() * GLASS_COLORS.length)]
     }));
   }, [count, width, seed]);
+
+  useLayoutEffect(() => {
+    const dummy = new Object3D();
+    const color = new Color();
+    for (const [kind, ref] of [
+      ['wine', wine],
+      ['squat', squat]
+    ] as const) {
+      const mesh = ref.current;
+      if (!mesh) continue;
+      let index = 0;
+      for (const bottle of bottles) {
+        if (bottle.kind !== kind) continue;
+        dummy.position.set(bottle.x, 0, bottle.z);
+        dummy.scale.setScalar(bottle.scale);
+        dummy.updateMatrix();
+        mesh.setMatrixAt(index, dummy.matrix);
+        mesh.setColorAt(index, color.set(bottle.color));
+        index++;
+      }
+      mesh.count = index;
+      mesh.instanceMatrix.needsUpdate = true;
+      if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    }
+  }, [bottles]);
+
   return (
     <group position={position}>
-      {bottles.map((bottle, index) => (
-        <mesh
-          key={index}
-          geometry={geometries[bottle.kind]}
-          position={[bottle.x, 0, bottle.z]}
-          scale={bottle.scale}
+      {BOTTLE_KINDS.map(kind => (
+        <instancedMesh
+          key={kind}
+          ref={kind === 'wine' ? wine : squat}
+          args={[bottleGeometry(kind), undefined, count]}
+          // Instances spread far past the one bottle the bounds describe.
+          frustumCulled={false}
           raycast={noRaycast}
         >
           <meshStandardMaterial
-            color={bottle.color}
-            roughness={0.06}
+            roughness={0.08}
             metalness={0.1}
             envMap={envMap}
-            envMapIntensity={2.2}
-            transparent
-            opacity={0.88}
+            envMapIntensity={2}
           />
-        </mesh>
+        </instancedMesh>
       ))}
     </group>
   );
@@ -270,6 +334,10 @@ function Walnut({
       <meshStandardMaterial
         map={walnutTexture()}
         color={color}
+        // Furniture stands where no light reaches: it glows a little.
+        emissiveMap={walnutTexture()}
+        emissive="#ffffff"
+        emissiveIntensity={0.3}
         roughness={0.45}
         envMap={envMap}
         envMapIntensity={0.3}
@@ -288,21 +356,21 @@ function NeonWall() {
           strokes={CAHO_STEADY}
           scale={SIGN_SCALE}
           color={NEON_PINK}
-          intensity={5}
+          intensity={NEON_LEVEL}
           radius={0.016}
         />
         <NeonTubes
           strokes={CAHO_FLICKER}
           scale={SIGN_SCALE}
           color={NEON_PINK}
-          intensity={5}
+          intensity={NEON_LEVEL}
           radius={0.016}
         />
         <mesh position={[0.05, -0.4, 0]} raycast={noRaycast}>
           <planeGeometry args={[2.3, 0.29]} />
           <meshBasicMaterial
             map={taglineTexture()}
-            color={new Color(NEON_PURPLE).multiplyScalar(5)}
+            color={new Color(NEON_PURPLE).multiplyScalar(1.8)}
             blending={AdditiveBlending}
             transparent
             depthWrite={false}
@@ -312,25 +380,10 @@ function NeonWall() {
       </group>
       <WallGlow
         position={[0, SIGN_Y - 0.1, wall + 0.02]}
-        size={[5, 2.8]}
+        size={[4.2, 2.2]}
         color={NEON_PINK}
-        strength={0.26}
+        strength={0.16}
       />
-      {/* Its reflection on the varnished floor: a long soft streak. */}
-      <mesh
-        position={[0, FLOOR_Y + 0.005, wall + 0.65]}
-        rotation-x={-Math.PI / 2}
-        raycast={noRaycast}
-      >
-        <planeGeometry args={[3, 1.2]} />
-        <meshBasicMaterial
-          map={glowTexture()}
-          color={new Color(NEON_PINK).multiplyScalar(0.14)}
-          blending={AdditiveBlending}
-          transparent
-          depthWrite={false}
-        />
-      </mesh>
       {/* Lights the wall and floor by the sign and dies out well before the
           table, where the warm lamp must own the colours. */}
       <pointLight
@@ -341,7 +394,8 @@ function NeonWall() {
         decay={1.5}
       />
 
-      <Sconce position={[2.5, 0.12, wall]} />
+      <Dartboard position={[2.6, 0.16, wall + 0.02]} />
+      <Sconce position={[-3.9, 0.12, wall]} />
 
       {/* A sideboard off to one side, so the sign's floor glow stays clear
           behind the table. */}
@@ -397,24 +451,16 @@ function BarWall() {
         <mesh position={[0, FLOOR_Y + 0.03, 0.6]} raycast={noRaycast}>
           <boxGeometry args={[2.5, 0.008, 0.01]} />
           <meshBasicMaterial
-            color={new Color(BAR_AMBER).multiplyScalar(3)}
+            color={new Color(BAR_AMBER).multiplyScalar(1.6)}
             toneMapped={false}
           />
         </mesh>
-        <mesh
-          position={[0, FLOOR_Y + 0.004, 0.85]}
-          rotation-x={-Math.PI / 2}
-          raycast={noRaycast}
-        >
-          <planeGeometry args={[3.4, 0.9]} />
-          <meshBasicMaterial
-            map={glowTexture()}
-            color={new Color(BAR_AMBER).multiplyScalar(0.5)}
-            blending={AdditiveBlending}
-            transparent
-            depthWrite={false}
-          />
-        </mesh>
+        {[-0.8, 0, 0.8].map(x => (
+          <Stool key={x} position={[x, FLOOR_Y, 0.95]} />
+        ))}
+        <Taps position={[-0.85, FLOOR_Y + 0.89, 0.34]} />
+        <Crates position={[-1.85, FLOOR_Y, 0.3]} />
+        <Chalkboard position={[-1.95, 0.42, 0.02]} />
 
         {/* Backlit panel behind the shelves. */}
         <mesh position={[0, 0.5, 0.02]} raycast={noRaycast}>
@@ -434,7 +480,7 @@ function BarWall() {
             <mesh position={[0, -0.016, 0.25]} raycast={noRaycast}>
               <boxGeometry args={[2.24, 0.006, 0.01]} />
               <meshBasicMaterial
-                color={new Color(BAR_AMBER).multiplyScalar(2.6)}
+                color={new Color(BAR_AMBER).multiplyScalar(1.6)}
                 toneMapped={false}
               />
             </mesh>
@@ -459,24 +505,16 @@ function BarWall() {
             strokes={ADULTS}
             scale={0.42}
             color={NEON_TEAL}
-            intensity={4}
+            intensity={1.5}
             radius={0.01}
           />
         </group>
         <WallGlow
           position={[1.9, 0.18, 0.02]}
-          size={[1.6, 1.6]}
+          size={[1.3, 1.3]}
           color={NEON_TEAL}
-          strength={0.25}
+          strength={0.16}
         />
-        <pointLight
-          position={[1.9, 0.15, 0.5]}
-          color={NEON_TEAL}
-          intensity={1.6}
-          distance={1.8}
-          decay={1.5}
-        />
-        <Sconce position={[-2, 0.12, 0]} />
       </group>
     </group>
   );
@@ -503,7 +541,7 @@ function Poster({ index, position, yaw }: PosterProps) {
           map={map}
           emissiveMap={map}
           emissive="#ffffff"
-          emissiveIntensity={0.16}
+          emissiveIntensity={0.4}
           roughness={0.6}
         />
       </mesh>
@@ -513,14 +551,8 @@ function Poster({ index, position, yaw }: PosterProps) {
       </mesh>
       <mesh position={[0, 0.545, 0.07]} raycast={noRaycast}>
         <boxGeometry args={[0.32, 0.004, 0.02]} />
-        <meshBasicMaterial color={[3, 2.2, 1.4]} toneMapped={false} />
+        <meshBasicMaterial color={[1.6, 1.3, 0.9]} toneMapped={false} />
       </mesh>
-      <WallGlow
-        position={[0, 0.25, 0.034]}
-        size={[0.95, 0.9]}
-        color="#ffcf9a"
-        strength={0.1}
-      />
     </group>
   );
 }
@@ -531,7 +563,7 @@ function Lounge() {
   const envMap = useEnvMap();
   const leather = (
     <meshStandardMaterial
-      color="#2a100c"
+      color="#6a2218"
       roughness={0.5}
       envMap={envMap}
       envMapIntensity={0.5}
@@ -573,17 +605,11 @@ function Lounge() {
         <mesh position-y={FLOOR_Y + 0.84} raycast={noRaycast}>
           <cylinderGeometry args={[0.08, 0.14, 0.18, 20, 1, true]} />
           <meshBasicMaterial
-            color={[2.2, 1.5, 0.8]}
+            color={[1.5, 1.15, 0.7]}
             side={DoubleSide}
             toneMapped={false}
           />
         </mesh>
-        <pointLight
-          position={[0, FLOOR_Y + 0.8, 0.2]}
-          color="#ffb46a"
-          intensity={1.4}
-          decay={2}
-        />
       </group>
       <WallGlow
         position={[1.55, FLOOR_Y + 0.9, -0.38]}
@@ -607,20 +633,13 @@ function Sconce({ position }: SconceProps) {
       </mesh>
       <mesh position={[0, 0.02, 0.07]} raycast={noRaycast}>
         <cylinderGeometry args={[0.035, 0.03, 0.17, 16]} />
-        <meshBasicMaterial color={[2.4, 1.6, 0.9]} toneMapped={false} />
+        <meshBasicMaterial color={[1.6, 1.25, 0.8]} toneMapped={false} />
       </mesh>
       <WallGlow
         position={[0, 0.05, 0.004]}
-        size={[0.9, 1.3]}
+        size={[0.8, 1.1]}
         color={LAMP_WARM}
-        strength={0.32}
-      />
-      <pointLight
-        position={[0, 0.02, 0.25]}
-        color={LAMP_WARM}
-        intensity={0.5}
-        distance={1.6}
-        decay={1.5}
+        strength={0.2}
       />
     </group>
   );
@@ -629,36 +648,27 @@ function Sconce({ position }: SconceProps) {
 // East wall: a closed door, the hallway light leaking around it, and a
 // sconce beside it so the seats facing this way see a warm mark.
 function Door() {
-  const leak = new Color(3, 2.2, 1.3);
+  const leak = new Color(1, 0.72, 0.4);
   return (
     <group position={[ROOM_HALF, 0, 1.4]} rotation-y={-Math.PI / 2}>
       <Walnut
         position={[0, FLOOR_Y + 1.05, 0.03]}
         size={[1.02, 2.1, 0.06]}
-        color="#3a281e"
+        color="#8a644c"
       />
-      <Walnut
-        position={[0, FLOOR_Y + 1.03, 0.065]}
-        size={[0.88, 2.04, 0.02]}
-        color="#2a1c14"
-      />
+      {/* Painted, the one cool colour on this wall. */}
+      <mesh position={[0, FLOOR_Y + 1.03, 0.065]} raycast={noRaycast}>
+        <boxGeometry args={[0.88, 2.04, 0.02]} />
+        <meshStandardMaterial
+          color="#2a9d8f"
+          emissive="#2a9d8f"
+          emissiveIntensity={0.25}
+          roughness={0.6}
+        />
+      </mesh>
       <mesh position={[0.34, FLOOR_Y + 1.0, 0.09]} raycast={noRaycast}>
         <sphereGeometry args={[0.025, 12, 8]} />
         <meshStandardMaterial color="#c99a4e" metalness={1} roughness={0.25} />
-      </mesh>
-      <mesh
-        position={[0, FLOOR_Y + 0.003, 0.25]}
-        rotation-x={-Math.PI / 2}
-        raycast={noRaycast}
-      >
-        <planeGeometry args={[0.95, 0.5]} />
-        <meshBasicMaterial
-          map={glowTexture()}
-          color={[1.4, 1.0, 0.6]}
-          blending={AdditiveBlending}
-          transparent
-          depthWrite={false}
-        />
       </mesh>
       <mesh position={[0, FLOOR_Y + 0.008, 0.08]} raycast={noRaycast}>
         <boxGeometry args={[0.86, 0.006, 0.004]} />
@@ -669,12 +679,10 @@ function Door() {
         <boxGeometry args={[0.004, 1.5, 0.004]} />
         <meshBasicMaterial color={leak} toneMapped={false} />
       </mesh>
-      <WallGlow
-        position={[0.46, FLOOR_Y + 0.7, 0.07]}
-        size={[0.35, 1.9]}
-        color="#ffcf9a"
-        strength={0.22}
-      />
+      <mesh position={[0, FLOOR_Y + 2.26, 0.04]} raycast={noRaycast}>
+        <boxGeometry args={[0.42, 0.16, 0.05]} />
+        <meshBasicMaterial map={exitTexture()} />
+      </mesh>
       <Sconce position={[-0.85, 0.22, 0]} />
     </group>
   );
@@ -688,6 +696,8 @@ function leafGeometry(): ShapeGeometry {
   return new ShapeGeometry(shape, 6);
 }
 
+const LEAF_COUNT = 22;
+
 function Plant({
   position,
   seed
@@ -696,6 +706,7 @@ function Plant({
   seed: number;
 }) {
   const envMap = useEnvMap();
+  const leaves = useRef<InstancedMesh>(null);
   const leaf = useMemo(() => leafGeometry(), []);
   const pot = useMemo(
     () =>
@@ -712,46 +723,303 @@ function Plant({
       ),
     []
   );
-  const leaves = useMemo(() => {
+
+  useLayoutEffect(() => {
+    const mesh = leaves.current;
+    if (!mesh) return;
     const random = seeded(seed);
-    return Array.from({ length: 22 }, () => ({
-      yaw: random() * Math.PI * 2,
-      tilt: 0.25 + random() * 0.9,
-      height: 0.3 + random() * 0.5,
-      scale: 0.8 + random() * 0.7
-    }));
+    const stem = new Matrix4();
+    const blade = new Matrix4();
+    const turn = new Quaternion();
+    const offset = new Vector3();
+    const size = new Vector3();
+    for (let index = 0; index < LEAF_COUNT; index++) {
+      const yaw = random() * Math.PI * 2;
+      const tilt = 0.25 + random() * 0.9;
+      const height = 0.3 + random() * 0.5;
+      const scale = 0.8 + random() * 0.7;
+      stem.makeRotationY(yaw).setPosition(0, 0.36, 0);
+      blade.compose(
+        offset.set(0, height * 0.4, 0),
+        turn.setFromEuler(new Euler(tilt, 0, 0)),
+        size.setScalar(scale)
+      );
+      mesh.setMatrixAt(index, stem.multiply(blade));
+    }
+    mesh.instanceMatrix.needsUpdate = true;
   }, [seed]);
+
   return (
     <group position={position}>
       <mesh geometry={pot} raycast={noRaycast}>
-        <meshStandardMaterial color="#1d1a18" roughness={0.7} />
+        <meshStandardMaterial color="#8a4a2c" roughness={0.8} />
       </mesh>
-      {leaves.map((item, index) => (
-        <group key={index} position-y={0.36} rotation-y={item.yaw}>
-          <mesh
-            geometry={leaf}
-            position-y={item.height * 0.4}
-            rotation-x={item.tilt}
-            scale={item.scale}
-            raycast={noRaycast}
-          >
-            <meshStandardMaterial
-              color="#16301c"
-              roughness={0.55}
-              side={DoubleSide}
-              envMap={envMap}
-              envMapIntensity={0.25}
-            />
-          </mesh>
-        </group>
+      <instancedMesh
+        ref={leaves}
+        args={[leaf, undefined, LEAF_COUNT]}
+        frustumCulled={false}
+        raycast={noRaycast}
+      >
+        <meshStandardMaterial
+          color="#2f7a3c"
+          roughness={0.55}
+          side={DoubleSide}
+          envMap={envMap}
+          envMapIntensity={0.25}
+        />
+      </instancedMesh>
+    </group>
+  );
+}
+
+type Placed = { position: [number, number, number] };
+
+const BRASS = '#c99a4e';
+
+// A bar stool: red vinyl seat on a brass post.
+function Stool({ position }: Placed) {
+  return (
+    <group position={position}>
+      <mesh position-y={0.64} raycast={noRaycast}>
+        <cylinderGeometry args={[0.17, 0.15, 0.07, 20]} />
+        <meshStandardMaterial color="#a3241c" roughness={0.45} />
+      </mesh>
+      <mesh position-y={0.31} raycast={noRaycast}>
+        <cylinderGeometry args={[0.022, 0.022, 0.6, 10]} />
+        <meshStandardMaterial color={BRASS} metalness={1} roughness={0.3} />
+      </mesh>
+      <mesh position-y={0.2} rotation-x={Math.PI / 2} raycast={noRaycast}>
+        <torusGeometry args={[0.13, 0.01, 6, 20]} />
+        <meshStandardMaterial color={BRASS} metalness={1} roughness={0.3} />
+      </mesh>
+      <mesh position-y={0.012} raycast={noRaycast}>
+        <cylinderGeometry args={[0.15, 0.17, 0.024, 20]} />
+        <meshStandardMaterial color={BRASS} metalness={1} roughness={0.3} />
+      </mesh>
+    </group>
+  );
+}
+
+const TAP_HANDLES = ['#d8372a', '#f2c230', '#2f9a55'];
+
+// The draught tower on the counter, one bright handle per beer.
+function Taps({ position }: Placed) {
+  return (
+    <group position={position}>
+      <mesh position-y={0.11} raycast={noRaycast}>
+        <cylinderGeometry args={[0.025, 0.035, 0.22, 12]} />
+        <meshStandardMaterial color={BRASS} metalness={1} roughness={0.25} />
+      </mesh>
+      <mesh position-y={0.23} raycast={noRaycast}>
+        <boxGeometry args={[0.36, 0.05, 0.06]} />
+        <meshStandardMaterial color={BRASS} metalness={1} roughness={0.25} />
+      </mesh>
+      {TAP_HANDLES.map((color, index) => (
+        <mesh
+          key={color}
+          position={[(index - 1) * 0.12, 0.31, 0]}
+          raycast={noRaycast}
+        >
+          <cylinderGeometry args={[0.02, 0.013, 0.12, 10]} />
+          <meshStandardMaterial color={color} roughness={0.35} />
+        </mesh>
       ))}
+    </group>
+  );
+}
+
+const CRATE_COLORS = ['#e0a81a', '#c2301f', '#e0a81a'];
+
+// Beer crates stacked by the bar, a little askew.
+function Crates({ position }: Placed) {
+  return (
+    <group position={position}>
+      {CRATE_COLORS.map((color, index) => (
+        <mesh
+          key={index}
+          position={[0, 0.14 + index * 0.285, 0]}
+          rotation-y={(index - 1) * 0.12}
+          raycast={noRaycast}
+        >
+          <boxGeometry args={[0.44, 0.28, 0.32]} />
+          <meshStandardMaterial color={color} roughness={0.6} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+// Lit just enough by its own print to read from across the room.
+function Chalkboard({ position }: Placed) {
+  const map = chalkboardTexture();
+  return (
+    <group position={position}>
+      <Walnut position={[0, 0, 0.012]} size={[1.0, 0.75, 0.024]} />
+      <mesh position-z={0.026} raycast={noRaycast}>
+        <planeGeometry args={[0.92, 0.67]} />
+        <meshStandardMaterial
+          map={map}
+          emissiveMap={map}
+          emissive="#ffffff"
+          emissiveIntensity={0.5}
+          roughness={0.9}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+function Dartboard({ position }: Placed) {
+  const map = dartboardTexture();
+  return (
+    <group position={position}>
+      <mesh rotation-x={Math.PI / 2} position-z={0.015} raycast={noRaycast}>
+        <cylinderGeometry args={[0.25, 0.25, 0.03, 32]} />
+        <meshStandardMaterial color="#16120f" roughness={0.8} />
+      </mesh>
+      <mesh position-z={0.032} raycast={noRaycast}>
+        <circleGeometry args={[0.24, 32]} />
+        <meshStandardMaterial
+          map={map}
+          emissiveMap={map}
+          emissive="#ffffff"
+          emissiveIntensity={0.35}
+          roughness={0.8}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+const JUKEBOX_WIDTH = 0.72;
+const JUKEBOX_HEIGHT = 1.35;
+
+// East wall: a jukebox, its whole front one self-lit picture.
+function Jukebox({ z }: { z: number }) {
+  const shoulder = JUKEBOX_HEIGHT - JUKEBOX_WIDTH / 2;
+  return (
+    <group position={[ROOM_HALF, FLOOR_Y, z]} rotation-y={-Math.PI / 2}>
+      <Walnut
+        position={[0, shoulder / 2, 0.2]}
+        size={[JUKEBOX_WIDTH, shoulder, 0.4]}
+        color="#6a4630"
+      />
+      <mesh
+        position={[0, shoulder, 0.2]}
+        rotation-x={Math.PI / 2}
+        raycast={noRaycast}
+      >
+        <cylinderGeometry
+          args={[JUKEBOX_WIDTH / 2, JUKEBOX_WIDTH / 2, 0.4, 24]}
+        />
+        <meshStandardMaterial
+          map={walnutTexture()}
+          color="#6a4630"
+          roughness={0.45}
+        />
+      </mesh>
+      <mesh position={[0, JUKEBOX_HEIGHT / 2, 0.405]} raycast={noRaycast}>
+        <planeGeometry args={[JUKEBOX_WIDTH, JUKEBOX_HEIGHT]} />
+        <meshBasicMaterial map={jukeboxTexture()} alphaTest={0.5} />
+      </mesh>
+    </group>
+  );
+}
+
+const BULB_COLORS = ['#ffb347', '#ff5fa8', '#ffe066', '#4fe0d0', '#ff6b4a'];
+const BULBS_PER_SPAN = 7;
+const SPAN = 2.4;
+const SAG = 0.22;
+const WIRE_STEPS = 10;
+
+// One sagging string of party bulbs along a wall, in the wall's own frame:
+// x along the wall, z out of it.
+type BulbRun = {
+  yaw: number;
+  top: number;
+  // Distance from the wall, to clear what hangs on it.
+  inset: number;
+};
+
+const BULB_RUNS: BulbRun[] = [
+  { yaw: 0, top: 0.66, inset: 0.12 },
+  { yaw: Math.PI, top: 1.2, inset: 0.5 },
+  { yaw: -Math.PI / 2, top: 1.0, inset: 0.5 },
+  { yaw: Math.PI / 2, top: 1.0, inset: 0.12 }
+];
+
+// Coloured bulbs strung around the room: unlit, one draw call.
+function PartyLights() {
+  const mesh = useRef<InstancedMesh>(null);
+  const wire = useRef<BufferGeometry>(null);
+  const spans = Math.round((ROOM_HALF * 2) / SPAN);
+  const count = BULB_RUNS.length * spans * BULBS_PER_SPAN;
+
+  useLayoutEffect(() => {
+    const bulbs = mesh.current;
+    if (!bulbs) return;
+    const dummy = new Object3D();
+    const color = new Color();
+    const spot = new Vector3();
+    const up = new Vector3(0, 1, 0);
+    // Where the string hangs, `t` of the way along one span.
+    const hang = (run: BulbRun, span: number, t: number) =>
+      spot
+        .set(
+          -ROOM_HALF + (span + t) * SPAN,
+          run.top - SAG * 4 * t * (1 - t),
+          -ROOM_HALF + run.inset
+        )
+        .applyAxisAngle(up, run.yaw);
+    const cord: number[] = [];
+    let index = 0;
+    for (const run of BULB_RUNS) {
+      for (let span = 0; span < spans; span++) {
+        for (let step = 0; step < WIRE_STEPS; step++) {
+          cord.push(...hang(run, span, step / WIRE_STEPS).toArray());
+          cord.push(...hang(run, span, (step + 1) / WIRE_STEPS).toArray());
+        }
+        for (let bulb = 0; bulb < BULBS_PER_SPAN; bulb++) {
+          hang(run, span, (bulb + 0.5) / BULBS_PER_SPAN);
+          spot.y -= 0.02;
+          dummy.position.copy(spot);
+          dummy.updateMatrix();
+          bulbs.setMatrixAt(index, dummy.matrix);
+          bulbs.setColorAt(
+            index,
+            color.set(BULB_COLORS[index % BULB_COLORS.length])
+          );
+          index++;
+        }
+      }
+    }
+    bulbs.instanceMatrix.needsUpdate = true;
+    if (bulbs.instanceColor) bulbs.instanceColor.needsUpdate = true;
+    wire.current?.setAttribute('position', new Float32BufferAttribute(cord, 3));
+  }, [spans]);
+
+  return (
+    <group>
+      <lineSegments frustumCulled={false} raycast={noRaycast}>
+        <bufferGeometry ref={wire} />
+        <lineBasicMaterial color="#4a3c30" />
+      </lineSegments>
+      <instancedMesh
+        ref={mesh}
+        args={[undefined, undefined, count]}
+        frustumCulled={false}
+        raycast={noRaycast}
+      >
+        <sphereGeometry args={[0.03, 10, 8]} />
+        <meshBasicMaterial toneMapped={false} />
+      </instancedMesh>
     </group>
   );
 }
 
 /**
  * The room around the table: floor and rug, walls, the CAHO neon sign, the
- * bar, posters, a door and plants.
+ * bar, a jukebox, posters, a door, party lights and plants.
  *
  * @example
  * <Room />
@@ -765,6 +1033,8 @@ export function Room() {
       <BarWall />
       <Door />
       <Lounge />
+      <Jukebox z={-0.1} />
+      <PartyLights />
       <Poster
         index={2}
         position={[ROOM_HALF - 0.02, 0.18, -1.3]}

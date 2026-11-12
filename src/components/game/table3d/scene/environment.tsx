@@ -177,11 +177,11 @@ export default function Environment3D() {
     <EnvMapContext value={envMap}>
       <RendererSetup />
       <color attach="background" args={[BACKGROUND]} />
-      <fogExp2 attach="fog" args={[HAZE, 0.06]} />
+      <fogExp2 attach="fog" args={[HAZE, 0.025]} />
 
       {/* Warm-neutral fill: lifts the panelling, floor and props out of
           the black without tinting what sits on the table. */}
-      <hemisphereLight args={['#4a3c38', '#120c0a', 1.2]} />
+      <hemisphereLight args={['#5a4a46', '#1c1412', 1.9]} />
       {/* The lamp's light bounced off the felt and the players: the only
           thing that reaches the backs of held cards and the pawns' fronts,
           which face the centre and away from the spot. */}
